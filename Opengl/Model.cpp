@@ -32,10 +32,16 @@ namespace FXGL
 		float data;
 		while (file.eof() == false)
 		{
+			if (isdigit(file.peek()) != true)
+			{
+				std::string line;
+				std::getline(file, line);
+			}
 			float x, y, z, r, g, b;
 			file >> x >> y >> z >> r >> g >> b;
-			Vertices.emplace_back(x, y, z, r, g, b);
 
+
+			Vertices.emplace_back(x, y, z, r, g, b);
 		} 
 	}
 

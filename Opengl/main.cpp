@@ -25,17 +25,9 @@ std::string FilePathModel = "Models/tester.txt";
 
 int main()
 {
-    FXGL::Model yes;
-    yes.load_Model(FilePathModel);
-    for (auto vertex : yes.Vertices)
-    {
-        std::cout << vertex.x << " ";
-        std::cout << vertex.y << " ";
-        std::cout << vertex.z << " ";
-        std::cout << vertex.r << " ";
-        std::cout << vertex.g << " ";
-        std::cout << vertex.b << std::endl;
-    }
+    FXGL::Model Model_1;
+    Model_1.load_Model(FilePathModel);
+
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -122,15 +114,15 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, yes.Vertices.size()*sizeof(float), yes.Vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Model_1.Vertices.size()*sizeof(FXGL::Vertex), Model_1.Vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)12);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)12);
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -163,8 +155,8 @@ int main()
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         
-    	//glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT, 0);
-        glDrawArrays(GL_LINE_STRIP, 0, yes.Vertices.size());
+    	
+        glDrawArrays(GL_LINE_STRIP, 0, Model_1.Vertices.size());
         glBindVertexArray(0);
         // glBindVertexArray(0); // no need to unbind it every time 
 

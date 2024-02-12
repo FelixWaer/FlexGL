@@ -18,12 +18,25 @@ namespace FXGL
 	class Model
 	{
 	public:
-		Model() = default;
+		Model();
 
 		std::vector<Vertex> Vertices;
-		glm::mat4 ModelMatrix;
+		std::vector<int> Indices;
+		glm::vec3 ModelPosition;
 
 		void load_Model(std::string& filePath);
+		glm::mat4 get_ModelMatrix() const;
+	};
+
+	class Line
+	{
+	public:
+		Line();
+
+		std::vector<Vertex> Vertices;
+		glm::mat4 LineMatrix;
+
+		void load_LineModel(std::string& filePath);
 	};
 }
 

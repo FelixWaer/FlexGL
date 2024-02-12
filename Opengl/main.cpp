@@ -2,9 +2,12 @@
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
 #include "Model.h"
+#include "Camera.h"
+#include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -13,10 +16,13 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+float DeltaTime = 0.f;
+float LastFrame = 0.f;
+
+Camera TheCamera;
 
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
-
 
 
 std::string FilePathVert = "Shader/Vertex_Shader.txt";
@@ -27,6 +33,18 @@ int main()
 {
     FXGL::Model Model_1;
     Model_1.load_Model(FilePathModel);
+	FXGL::Model Cube;
+    Cube.Vertices.emplace_back(-0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f);
+    Cube.Vertices.emplace_back(0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f);
+    Cube.Vertices.emplace_back(0.5f, -0.5f, 0.f, 1.f, 0.f, 0.f);
+    Cube.Vertices.emplace_back(-0.5f, -0.5f, 0.f, 1.f, 0.f, 0.f);
+    Cube.Indices.emplace_back(0);
+    Cube.Indices.emplace_back(1);
+    Cube.Indices.emplace_back(2);
+    Cube.Indices.emplace_back(2);
+    Cube.Indices.emplace_back(3);
+    Cube.Indices.emplace_back(0);
+    Cube.ModelPosition = glm::vec3(0.f, 0.f, -5.f);
 
     // glfw: initialize and configure
     // ------------------------------
@@ -59,52 +77,13 @@ int main()
         return -1;
     }
 
+    FXGL::Shader TheShader;
+    TheShader.set_ShaderPath(FilePathVert, FilePathFrag);
+    TheShader.init_Shader();
 
-    // build and compile our shader program
-    // ------------------------------------
-    // vertex shader
-    std::string VertexText = FXGL::Shader::load_Shader(FilePathVert);
-    const char* VertextShaderText = VertexText.c_str();
-
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &VertextShaderText, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader
-    std::string FragText = FXGL::Shader::load_Shader(FilePathFrag);
-    const char* FragmentShaderText = FragText.c_str();
-
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &FragmentShaderText, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // link shaders
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    int modelLoc = glGetUniformLocation(TheShader.ShaderProgram, "model");
+    int viewLoc = glGetUniformLocation(TheShader.ShaderProgram, "view");
+    int projLoc = glGetUniformLocation(TheShader.ShaderProgram, "projection");
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -114,33 +93,42 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, Model_1.Vertices.size()*sizeof(FXGL::Vertex), Model_1.Vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Cube.Vertices.size()*sizeof(FXGL::Vertex), Cube.Vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, Cube.Indices.size()*sizeof(int), Cube.Indices.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)12);
 
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0);
 
-    // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+        float currentFrame = static_cast<float>(glfwGetTime());
+        DeltaTime = currentFrame - LastFrame;
+        LastFrame = currentFrame;
+
+        glm::mat4 Model_t;
+		glm::mat4 View_t;
+		glm::mat4 Projection_t;
+        Model_t = glm::rotate(Cube.get_ModelMatrix(), glm::radians(-55.f), glm::vec3(1.f, 0.f, 0.f));
+        View_t = TheCamera.get_CameraView();
+        Projection_t = glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH/SCR_HEIGHT), 0.1f, 100.0f);
+
+   
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(Model_t));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(View_t));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(Projection_t));
+
         //bind_VertexBuffer();
         // input
         // -----
@@ -152,11 +140,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle
-        glUseProgram(shaderProgram);
+        glUseProgram(TheShader.ShaderProgram);
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         
-    	
-        glDrawArrays(GL_LINE_STRIP, 0, Model_1.Vertices.size());
+        glDrawElements(GL_TRIANGLES, Cube.Indices.size(), GL_UNSIGNED_INT, 0);
+        //glDrawArrays(GL_TRIANGLES, 0, Cube.Vertices.size());
         glBindVertexArray(0);
         // glBindVertexArray(0); // no need to unbind it every time 
 
@@ -171,7 +159,7 @@ int main()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(TheShader.ShaderProgram);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
@@ -185,6 +173,23 @@ void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        TheCamera.update_CameraPosition(glm::vec3(10.f, 0.f, 0.f) * DeltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        TheCamera.update_CameraPosition(glm::vec3(-10.f, 0.f, 0.f) * DeltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        TheCamera.update_CameraPosition(glm::vec3(0.f, 0.f, 10.f) * DeltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        TheCamera.update_CameraPosition(glm::vec3(0.f, 0.f, -10.f) * DeltaTime);
+    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

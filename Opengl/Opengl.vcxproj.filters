@@ -27,6 +27,9 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -45,6 +48,9 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>

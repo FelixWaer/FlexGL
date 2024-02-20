@@ -1,5 +1,5 @@
 #include "Model.h"
-
+#include <glad/glad.h>
 #include <iostream>
 #include <fstream>
 
@@ -15,7 +15,6 @@ namespace FXGL
 		r = r_;
 		g = g_;
 		b = b_;
-
 	}
 
 	Model::Model()
@@ -59,7 +58,7 @@ namespace FXGL
 
 	Line::Line()
 	{
-		LineMatrix = glm::mat4(1.f);
+		LinePosition = glm::vec3(0.f);
 	}
 
 	void Line::load_LineModel(std::string& filePath)
@@ -89,5 +88,42 @@ namespace FXGL
 
 			Vertices.emplace_back(x, y, z, r, g, b);
 		}
+
+		bind_Buffer();
+	}
+	void Line::bind_Buffer()
+	{
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glBindVertexArray(VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(FXGL::Vertex), Vertices.data(), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)12);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindVertexArray(0);
+
+	}
+	void Line::draw_Line()
+	{
+		glBindVertexArray(VAO);
+
+		glDrawArrays(GL_LINE_STRIP, 0, Vertices.size());
+
+		glBindVertexArray(0);
+	}
+	glm::mat4 Line::get_LineMatrix() const
+	{
+		return glm::translate(glm::mat4(1.f), LinePosition);
+	}
+	void Line::set_Location(glm::vec3 posVector)
+	{
+		LinePosition = posVector;
 	}
 }

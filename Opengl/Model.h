@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "glad/glad.h"
+
 namespace FXGL
 {
 	struct Vertex
@@ -31,12 +33,21 @@ namespace FXGL
 	class Line
 	{
 	public:
-		Line();
 
+		unsigned int VAO;
 		std::vector<Vertex> Vertices;
-		glm::mat4 LineMatrix;
 
+		Line();
 		void load_LineModel(std::string& filePath);
+		void draw_Line();
+
+		glm::mat4 get_LineMatrix() const;
+		void set_Location(glm::vec3 posVector);
+	private:
+		glm::vec3 LinePosition;
+		unsigned int VBO;
+
+		void bind_Buffer();
 	};
 }
 

@@ -10,6 +10,7 @@
 #include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_Button_Callback(GLFWwindow*, double xPos, double yPos);
 void processInput(GLFWwindow* window);
 
 // settings
@@ -19,6 +20,10 @@ const unsigned int SCR_HEIGHT = 600;
 float DeltaTime = 0.f;
 float LastFrame = 0.f;
 
+double XPosMouse = SCR_WIDTH / 2;
+double YPosMouse = SCR_HEIGHT / 2;
+bool CameraFirstMove = true;
+
 Camera TheCamera;
 
 // set up vertex data (and buffer(s)) and configure vertex attributes
@@ -27,8 +32,10 @@ Camera TheCamera;
 
 std::string FilePathVert = "Shader/Vertex_Shader.txt";
 std::string FilePathFrag = "Shader/Fragment_Shader.txt";
-std::string FilePathModel = "Models/tester.txt";
+std::string FilePathModel = "Models/Data Points";
+std::string FilePathModel2 = "Models/Data Points Interpolation";
 
+std::vector<FXGL::Line> Models;
 int main()
 {
     FXGL::Model Model_1;
@@ -59,6 +66,7 @@ int main()
 
     // glfw window creation
     // --------------------
+
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Triangle window", NULL, NULL);
     if (window == NULL)
     {
@@ -68,6 +76,7 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_Button_Callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -84,6 +93,14 @@ int main()
     int modelLoc = glGetUniformLocation(TheShader.ShaderProgram, "model");
     int viewLoc = glGetUniformLocation(TheShader.ShaderProgram, "view");
     int projLoc = glGetUniformLocation(TheShader.ShaderProgram, "projection");
+
+    FXGL::Line line1;
+    line1.load_LineModel(FilePathModel);
+    line1.set_Location(glm::vec3(10.f, 0.f, 0.f));
+    FXGL::Line line2;
+    line2.load_LineModel(FilePathModel2);
+    Models.emplace_back(line1);
+    Models.emplace_back(line2);
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -124,7 +141,6 @@ int main()
         View_t = TheCamera.get_CameraView();
         Projection_t = glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH/SCR_HEIGHT), 0.1f, 100.0f);
 
-   
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(Model_t));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(View_t));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(Projection_t));
@@ -136,16 +152,23 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.f, 0.f, 0.f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle
         glUseProgram(TheShader.ShaderProgram);
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        
-        glDrawElements(GL_TRIANGLES, Cube.Indices.size(), GL_UNSIGNED_INT, 0);
-        //glDrawArrays(GL_TRIANGLES, 0, Cube.Vertices.size());
-        glBindVertexArray(0);
+        glLineWidth(5);
+
+        for (auto model : Models)
+        {
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model.get_LineMatrix()));
+            model.draw_Line();
+        }
+        //glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        //
+        //glDrawElements(GL_TRIANGLES, Cube.Indices.size(), GL_UNSIGNED_INT, 0);
+        ////glDrawArrays(GL_TRIANGLES, 0, Cube.Vertices.size());
+        //glBindVertexArray(0);
         // glBindVertexArray(0); // no need to unbind it every time 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -176,19 +199,19 @@ void processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        TheCamera.update_CameraPosition(glm::vec3(10.f, 0.f, 0.f) * DeltaTime);
+        TheCamera.move_CameraSide(true);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        TheCamera.update_CameraPosition(glm::vec3(-10.f, 0.f, 0.f) * DeltaTime);
+        TheCamera.move_CameraSide(false);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        TheCamera.update_CameraPosition(glm::vec3(0.f, 0.f, 10.f) * DeltaTime);
+        TheCamera.move_CameraFront(false);
     }
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        TheCamera.update_CameraPosition(glm::vec3(0.f, 0.f, -10.f) * DeltaTime);
+        TheCamera.move_CameraFront(true);
     }
 }
 
@@ -200,4 +223,21 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
     std::cout << " windows resized with " << width << " Height " << height << std::endl;
+}
+
+void mouse_Button_Callback(GLFWwindow* window, double xPos, double yPos)
+{
+    if (CameraFirstMove == true)
+    {
+        XPosMouse = xPos;
+        YPosMouse = yPos;
+        CameraFirstMove = false;
+    }
+
+    float xOffset = xPos - XPosMouse;
+    float yOffset = YPosMouse - yPos;
+    XPosMouse = xPos;
+    YPosMouse = yPos;
+
+    TheCamera.update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
 }

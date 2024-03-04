@@ -4,6 +4,11 @@
 #include <sstream>
 #include <iostream>
 
+FXGL::Shader::~Shader()
+{
+    cleanup_Shader();
+}
+
 void FXGL::Shader::init_Shader()
 {
     std::string VertexText = load_Shader(VertexShaderPath);
@@ -55,6 +60,11 @@ void FXGL::Shader::set_ShaderPath(const std::string& vertexPath, const std::stri
 {
 	VertexShaderPath = vertexPath;
 	FragmentShaderPath = fragmentPath;
+}
+
+void FXGL::Shader::cleanup_Shader()
+{
+    glDeleteProgram(ShaderProgram);
 }
 
 std::string FXGL::Shader::load_Shader(const std::string& filePath)

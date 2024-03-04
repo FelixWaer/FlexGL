@@ -21,33 +21,45 @@ namespace FXGL
 	{
 	public:
 		Model();
+		~Model();
 
 		std::vector<Vertex> Vertices;
-		std::vector<int> Indices;
+		std::vector<unsigned int> Indices;
 		glm::vec3 ModelPosition;
 
 		void load_Model(std::string& filePath);
+		void bind_Buffer();
+		void draw_Model();
 		glm::mat4 get_ModelMatrix() const;
+
+	private:
+		unsigned int VAO;
+		unsigned int VBO;
+		unsigned int EBO;
+
+		void cleanup_Model();
 	};
 
 	class Line
 	{
 	public:
-
-		unsigned int VAO;
+		Line(bool isLine);
+		~Line();
+		
 		std::vector<Vertex> Vertices;
 
-		Line();
 		void load_LineModel(std::string& filePath);
+		void bind_Buffer();
 		void draw_Line();
-
 		glm::mat4 get_LineMatrix() const;
 		void set_Location(glm::vec3 posVector);
 	private:
 		glm::vec3 LinePosition;
+		unsigned int VAO;
 		unsigned int VBO;
+		bool IsLine;
 
-		void bind_Buffer();
+		void cleanup_LineModel();
 	};
 }
 

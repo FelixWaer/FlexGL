@@ -34,12 +34,12 @@ std::string FilePathVert = "Shader/Vertex_Shader.txt";
 std::string FilePathFrag = "Shader/Fragment_Shader.txt";
 std::string FilePathModel = "Models/Data Points";
 std::string FilePathModel2 = "Models/Data Points Interpolation";
+std::string FilePathModel3 = "Models/Data Points Vertex";
 
-std::vector<FXGL::Line> Models;
+std::vector<FXGL::Line> LineModels;
+std::vector<FXGL::Model> Models;
 int main()
 {
-    FXGL::Model Model_1;
-    Model_1.load_Model(FilePathModel);
 	FXGL::Model Cube;
     Cube.Vertices.emplace_back(-0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f);
     Cube.Vertices.emplace_back(0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f);
@@ -94,37 +94,21 @@ int main()
     int viewLoc = glGetUniformLocation(TheShader.ShaderProgram, "view");
     int projLoc = glGetUniformLocation(TheShader.ShaderProgram, "projection");
 
-    FXGL::Line line1;
+    FXGL::Line line1(true);
     line1.load_LineModel(FilePathModel);
     line1.set_Location(glm::vec3(10.f, 0.f, 0.f));
-    FXGL::Line line2;
+    FXGL::Line line2(true);
     line2.load_LineModel(FilePathModel2);
-    Models.emplace_back(line1);
-    Models.emplace_back(line2);
+    FXGL::Line line3(false);
+    line3.load_LineModel(FilePathModel3);
+    LineModels.emplace_back(line1);
+    LineModels.emplace_back(line2);
+    LineModels.emplace_back(line3);
+    Cube.bind_Buffer();
+    Models.emplace_back(Cube);
 
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, Cube.Vertices.size()*sizeof(FXGL::Vertex), Cube.Vertices.data(), GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, Cube.Indices.size()*sizeof(int), Cube.Indices.data(), GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(FXGL::Vertex), (void*)12);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(0);
-
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glEnable(GL_DEPTH_TEST);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // render loop
     // -----------
@@ -145,44 +129,35 @@ int main()
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(View_t));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(Projection_t));
 
-        //bind_VertexBuffer();
         // input
         // -----
         processInput(window);
 
         // render
         // ------
-        glClearColor(0.f, 0.f, 0.f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.f, 0.f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // draw our first triangle
         glUseProgram(TheShader.ShaderProgram);
         glLineWidth(5);
+        glPointSize(5);
 
-        for (auto model : Models)
+        for (auto model : LineModels)
         {
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model.get_LineMatrix()));
             model.draw_Line();
         }
-        //glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        //
-        //glDrawElements(GL_TRIANGLES, Cube.Indices.size(), GL_UNSIGNED_INT, 0);
-        ////glDrawArrays(GL_TRIANGLES, 0, Cube.Vertices.size());
-        //glBindVertexArray(0);
-        // glBindVertexArray(0); // no need to unbind it every time 
+        for (auto model : Models)
+        {
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model.get_ModelMatrix()));
+            model.draw_Model();
+        }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    glDeleteProgram(TheShader.ShaderProgram);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------

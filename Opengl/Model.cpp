@@ -5,6 +5,8 @@
 
 #include <glm/ext.hpp>
 
+#include "EngineManager.h"
+
 namespace FXGL
 {
 	Vertex::Vertex(float x_, float y_, float z_, float r_, float g_, float b_)
@@ -20,6 +22,7 @@ namespace FXGL
 	Model::Model()
 	{
 		ModelPosition = glm::vec3(0.f, 0.f, 0.f);
+
 	}
 
 	Model::~Model()
@@ -107,6 +110,7 @@ namespace FXGL
 	{
 		LinePosition = glm::vec3(0.f);
 		IsLine = isLine;
+
 	}
 
 	Line::~Line()

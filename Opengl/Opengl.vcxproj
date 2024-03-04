@@ -132,6 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="EngineManager.cpp" />
+    <ClCompile Include="FlexGL.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -139,6 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="EngineManager.h" />
+    <ClInclude Include="FlexGL.h" />
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3native.h" />

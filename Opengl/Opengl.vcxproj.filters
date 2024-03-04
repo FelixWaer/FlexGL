@@ -30,6 +30,12 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="EngineManager.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexGL.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -51,6 +57,12 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineManager.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexGL.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>

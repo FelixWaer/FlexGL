@@ -4,10 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Shader.h"
-#include "Model.h"
 #include "Camera.h"
-#include "Shader.h"
+
 
 #include "EngineManager.h"
 
@@ -28,10 +26,10 @@ bool CameraFirstMove = true;
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
 
-EngineManager TheEngine;
 
 int main()
 {
+    EngineManager* EM = EngineManager::create_EngineManager();
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -45,17 +43,17 @@ int main()
 
     // glfw window creation
     // --------------------
-    TheEngine.init_Window();
+    EM->init_Window();
 
-    if (TheEngine.TheWindow == NULL)
+    if (EM->TheWindow == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(TheEngine.TheWindow);
-    glfwSetFramebufferSizeCallback(TheEngine.TheWindow, framebuffer_size_callback);
-    glfwSetCursorPosCallback(TheEngine.TheWindow, mouse_Button_Callback);
+    glfwMakeContextCurrent(EM->TheWindow);
+    glfwSetFramebufferSizeCallback(EM->TheWindow, framebuffer_size_callback);
+    glfwSetCursorPosCallback(EM->TheWindow, mouse_Button_Callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -65,19 +63,19 @@ int main()
         return -1;
     }
     glEnable(GL_DEPTH_TEST);
-    glfwSetInputMode(TheEngine.TheWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(EM->TheWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    TheEngine.init_Engine();
+    EM->init_Engine();
 
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(TheEngine.TheWindow))
+    while (!glfwWindowShouldClose(EM->TheWindow))
     {
-        TheEngine.tick_Engine();
+        EM->tick_Engine();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(TheEngine.TheWindow);
+        glfwSwapBuffers(EM->TheWindow);
         glfwPollEvents();
     }
 
@@ -111,5 +109,5 @@ void mouse_Button_Callback(GLFWwindow* window, double xPos, double yPos)
     XPosMouse = xPos;
     YPosMouse = yPos;
 
-    TheEngine.TheCamera->update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
+    EngineManager::TheEngineManager->TheCamera->update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
 }

@@ -15,7 +15,7 @@ glm::mat4 Camera::get_CameraProjection()
 	return glm::mat4(1.f);
 }
 
-glm::vec3 Camera::get_CameraPosition()
+glm::vec3& Camera::get_CameraPosition()
 {
 	return CameraPos;
 }
@@ -103,4 +103,9 @@ void Camera::set_CameraHeight(float yPos)
 void Camera::lock_CameraPitch(float degrees)
 {
 	Pitch = degrees;
+}
+
+void Camera::turn_CameraAround()
+{
+	Yaw *= -1;
 }

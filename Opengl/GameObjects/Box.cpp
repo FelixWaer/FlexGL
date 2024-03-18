@@ -16,7 +16,7 @@ void Box::game_Start()
 	BoxCollider.set_BoxWidth(10.1f);
 	BoxCollider.set_BoxHeight(1.1f);
 	BoxCollider.set_BoxDepth(10.1f);
-
+	add_Tag("Box");
 }
 
 void Box::on_Collision(GameObject* otherGameObject)
@@ -26,7 +26,6 @@ void Box::on_Collision(GameObject* otherGameObject)
 	if (get_GameObjectPosition().x <= get_GameObjectPosition().x + 10.f && get_GameObjectPosition().x >= get_GameObjectPosition().x - 10.f)
 	{
 		otherGameObject->get_GameObjectVelocity().x = 0;
-		std::cout << "hhh";
 	}
 	if (get_GameObjectPosition().y <= get_GameObjectPosition().y + 1.f && get_GameObjectPosition().y >= get_GameObjectPosition().y - 1.0f)
 	{

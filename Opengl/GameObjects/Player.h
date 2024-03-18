@@ -14,12 +14,19 @@ public:
 	void on_Collision(GameObject* otherGameObject) override;
 
 	Camera TheCamera;
-	//SphereCollision SphereCollider;
+	SphereCollision SphereCollider;
 	BoxCollision BoxCollider;
 	Model PlayerModel;
 
 	void jump();
 private:
 	bool Jumping = false;
+	bool MovingXPos = false;
+	bool MovingYPos = false;
+	bool MovingZPos = false;
+
+	float xPos = 0.f;
+	float yPos = 0.f;
+	float zPos = 0.f;
 };
 

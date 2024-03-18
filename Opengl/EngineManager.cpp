@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-const unsigned int SCR_WIDTH = 1000;
+const unsigned int SCR_WIDTH = 1800;
 const unsigned int SCR_HEIGHT = 900;
 
 std::string FilePathVert = "Shader/Vertex_Shader.txt";
@@ -50,7 +50,7 @@ void EngineManager::tick_Engine()
 
 	TheGame.Input(TheWindow);
 	check_Collision();
-	TheGame.tick(this, DeltaTime);
+	TheGame.tick(DeltaTime);
 
 	glClearColor(0.f, 0.f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -138,6 +138,18 @@ void EngineManager::add_ToSphereCollisionHandler(SphereCollision* sphereCollisio
 void EngineManager::add_ToBoxCollisionHandler(BoxCollision* boxCollisionPtr)
 {
 	BoxCollisionHandler.emplace_back(boxCollisionPtr);
+}
+
+void EngineManager::turnOff_DebugMode(bool turnOff)
+{
+	for (SphereCollision* sphere : SphereCollisionHandler)
+	{
+		sphere->enable_SphereVisible(turnOff);
+	}
+	for (BoxCollision* sphere : BoxCollisionHandler)
+	{
+		sphere->enable_BoxVisible(turnOff);
+	}
 }
 
 bool EngineManager::calculate_SphereCollision(glm::vec3 spherePos_1, glm::vec3 spherePos_2, float sphereRadius_1, float sphereRadius_2)

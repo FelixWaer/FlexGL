@@ -17,7 +17,7 @@ void FlexGL::game_Start(EngineManager* EM)
     Wall_5.init_Model();
     Roof_1.init_Model();
 
-    EM->TheCamera = &ThePlayer.TheCamera;
+    EngineManager::TheEngineManager->TheCamera = &ThePlayer.TheCamera;
     create_Cube(Floor_1, glm::vec3(0.5f, 0.5f, 0.f));
     Floor_1.set_ModelPosition(glm::vec3(0.f, -20.f, 0.f));
     Floor_1.scale_Model(glm::vec3(50.f, 1.f, 50.f));
@@ -51,6 +51,9 @@ void FlexGL::game_Start(EngineManager* EM)
     item_7.init_GameObject();
     item_8.init_GameObject();
 
+    HouseItem.init_GameObject();
+    HouseItem.set_Color(glm::vec3(1.f, 1.f, 0.f));
+    HouseItem.set_GameObjectPosition(glm::vec3(0.f, -19.f, 5.f));
     spawn_PickupRandom();
 
     graph_1.init_GameObject();
@@ -68,78 +71,79 @@ void FlexGL::game_Start(EngineManager* EM)
 
     Camera_1.update_CameraPosition(glm::vec3(4.f, -14.f, 1.f));
     Camera_1.set_CameraSpeed(0.0f);
+    Camera_1.turn_CameraAround();
+    Camera_2.update_CameraPosition(glm::vec3(-4.f, -14.f, 1.f));
+    Camera_2.set_CameraSpeed(0.0f);
+    Camera_2.turn_CameraAround();
 
-    camera.emplace_back(&ThePlayer.TheCamera);
-    camera.emplace_back(&Camera_1);
-    camera.emplace_back(&Camera_2);
+	Cameras.emplace_back(&ThePlayer.TheCamera);
+    Cameras.emplace_back(&Camera_1);
 
     box.init_GameObject();
+
 }
 
-void FlexGL::tick(EngineManager* EM, float deltaTime)
+void FlexGL::tick(float deltaTime)
 {
-	if (Scene_2 == true)
+	if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == true)
 	{
-       // EngineManager::TheEngineManager->TheCamera = camera[1];
-        //EM->TheCamera = &Camera_1;
-	}
-	else
-	{
-        //EM->TheCamera = &ThePlayer.TheCamera;
+        EngineManager::TheEngineManager->TheCamera = &Camera_1;
 	}
 }
 
 void FlexGL::Input(GLFWwindow* window)
 {
-	if (Scene_2 == false)
-	{
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        {
-            camera[CameraIndex]->move_CameraSide(true);
-        }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        {
-            camera[CameraIndex]->move_CameraSide(false);
-        }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        {
-            camera[CameraIndex]->move_CameraFront(false);
-        }
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        {
-            camera[CameraIndex]->move_CameraFront(true);
-        }
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        {
-            ThePlayer.jump();
-        }
-	}
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        ThePlayer.TheCamera.move_CameraSide(true);
+       
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        ThePlayer.TheCamera.move_CameraSide(false);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        ThePlayer.TheCamera.move_CameraFront(false);
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        ThePlayer.TheCamera.move_CameraFront(true);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        ThePlayer.jump();
+    }
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
     }
-	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-	{
-		if (Scene_2 == false)
-		{
-            Scene_2 = true;
-		}
-		else
-		{
-            Scene_2 = false;
-		}
-	}
 	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
 	{
 		if (KeyPressed == false)
 		{
-            CameraIndex += 1;
+  /*          CameraIndex += 1;
             if (CameraIndex >= camera.size())
             {
                 CameraIndex = 0;
             }
-            EngineManager::TheEngineManager->TheCamera = camera[CameraIndex];
+            EngineManager::TheEngineManager->TheCamera = camera[CameraIndex];*/
+            if (DebugTurnedOff == true)
+            {
+                EngineManager::TheEngineManager->turnOff_DebugMode(true);
+                DebugTurnedOff = false;
+                TheNPC.switch_Path();
+                NPC_2.switch_Path();
+            }
+            else
+            {
+                EngineManager::TheEngineManager->turnOff_DebugMode(false);
+                DebugTurnedOff = true;
+                TheNPC.switch_Path();
+                NPC_2.switch_Path();
+            }
+            
 		}
 
         KeyPressed = true;
@@ -148,6 +152,30 @@ void FlexGL::Input(GLFWwindow* window)
 	{
         KeyPressed = false;
 	}
+
+    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+    {
+        if (KeyPressed2 == false)
+        {
+            std::cout << "no";
+            if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == true)
+            {
+                EngineManager::TheEngineManager->TheCamera = &Camera_2;
+                CameraIs1 = false;
+            }
+            else if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == false)
+            {
+                EngineManager::TheEngineManager->TheCamera = &Camera_1;
+                CameraIs1 = true;
+            }
+        }
+
+        KeyPressed2 = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_RELEASE)
+    {
+        KeyPressed2 = false;
+    }
 }
 
 void FlexGL::spawn_PickupRandom()

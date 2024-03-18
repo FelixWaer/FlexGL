@@ -19,6 +19,12 @@ void NPC::tick(float deltaTime)
 {
 	GameObject::tick(deltaTime);
 
+	if (OriginalePath == false)
+	{
+		move_UpDown();
+		return;
+	}
+
 	if (DoNothing == false)
 	{
 		if (CircleDriving == true)
@@ -35,6 +41,32 @@ void NPC::tick(float deltaTime)
 void NPC::enable_CircleDriving(bool enable)
 {
 	CircleDriving = enable;
+}
+
+void NPC::move_UpDown()
+{
+	if (get_GameObjectPosition().y >= 25.f)
+	{
+		set_GameObjectVelocity(glm::vec3(0.f, -10.f, 0.f));
+	}
+	if (get_GameObjectPosition().y <= -25.f)
+	{
+		set_GameObjectVelocity(glm::vec3(0.f, 10.f, 0.f));
+	}
+}
+
+void NPC::switch_Path()
+{
+	if (OriginalePath == true)
+	{
+		OriginalePath = false;
+		set_GameObjectVelocity(glm::vec3(0.f, 10.f, 0.f));
+	}
+	else
+	{
+		OriginalePath = true;
+		set_GameObjectVelocity(glm::vec3(0.f, 0.f, 0.f));
+	}
 }
 
 void NPC::move_NPC(float deltaTime)

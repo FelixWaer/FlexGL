@@ -10,8 +10,9 @@ public:
 	void tick(float deltaTime) override;
 
 	void enable_CircleDriving(bool enable);
-
+	void move_UpDown();
 	bool DoNothing = false;
+	void switch_Path();
 private:
 	Model NPCModel;
 	BoxCollision BoxCollider;
@@ -23,6 +24,7 @@ private:
 	float Radius = 15.f;
 	float SmallerBigger = 1.f;
 	bool CircleDriving = false;
+	bool OriginalePath = true;
 
 	void move_NPC(float deltaTime);
 	float calculate_NPCPath(float x);

@@ -10,7 +10,7 @@ public:
 
 	glm::mat4 get_CameraView();
 	glm::mat4 get_CameraProjection();
-	glm::vec3 get_CameraPosition();
+	glm::vec3& get_CameraPosition();
 	glm::vec3 get_CameraRotation();
 	glm::vec3 get_CameraTarget();
 	void update_CameraPosition(glm::vec3 positionVector);
@@ -22,7 +22,7 @@ public:
 	void attach_ToGameObject(GameObject* GO);
 	void set_CameraHeight(float yPos);
 	void lock_CameraPitch(float degrees);
-
+	void turn_CameraAround();
 
 private:
 	glm::vec3 CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);

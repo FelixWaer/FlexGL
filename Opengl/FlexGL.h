@@ -15,13 +15,13 @@ class FlexGL
 {
 public:
 	void game_Start(EngineManager* EM);
-	void tick(EngineManager* EM, float deltaTime);
+	void tick(float deltaTime);
 	void Input(GLFWwindow* window);
 private:
 
 	Graphs graph_1;
 
-	std::vector<Camera*> camera;
+	std::vector<Camera*> Cameras;
 	int CameraIndex = 0;
 	Camera Camera_1;
 	Camera Camera_2;
@@ -40,6 +40,7 @@ private:
 	PickUpItem item_6;
 	PickUpItem item_7;
 	PickUpItem item_8;
+	PickUpItem HouseItem;
 
 	Model Floor_1;
 	Model Wall_1;
@@ -51,8 +52,11 @@ private:
 
 	Box box;
 
-	bool Scene_2 = false;
 	bool KeyPressed = false;
+	bool KeyPressed2 = false;
+	bool DebugTurnedOff = false;
+
+	bool CameraIs1 = true;
 
 	void spawn_PickupRandom();
 };

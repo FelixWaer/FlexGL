@@ -27,6 +27,8 @@ public:
 	int viewLoc;
 	int projLoc;
 
+	bool Scene_2 = false;
+
 	void init_Window();
 	void init_Engine();
 	void tick_Engine();
@@ -37,6 +39,8 @@ public:
 	void add_ToGameObjectHandler(GameObject* gameObjectPtr);
 	void add_ToSphereCollisionHandler(SphereCollision* sphereCollisionPtr);
 	void add_ToBoxCollisionHandler(BoxCollision* boxCollisionPtr);
+
+	void turnOff_DebugMode(bool turnOff);
 private:
 	FlexGL TheGame;
 

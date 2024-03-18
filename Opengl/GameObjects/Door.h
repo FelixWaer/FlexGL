@@ -1,7 +1,7 @@
 #pragma once
 #include "../GameObject.h"
-#include "../GameObject Components/SphereCollision.h"
 #include "../Model.h"
+#include "../GameObject Components/BoxCollision.h"
 
 class Door : public GameObject
 {
@@ -11,7 +11,7 @@ public:
 	void on_Collision(GameObject* otherGameObject) override;
 private:
 	Model DoorModel;
-	SphereCollision SphereCollider;
+	BoxCollision BoxCollider;
 
 	bool OpenDoor = false;
 

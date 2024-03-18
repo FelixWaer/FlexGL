@@ -9,11 +9,13 @@ void Door::game_Start()
 	DoorModel.bind_ToGameObject(this);
 
 	set_GameObjectPosition(glm::vec3(0.f, -17.f, 10.f));
-	DoorModel.scale_Model(glm::vec3(2.f, 6.f, 1.f));
+	DoorModel.scale_Model(glm::vec3(2.f, 8.f, 1.f));
 
-	SphereCollider.attach_ToGameObject(this);
-	SphereCollider.set_SphereRadius(3.f);
-	SphereCollider.enable_SphereVisible(true);
+	BoxCollider.attach_ToGameObject(this);
+	BoxCollider.set_BoxWidth(2);
+	BoxCollider.set_BoxHeight(6.f);
+	BoxCollider.set_BoxDepth(3.f);
+	BoxCollider.enable_BoxVisible(true);
 }
 
 void Door::tick(float deltaTime)
@@ -30,6 +32,7 @@ void Door::on_Collision(GameObject* otherGameObject)
 	if (otherGameObject->has_Tag("Player"))
 	{
 		OpenDoor = true;
+		EngineManager::TheEngineManager->Scene_2 = true;
 	}
 }
 

@@ -1,10 +1,10 @@
 #pragma once
 #include "../GameObject.h"
 
-#include "../Camera.h"
+#include "../Rendering/Camera.h"
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObject Components/BoxCollision.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 
 class Player : public GameObject
 {

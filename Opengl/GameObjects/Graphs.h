@@ -1,6 +1,6 @@
 #pragma once
 #include "../GameObject.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 #include "../GameObject Components/SphereCollision.h"
 
 class Graphs : public GameObject
@@ -11,7 +11,7 @@ public:
 	void on_Collision(GameObject* otherGameObject) override;
 
 private:
-	Line line = Line(true);
+	Model line;
 	std::string FilePathModel = "Models/Data Points Interpolation";
 };
 

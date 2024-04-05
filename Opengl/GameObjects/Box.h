@@ -1,7 +1,7 @@
 #pragma once
 #include "../GameObject.h"
 #include "../GameObject Components/BoxCollision.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 
 class Box : public GameObject
 {

@@ -1,6 +1,6 @@
 #include "Box.h"
 
-#include "../Model.h"
+#include "../Rendering/Model.h"
 
 void Box::game_Start()
 {

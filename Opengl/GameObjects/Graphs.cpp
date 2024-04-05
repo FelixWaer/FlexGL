@@ -8,10 +8,11 @@ void Graphs::tick(float deltaTime)
 
 void Graphs::game_Start()
 {
-	line.init_LineModel();
+	line.init_Model();
 	line.bind_ToGameObject(this);
-	line.load_LineModel(FilePathModel);
-	line.set_Location(glm::vec3(10.f, 0.f, 0.f));
+	line.load_Model(FilePathModel);
+	line.set_ModelPosition(glm::vec3(10.f, 0.f, 0.f));
+	line.turn_OnLine();
 }
 
 void Graphs::on_Collision(GameObject* otherGameObject)

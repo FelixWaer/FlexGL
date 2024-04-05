@@ -2,7 +2,7 @@
 
 #include "../EngineManager.h"
 #include "../GameObject.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 
 void BoxCollision::attach_ToGameObject(GameObject* GO)
 {

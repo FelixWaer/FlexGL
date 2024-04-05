@@ -1,8 +1,7 @@
 #pragma once
 #include "../GameObject.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 #include "../GameObject Components/SphereCollision.h"
-#include "../GameObject Components/BoxCollision.h"
 
 class PickUpItem : public GameObject
 {

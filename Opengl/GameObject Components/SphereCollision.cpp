@@ -2,7 +2,7 @@
 
 #include "../EngineManager.h"
 #include "../GameObject.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 
 void SphereCollision::attach_ToGameObject(GameObject* GO)
 {
@@ -20,8 +20,8 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 {
 	if (isVisible == true && SphereModel == nullptr)
 	{
-		SphereModel = new Line(true);
-		SphereModel->init_LineModel();
+		SphereModel = new Model;
+		SphereModel->init_Model();
 		SphereModel->attach_ToPosition(SpherePosition);
 		create_SphereLines(*SphereModel, SphereRadius, glm::vec3(1.f, 0.f, 0.f));
 
@@ -29,7 +29,7 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 	}
 	if (isVisible == false && SphereModel != nullptr)
 	{
-		SphereModel->hide_LineModel(true);
+		SphereModel->hide_Model(true);
 	}
 }
 

@@ -19,6 +19,12 @@
     <Filter Include="GameObject Components">
       <UniqueIdentifier>{9e411612-665d-4074-8c16-25f211af5ab5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject Components\Collider Component">
+      <UniqueIdentifier>{600438fc-b009-406c-bb8a-ed58c322dfb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{daa76ade-094c-4706-aa5c-929d629d1e21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -26,15 +32,6 @@
     </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="EngineManager.cpp">
       <Filter>Resource Files</Filter>
@@ -48,9 +45,6 @@
     <ClCompile Include="GameObjects\PickUpItem.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject Components\SphereCollision.cpp">
-      <Filter>GameObject Components</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\Player.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -63,11 +57,26 @@
     <ClCompile Include="GameObjects\Door.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject Components\BoxCollision.cpp">
-      <Filter>GameObject Components</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\Box.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject Components\BoxCollision.cpp">
+      <Filter>GameObject Components\Collider Component</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject Components\SphereCollision.cpp">
+      <Filter>GameObject Components\Collider Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Camera.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Model.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Shader.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Mesh.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,15 +92,6 @@
     <ClInclude Include="ProjectDependencies\Includes\KHR\khrplatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="EngineManager.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -103,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="GameObjects\PickUpItem.h">
       <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject Components\SphereCollision.h">
-      <Filter>GameObject Components</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Player.h">
       <Filter>GameObject</Filter>
@@ -119,11 +116,32 @@
     <ClInclude Include="GameObjects\Door.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject Components\BoxCollision.h">
-      <Filter>GameObject Components</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Box.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject Components\BoxCollision.h">
+      <Filter>GameObject Components\Collider Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject Components\SphereCollision.h">
+      <Filter>GameObject Components\Collider Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderInfo.h">
+      <Filter>GameObject Components\Collider Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Camera.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Model.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Shader.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Mesh.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Vertex.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

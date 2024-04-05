@@ -1,6 +1,6 @@
 #pragma once
 #include "../GameObject.h"
-#include "../Model.h"
+#include "../Rendering/Model.h"
 #include "../GameObject Components/BoxCollision.h"
 
 class Door : public GameObject

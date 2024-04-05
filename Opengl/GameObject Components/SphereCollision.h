@@ -3,7 +3,7 @@
 #include "glm/glm.hpp"
 
 class GameObject;
-class Line;
+class Model;
 
 class SphereCollision
 {
@@ -25,6 +25,6 @@ private:
 	bool Visible = false;
 	bool Collision = true;
 
-	Line* SphereModel;
+	Model* SphereModel;
 };
 

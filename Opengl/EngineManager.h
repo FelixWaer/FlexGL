@@ -6,9 +6,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "FlexGL.h"
-#include "Shader.h"
-#include "Model.h"
-#include "Camera.h"
+#include "Rendering/Shader.h"
+#include "Rendering/Model.h"
+#include "Rendering/Camera.h"
 #include "GameObject.h"
 #include "GameObject Components/SphereCollision.h"
 #include "GameObject Components/BoxCollision.h"
@@ -35,7 +35,6 @@ public:
 
 	void check_Collision();
 	void add_ToModelHandler(Model* modelPtr);
-	void add_ToLineModelHandler(Line* lineModelPtr);
 	void add_ToGameObjectHandler(GameObject* gameObjectPtr);
 	void add_ToSphereCollisionHandler(SphereCollision* sphereCollisionPtr);
 	void add_ToBoxCollisionHandler(BoxCollision* boxCollisionPtr);
@@ -45,7 +44,6 @@ private:
 	FlexGL TheGame;
 
 	std::vector<Model*> ModelHandler;
-	std::vector<Line*> LineModelHandler;
 	std::vector<GameObject*> GameObjectHandler;
 	std::vector<SphereCollision*> SphereCollisionHandler;
 	std::vector<BoxCollision*> BoxCollisionHandler;

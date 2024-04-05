@@ -62,11 +62,6 @@ void EngineManager::tick_Engine()
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(TheCamera->get_CameraView()));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 200.0f)));
 
-	for (auto model : LineModelHandler)
-	{
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model->get_LineMatrix()));
-		model->draw_Line();
-	}
 	for (auto model : ModelHandler)
 	{
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
@@ -80,16 +75,13 @@ void EngineManager::check_Collision()
 	{
 		for (size_t i = 0; i < SphereCollisionHandler.size(); i++)
 		{
-			for (size_t j = 0; j < SphereCollisionHandler.size(); j++)
+			for (size_t j = i+1; j < SphereCollisionHandler.size(); j++)
 			{
-				if (j == i)
-				{
-					continue;
-				}
 				if (calculate_SphereCollision(SphereCollisionHandler[i]->get_SpherePosition(), SphereCollisionHandler[j]->get_SpherePosition(),
 					SphereCollisionHandler[i]->get_SphereRadius(), SphereCollisionHandler[j]->get_SphereRadius()))
 				{
 					SphereCollisionHandler[i]->run_CollisionFunction(SphereCollisionHandler[j]);
+					SphereCollisionHandler[j]->run_CollisionFunction(SphereCollisionHandler[i]);
 				}
 			}
 		}
@@ -98,17 +90,14 @@ void EngineManager::check_Collision()
 	{
 		for (size_t i = 0; i < BoxCollisionHandler.size(); i++)
 		{
-			for (size_t j = 0; j < BoxCollisionHandler.size(); j++)
+			for (size_t j = i+1; j < BoxCollisionHandler.size(); j++)
 			{
-				if (j == i)
-				{
-					continue;
-				}
 				if (calculate_BoxCollision(BoxCollisionHandler[i]->get_BoxPosition(), BoxCollisionHandler[j]->get_BoxPosition(), 
 					BoxCollisionHandler[i]->BoxHeight, BoxCollisionHandler[i]->BoxWidth, BoxCollisionHandler[i]->BoxDepth,
 					BoxCollisionHandler[j]->BoxHeight, BoxCollisionHandler[j]->BoxWidth, BoxCollisionHandler[j]->BoxDepth))
 				{
 					BoxCollisionHandler[i]->run_CollisionFunction(BoxCollisionHandler[j]);
+					BoxCollisionHandler[j]->run_CollisionFunction(BoxCollisionHandler[i]);
 				}
 			}
 		}
@@ -118,11 +107,6 @@ void EngineManager::check_Collision()
 void EngineManager::add_ToModelHandler(Model* modelPtr)
 {
 	ModelHandler.emplace_back(modelPtr);
-}
-
-void EngineManager::add_ToLineModelHandler(Line* lineModelPtr)
-{
-	LineModelHandler.emplace_back(lineModelPtr);
 }
 
 void EngineManager::add_ToGameObjectHandler(GameObject* gameObjectPtr)

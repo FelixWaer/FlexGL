@@ -41,7 +41,7 @@ void FlexGL::game_Start(EngineManager* EM)
     create_Cube(Roof_1, glm::vec3(0.8f, 0.5f, 0.5f));
     Roof_1.set_ModelPosition(glm::vec3(0.f, -13.5f, 5.f));
     Roof_1.scale_Model(glm::vec3(11.f, 1.f, 11.f));
-
+	
     item_1.init_GameObject();
     item_2.init_GameObject();
     item_3.init_GameObject();
@@ -64,8 +64,6 @@ void FlexGL::game_Start(EngineManager* EM)
     NPC_3.init_GameObject();
     NPC_3.DoNothing = true;
     NPC_3.set_GameObjectVelocity(glm::vec3(0.f, 0.f, -1.f));
-    glm::vec3 tempVec = box.get_GameObjectPosition();
-    tempVec.x += 0.f;
     NPC_3.set_GameObjectPosition(glm::vec3(-40.f, 0.f, -25.f));
     TheDoor.init_GameObject();
 
@@ -80,7 +78,6 @@ void FlexGL::game_Start(EngineManager* EM)
     Cameras.emplace_back(&Camera_1);
 
     box.init_GameObject();
-
 }
 
 void FlexGL::tick(float deltaTime)

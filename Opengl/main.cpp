@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Camera.h"
+#include "Rendering/Camera.h"
 
 
 #include "EngineManager.h"

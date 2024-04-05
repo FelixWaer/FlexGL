@@ -133,7 +133,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EngineManager.cpp" />
     <ClCompile Include="FlexGL.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
@@ -147,11 +146,13 @@
     <ClCompile Include="GameObjects\Player.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Rendering\Camera.cpp" />
+    <ClCompile Include="Rendering\Mesh.cpp" />
+    <ClCompile Include="Rendering\Model.cpp" />
+    <ClCompile Include="Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ColliderInfo.h" />
     <ClInclude Include="EngineManager.h" />
     <ClInclude Include="FlexGL.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
@@ -167,8 +168,11 @@
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3native.h" />
     <ClInclude Include="ProjectDependencies\Includes\KHR\khrplatform.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="Rendering\Camera.h" />
+    <ClInclude Include="Rendering\Mesh.h" />
+    <ClInclude Include="Rendering\Model.h" />
+    <ClInclude Include="Rendering\Shader.h" />
+    <ClInclude Include="Rendering\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ProjectDependencies\Libraries\glfw3.dll" />

@@ -6,6 +6,7 @@
 
 std::string FilePathModel = "Models/Data Points";
 std::string FilePathModel3 = "Models/Data Points Vertex";
+std::string FilePathModel2 = "Models/Function Points";
 
 void FlexGL::game_Start(EngineManager* EM)
 {
@@ -16,6 +17,12 @@ void FlexGL::game_Start(EngineManager* EM)
     Wall_4.init_Model();
     Wall_5.init_Model();
     Roof_1.init_Model();
+
+    Testing.init_Model();
+    Testing.set_ModelPosition(glm::vec3(20.f, -30.f, 0.f));
+    Testing.scale_Model(glm::vec3(1.f));
+    Testing.load_Model(FilePathModel2);
+    //Testing.draw_ModelAsLines(true);
 
     EngineManager::TheEngineManager->TheCamera = &ThePlayer.TheCamera;
     create_Cube(Floor_1, glm::vec3(0.5f, 0.5f, 0.f));
@@ -78,10 +85,13 @@ void FlexGL::game_Start(EngineManager* EM)
     Cameras.emplace_back(&Camera_1);
 
     box.init_GameObject();
+
+    EngineManager::TheEngineManager->TheTerrain = &Testing;
 }
 
 void FlexGL::tick(float deltaTime)
 {
+    //std::cout << ThePlayer.get_GameObjectPosition().x << ThePlayer.get_GameObjectPosition().y << ThePlayer.get_GameObjectPosition().z << std::endl;
 	if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == true)
 	{
         EngineManager::TheEngineManager->TheCamera = &Camera_1;

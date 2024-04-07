@@ -23,6 +23,7 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 		SphereModel = new Model;
 		SphereModel->init_Model();
 		SphereModel->attach_ToPosition(SpherePosition);
+		SphereModel->turn_OnLine();
 		create_SphereLines(*SphereModel, SphereRadius, glm::vec3(1.f, 0.f, 0.f));
 
 		return;

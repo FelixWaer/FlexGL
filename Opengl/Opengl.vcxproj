@@ -147,6 +147,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
+    <ClCompile Include="Rendering\Light.cpp" />
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Model.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3native.h" />
     <ClInclude Include="ProjectDependencies\Includes\KHR\khrplatform.h" />
     <ClInclude Include="Rendering\Camera.h" />
+    <ClInclude Include="Rendering\Light.h" />
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\Model.h" />
     <ClInclude Include="Rendering\Shader.h" />

@@ -28,33 +28,32 @@ void Player::game_Start()
 void Player::tick(float deltaTime)
 {
 	GameObject::tick(deltaTime);
-	if (Jumping == true)
-	{
-		TheCamera.move_CameraUp(20.f * deltaTime);
-		Jumping = false;
-	}
-	else
-	{
-		if (TheCamera.get_CameraPosition().y < -16.f)
-		{
-			TheCamera.set_CameraHeight(-16.f);
-		}
-		TheCamera.move_CameraUp(-5.f * deltaTime);
-	}
-	TheCamera.lock_CameraPitch(-10.f);
+	//if (Jumping == true)
+	//{
+	//	TheCamera.move_CameraUp(20.f * deltaTime);
+	//	Jumping = false;
+	//}
+	//else
+	//{
+	//	if (TheCamera.get_CameraPosition().y < -16.f)
+	//	{
+	//		TheCamera.set_CameraHeight(-16.f);
+	//	}
+	//	TheCamera.move_CameraUp(-5.f * deltaTime);
+	//}
+	//TheCamera.lock_CameraPitch(-10.f);
 	glm::vec3 tempVec = TheCamera.get_CameraPosition();
 	glm::vec3 tempVec2 = TheCamera.get_CameraTarget();
 	tempVec2 *= 5;
 	tempVec2.y = 0;
 	tempVec.y -= 2;
 	glm::vec3 tempVec3 = tempVec + tempVec2;
-
 	
 	PlayerModel.set_ModelPosition(tempVec+tempVec2);
 	
 	PlayerModel.rotate_Model(glm::vec3(0.f, -TheCamera.get_CameraRotation().x, 0.f));
 	set_GameObjectPosition(tempVec+tempVec2);
-	
+	EngineManager::TheEngineManager->CharacterPoint = get_GameObjectPositionPtr();
 }
 
 void Player::on_Collision(GameObject* otherGameObject)

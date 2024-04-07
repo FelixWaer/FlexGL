@@ -9,19 +9,28 @@ class GameObject;
 
 struct Vertex
 {
-public:
-	Vertex() = default;
-	Vertex(float x, float y, float z, const glm::vec3& color);
+	//Vertex() = default;
+	Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color);
 
-	float x, y, z;
+	glm::vec3 XYZ;
+	glm::vec3 Normal;
 	glm::vec3 RGB;
+};
+
+struct Triangle
+{
+	Triangle(unsigned int firstIndex, unsigned int secondIndex, unsigned int thirdIndex);
+
+	unsigned int FirstIndex;
+	unsigned int SecondIndex;
+	unsigned int ThirdIndex;
 };
 
 class Model
 {
 public:
 	std::vector<Vertex> Vertices;
-	std::vector<unsigned int> Indices;
+	std::vector<Triangle> Indices;
 
 	void init_Model();
 	void load_Model(std::string& filePath);
@@ -33,6 +42,7 @@ public:
 	void scale_Model(glm::vec3 newScale);
 	void rotate_Model(glm::vec3 newRotation);
 	void draw_ModelAsLines(bool drawModelLines);
+	glm::vec3 get_WorldPosition();
 
 	void turn_OnLine();
 
@@ -58,3 +68,6 @@ private:
 void create_Cube(Model& model, const glm::vec3& color);
 void create_SphereLines(Model& lineModel, float radius, const glm::vec3& color);
 void create_BoxLines(Model& lineModel, float height, float width, float depth, const glm::vec3& color);
+
+void calculate_VertexNormal(Vertex& vertexA, const Vertex& vertexB, const Vertex& vertexC, const Vertex& vertexD);
+void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC);

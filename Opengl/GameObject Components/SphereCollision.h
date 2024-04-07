@@ -25,6 +25,6 @@ private:
 	bool Visible = false;
 	bool Collision = true;
 
-	Model* SphereModel;
+	Model* SphereModel = nullptr;
 };
 

@@ -9,6 +9,7 @@
 #include "Rendering/Shader.h"
 #include "Rendering/Model.h"
 #include "Rendering/Camera.h"
+#include "Rendering/Light.h"
 #include "GameObject.h"
 #include "GameObject Components/SphereCollision.h"
 #include "GameObject Components/BoxCollision.h"
@@ -23,9 +24,14 @@ public:
 	Camera* TheCamera;
 	GLFWwindow* TheWindow;
 
-	int modelLoc;
-	int viewLoc;
-	int projLoc;
+	Model* TheTerrain = nullptr;
+	glm::vec3* CharacterPoint = nullptr;
+
+	int ModelLoc;
+	int PositionLoc;
+	int CameraPosLoc;
+	int lightPosLoc;
+	int lightColorLoc;
 
 	bool Scene_2 = false;
 
@@ -43,6 +49,9 @@ public:
 private:
 	FlexGL TheGame;
 
+	//glm::vec3 LightPosition = glm::vec3(0.f);
+	Light TheLight;
+
 	std::vector<Model*> ModelHandler;
 	std::vector<GameObject*> GameObjectHandler;
 	std::vector<SphereCollision*> SphereCollisionHandler;
@@ -53,4 +62,13 @@ private:
 
 	bool calculate_SphereCollision(glm::vec3 spherePos_1, glm::vec3 spherePos_2, float sphereRadius_1, float sphereRadius_2);
 	bool calculate_BoxCollision(glm::vec3 boxPos_1, glm::vec3 boxPos_2, float boxHeight_1, float boxWidth_1, float boxDepth_1, float boxHeight_2, float boxWidth_2, float boxDepth_2);
+	static bool calculate_PointOnTriangle(glm::vec3& x, glm::vec3 P, glm::vec3 Q, glm::vec3 R, const glm::vec3& position);
+	static void switch_YZ(glm::vec3& vector);
+
+	float Degrees = 0.f;
+	float DegreesColor = 0.f;
+	float Radius = 15.f;
+	float SmallerBigger = 1.f;
+	float SmallerBiggerColor = 1.f;
+	void move_Light(float deltaTime);
 };

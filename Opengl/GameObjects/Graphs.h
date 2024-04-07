@@ -12,6 +12,6 @@ public:
 
 private:
 	Model line;
-	std::string FilePathModel = "Models/Data Points Interpolation";
+	std::string FilePathModel = "Models/Spiral Points";
 };
 

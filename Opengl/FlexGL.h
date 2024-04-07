@@ -50,6 +50,8 @@ private:
 	Model Wall_5;
 	Model Roof_1;
 
+	Model Testing;
+
 	Box box;
 
 	bool KeyPressed = false;

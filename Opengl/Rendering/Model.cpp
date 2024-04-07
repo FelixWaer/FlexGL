@@ -7,14 +7,20 @@
 
 #include "../EngineManager.h"
 #include "../GameObject.h"
-Vertex::Vertex(float x_, float y_, float z_, const glm::vec3& color)
+Vertex::Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color)
 {
-	x = x_;
-	y = y_;
-	z = z_;
-
+	XYZ = position;
+	Normal = normal;
 	RGB = color;
 }
+
+Triangle::Triangle(unsigned int firstIndex, unsigned int secondIndex, unsigned int thirdIndex)
+{
+	FirstIndex = firstIndex;
+	SecondIndex = secondIndex;
+	ThirdIndex = thirdIndex;
+}
+
 
 void Model::init_Model()
 {
@@ -25,30 +31,65 @@ void Model::load_Model(std::string& filePath)
 {
 	std::ifstream file;
 	file.open(filePath);
-	std::vector<float> test;
+
 	if (file.is_open() == false)
 	{
 		std::cout << "could not open model file!" << std::endl;
 		return;
 	}
 
-	std::vector<float> vertexData;
-	int i = 0;
-	float data;
-	glm::vec3 color;
+	char dataType = 'O';
+	float vectorSize = 0;
+	std::string line;
+
 	while (file.eof() == false)
 	{
-		if (isdigit(file.peek()) != true)
+		file >> std::ws;
+		if (file.peek() == EOF)
 		{
-			std::string line;
-			std::getline(file, line);
+			break;
 		}
-		float x, y, z, r, g, b;
-		file >> x >> y >> z >> r >> g >> b;
+		if (file.peek() == 'V')
+		{
+			std::getline(file, line);
+			dataType = 'V';
+			file >> vectorSize;
+			Vertices.reserve(static_cast<unsigned int>(vectorSize));
+			continue;
+		}
 
-		color = glm::vec3(r, g, b);
+		if (file.peek() == 'T')
+		{
+			std::getline(file, line);
+			dataType = 'T';
+			file >> vectorSize;
+			Indices.reserve(static_cast<unsigned int>(vectorSize));
 
-		Vertices.emplace_back(x, y, z, color);
+			continue;
+		}
+
+		switch (dataType)
+		{
+		case 'V':
+			glm::vec3 position;
+			glm::vec3 normal;
+			glm::vec3 color;
+			file >> position.x >> position.y >> position.z >> normal.x >> normal.y >> normal.z >> color.r >> color.g >> color.b;
+			Vertices.emplace_back(position, normal, color);
+			break;
+
+		case 'T':
+			int I_1, I_2, I_3;
+			file >> I_1 >> I_2 >> I_3;
+			Indices.emplace_back(I_1, I_2, I_3);
+			break;
+
+		case 'O':
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	bind_Buffer();
@@ -66,12 +107,14 @@ void Model::bind_Buffer()
 	glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(Vertex), Vertices.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(unsigned int), Indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(Triangle), Indices.data(), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)12);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)24),
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -113,6 +156,15 @@ void Model::draw_ModelAsLines(bool drawModelLines)
 	DrawLines = drawModelLines;
 }
 
+glm::vec3 Model::get_WorldPosition()
+{
+	if (AttachedModelPosition == nullptr)
+	{
+		return ModelPosition;
+	}
+	return *AttachedModelPosition;
+}
+
 void Model::turn_OnLine()
 {
 	IsLine = true;
@@ -134,11 +186,11 @@ void Model::draw_Model()
 
 	if (DrawLines == true)
 	{
-		glDrawElements(GL_LINE_STRIP, Indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_LINE_STRIP, Indices.size()*3, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		return;
 	}
-	glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, Indices.size()*3, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 }
@@ -163,63 +215,44 @@ void Model::cleanup_Model()
 
 void create_Cube(Model& model, const glm::vec3& color)
 {
-	model.Vertices.emplace_back(-0.5f, 0.5f, 0.5f, color);
-	model.Vertices.emplace_back(-0.5f, -0.5f, 0.5f, color);
-	model.Vertices.emplace_back(0.5f, -0.5f, 0.5f, color);
-	model.Vertices.emplace_back(0.5f, 0.5f, 0.5f, color);
+	model.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f), color);
+	model.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f), color);
+	model.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.f), color);
+	model.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.f), color);
 
-	model.Vertices.emplace_back(-0.5f, 0.5f, -0.5f, color);
-	model.Vertices.emplace_back(-0.5f, -0.5f, -0.5f, color);
-	model.Vertices.emplace_back(0.5f, -0.5f, -0.5f, color);
-	model.Vertices.emplace_back(0.5f, 0.5f, -0.5f, color);
+	model.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.f), color);
+	model.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.f), color);
+	model.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.f), color);
+	model.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.f), color);
 
-	model.Indices.emplace_back(0);
-	model.Indices.emplace_back(1);
-	model.Indices.emplace_back(2);
+	model.Indices.emplace_back(0, 1, 2);
 
-	model.Indices.emplace_back(2);
-	model.Indices.emplace_back(3);
-	model.Indices.emplace_back(0);
+	model.Indices.emplace_back(2, 3, 0);
 
-	model.Indices.emplace_back(3);
-	model.Indices.emplace_back(2);
-	model.Indices.emplace_back(6);
+	model.Indices.emplace_back(0, 4, 5);
 
-	model.Indices.emplace_back(6);
-	model.Indices.emplace_back(7);
-	model.Indices.emplace_back(3);
+	model.Indices.emplace_back(5, 1, 0);
 
-	model.Indices.emplace_back(7);
-	model.Indices.emplace_back(6);
-	model.Indices.emplace_back(5);
+	model.Indices.emplace_back(3, 2, 6);
 
-	model.Indices.emplace_back(5);
-	model.Indices.emplace_back(4);
-	model.Indices.emplace_back(7);
+	model.Indices.emplace_back(6 ,7 ,3);
 
-	model.Indices.emplace_back(4);
-	model.Indices.emplace_back(5);
-	model.Indices.emplace_back(1);
+	model.Indices.emplace_back(1, 5, 6);
 
-	model.Indices.emplace_back(1);
-	model.Indices.emplace_back(0);
-	model.Indices.emplace_back(4);
+	model.Indices.emplace_back(6, 2, 1);
 
-	model.Indices.emplace_back(0);
-	model.Indices.emplace_back(3);
-	model.Indices.emplace_back(7);
+	model.Indices.emplace_back(0, 3, 7);
 
-	model.Indices.emplace_back(7);
-	model.Indices.emplace_back(4);
-	model.Indices.emplace_back(0);
+	model.Indices.emplace_back(7, 4, 0);
 
-	model.Indices.emplace_back(1);
-	model.Indices.emplace_back(2);
-	model.Indices.emplace_back(6);
+	model.Indices.emplace_back(4, 7, 6);
 
-	model.Indices.emplace_back(6);
-	model.Indices.emplace_back(5);
-	model.Indices.emplace_back(1);
+	model.Indices.emplace_back(6, 5, 4);
+
+	for (const Triangle& triangle : model.Indices)
+	{
+		calculate_TriangleNormal(model.Vertices[triangle.FirstIndex], model.Vertices[triangle.SecondIndex], model.Vertices[triangle.ThirdIndex]);
+	}
 
 	model.bind_Buffer();
 }
@@ -227,17 +260,21 @@ void create_Cube(Model& model, const glm::vec3& color)
 void create_SphereLines(Model& lineModel, float radius, const glm::vec3& color)
 {
 	float degrees =22.5f;
+	glm::vec3 position;
 	for (int i = 0; i < 18; i++)
 	{
-		lineModel.Vertices.emplace_back(radius * sin(glm::radians(degrees*i)), radius * cos(glm::radians(degrees*i)), 0.f, color);
+		position = glm::vec3(radius * sin(glm::radians(degrees * i)), radius * cos(glm::radians(degrees * i)), 0.f);
+		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
 	}
 	for (int i = 0; i < 21; i++)
 	{
-		lineModel.Vertices.emplace_back(0.f, radius * cos(glm::radians(degrees*i)), radius * sin(glm::radians(degrees*i)), color);
+		position = glm::vec3(0.f, radius * cos(glm::radians(degrees * i)), radius * sin(glm::radians(degrees * i)));
+		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
 	}
 	for (int i = 0; i < 18; i++)
 	{
-		lineModel.Vertices.emplace_back(radius * sin(glm::radians(degrees*i)), 0.f, radius * cos(glm::radians(degrees*i)), color);
+		position = glm::vec3(radius * sin(glm::radians(degrees * i)), 0.f, radius * cos(glm::radians(degrees * i)));
+		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
 	}
 
 	lineModel.bind_Buffer();
@@ -245,17 +282,26 @@ void create_SphereLines(Model& lineModel, float radius, const glm::vec3& color)
 
 void create_BoxLines(Model& lineModel, float height, float width, float depth, const glm::vec3& color)
 {
-	lineModel.Vertices.emplace_back(width / 2, height / 2, depth / 2, color);
-	lineModel.Vertices.emplace_back(-width / 2, height / 2, depth / 2, color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, height / 2, depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, height / 2, depth / 2), glm::vec3(1.f), color);
 
-	lineModel.Vertices.emplace_back(width / 2, -height / 2, depth / 2, color);
-	lineModel.Vertices.emplace_back(-width / 2, -height / 2, depth / 2, color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, depth / 2), glm::vec3(1.f), color);
 
-	lineModel.Vertices.emplace_back(width / 2, height / 2, -depth / 2, color);
-	lineModel.Vertices.emplace_back(-width / 2, height / 2, -depth / 2, color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, height / 2, -depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, height / 2, -depth / 2), glm::vec3(1.f), color);
 
-	lineModel.Vertices.emplace_back(width / 2, -height / 2, -depth / 2, color);
-	lineModel.Vertices.emplace_back(-width / 2, -height / 2, -depth / 2, color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
 
 	lineModel.bind_Buffer();
+}
+
+void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)
+{
+	glm::vec3 normal = glm::cross(vertexB.XYZ - vertexA.XYZ, vertexC.XYZ - vertexA.XYZ);
+
+	vertexA.Normal += glm::normalize(normal);
+	vertexB.Normal += glm::normalize(normal);
+	vertexC.Normal += glm::normalize(normal);
 }

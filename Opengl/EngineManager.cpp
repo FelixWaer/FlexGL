@@ -30,7 +30,10 @@ void EngineManager::init_Engine()
 	CameraPosLoc = glGetUniformLocation(TheShader.ShaderProgram, "CameraPos");
 	lightPosLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightPos");
 	lightColorLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightColor");
-	
+
+	TheLight.set_LightColor(glm::vec3(1.f));
+	TheLight.set_LightPosition(glm::vec3(0.f));
+
 	TheGame.game_Start(this);
 	for (GameObject* gameObject : GameObjectHandler)
 	{
@@ -85,7 +88,8 @@ void EngineManager::tick_Engine()
 		}
 	}
 
-	move_Light(DeltaTime);
+	//std::cout << 1 / DeltaTime << std::endl;
+	//move_Light(DeltaTime);
 }
 
 void EngineManager::check_Collision()
@@ -196,11 +200,10 @@ bool EngineManager::calculate_PointOnTriangle(glm::vec3& x, glm::vec3 P, glm::ve
 	float A = glm::length(glm::cross(Q - P, R - P));
 
 	float U, V, W;
-	
+
 	U = glm::cross(Q - tempVector, R - tempVector).z / A;
 	V = glm::cross(R - tempVector, P - tempVector).z / A;
 	W = glm::cross(P - tempVector, Q - tempVector).z / A;
-
 
 	float triangleHeight = U * (P.z - position.y) + V * (Q.z - position.y) + W * (R.z - position.y);
 

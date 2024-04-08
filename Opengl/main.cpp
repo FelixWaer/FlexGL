@@ -52,6 +52,7 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(EM->TheWindow);
+    glfwSwapInterval(0);
     glfwSetFramebufferSizeCallback(EM->TheWindow, framebuffer_size_callback);
     glfwSetCursorPosCallback(EM->TheWindow, mouse_Button_Callback);
 

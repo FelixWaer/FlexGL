@@ -186,8 +186,10 @@ void Model::draw_Model()
 
 	if (DrawLines == true)
 	{
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawElements(GL_LINE_STRIP, Indices.size()*3, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+		
 		return;
 	}
 	glDrawElements(GL_TRIANGLES, Indices.size()*3, GL_UNSIGNED_INT, 0);

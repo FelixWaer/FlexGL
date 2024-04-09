@@ -3,7 +3,13 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "../EngineManager.h"
 #include "../GameObject.h"
+
+void Camera::init_Camera()
+{
+	EngineManager::TheEngineManager->add_ToCameraHandler(this);
+}
 
 glm::mat4 Camera::get_CameraView()
 {

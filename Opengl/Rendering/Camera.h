@@ -8,6 +8,8 @@ class Camera
 public:
 	Camera() = default;
 
+	void init_Camera();
+
 	glm::mat4 get_CameraView();
 	glm::mat4 get_CameraProjection();
 	glm::vec3& get_CameraPosition();

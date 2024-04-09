@@ -47,13 +47,14 @@ void EngineManager::tick_Engine()
 	DeltaTime = currentFrame - LastFrame;
 	LastFrame = currentFrame;
 
+	TheGame.Input(TheWindow);
+	check_Collision();
+
 	for (GameObject* gameObject  : GameObjectHandler)
 	{
 		gameObject->tick(DeltaTime);
 	}
 
-	TheGame.Input(TheWindow);
-	check_Collision();
 	TheGame.tick(DeltaTime);
 
 	glClearColor(0.f, 0.f, 0.5f, 1.0f);
@@ -63,14 +64,14 @@ void EngineManager::tick_Engine()
 	glLineWidth(5);
 	glPointSize(5);
 
-	glUniform3fv(CameraPosLoc, 1, glm::value_ptr(TheCamera->get_CameraPosition()));
+	glUniform3fv(CameraPosLoc, 1, glm::value_ptr(get_ActiveCamera().get_CameraPosition()));
 	glUniform3fv(lightPosLoc, 1, glm::value_ptr(TheLight.get_LightPosition()));
 	glUniform3fv(lightColorLoc, 1, glm::value_ptr(TheLight.get_LightColor()));
 
 	for (auto model : ModelHandler)
 	{
 		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
-		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 200.0f) * TheCamera->get_CameraView() * model->get_ModelMatrix()));
+		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 200.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
 
 		model->draw_Model();
 	}
@@ -83,7 +84,7 @@ void EngineManager::tick_Engine()
 				TheTerrain->Vertices[triangle.SecondIndex].XYZ,
 				TheTerrain->Vertices[triangle.ThirdIndex].XYZ, TheTerrain->get_WorldPosition()))
 			{
-				TheCamera->get_CameraPosition().y = CharacterPoint->y+3;
+				get_ActiveCamera().get_CameraPosition().y = CharacterPoint->y+3;
 			}
 		}
 	}
@@ -147,6 +148,21 @@ void EngineManager::add_ToBoxCollisionHandler(BoxCollision* boxCollisionPtr)
 	BoxCollisionHandler.emplace_back(boxCollisionPtr);
 }
 
+void EngineManager::add_ToCameraHandler(Camera* CameraPtr)
+{
+	CameraHandler.emplace_back(CameraPtr);
+}
+
+void EngineManager::set_ActiveCamera(Camera* cameraPtr)
+{
+	ActiveCamera = cameraPtr;
+}
+
+Camera& EngineManager::get_ActiveCamera()
+{
+	return *ActiveCamera;
+}
+
 void EngineManager::turnOff_DebugMode(bool turnOff)
 {
 	for (SphereCollision* sphere : SphereCollisionHandler)
@@ -183,32 +199,22 @@ bool EngineManager::calculate_BoxCollision(glm::vec3 boxPos_1, glm::vec3 boxPos_
 		(boxPos_1.z + boxDepth_1 / 2) >= (boxPos_2.z - boxDepth_2 / 2);
 }
 
-bool EngineManager::calculate_PointOnTriangle(glm::vec3& x, glm::vec3 P, glm::vec3 Q, glm::vec3 R, const glm::vec3& position)
+bool EngineManager::calculate_PointOnTriangle(glm::vec3& x, const glm::vec3& P, const glm::vec3& Q, const glm::vec3& R, const glm::vec3& position)
 {
 	glm::vec3 tempVector = x;
 	tempVector.y -= 0.5;
 
-	P += position;
-	Q += position;
-	R += position;
-
-	switch_YZ(P);
-	switch_YZ(Q);
-	switch_YZ(R);
-	switch_YZ(tempVector);
-
-	float A = glm::length(glm::cross(Q - P, R - P));
-
-	float U, V, W;
-
-	U = glm::cross(Q - tempVector, R - tempVector).z / A;
-	V = glm::cross(R - tempVector, P - tempVector).z / A;
-	//W = glm::cross(P - tempVector, Q - tempVector).z / A;
-	W = 1 - U - V;
+	//arealet er 1 akkurat nå så ikke vits i å regne det ug og gjøre matte med det
+	//float A = calculate_Normal(Q - P, R - P);
+	//float A = 1.f/2;
+	
+	float U = calculate_Normal((Q + position) - tempVector, (R + position) - tempVector);
+	float V = calculate_Normal((R+ position) - tempVector, (P + position) - tempVector);
+	float W = 1 - U - V;
 
 	if (U >= 0 && V >= 0 && W >= 0)
 	{
-		float triangleHeight = U * (P.z - position.y) + V * (Q.z - position.y) + W * (R.z - position.y);
+		float triangleHeight = U * (P.y) + V * (Q.y) + W * (R.y);
 		x.y = (triangleHeight+position.y);
 		return true;
 	}
@@ -251,4 +257,14 @@ void EngineManager::move_Light(float deltaTime)
 	{
 		SmallerBigger *= -1;
 	}
+}
+
+float EngineManager::calculate_Normal(const glm::vec3& AB, const glm::vec3& AC)
+{
+	return AB[0] * AC[2] - AC[0] * AB[2];
+}
+
+float EngineManager::calculate_Normal(const glm::vec3&& AB, const glm::vec3&& AC)
+{
+	return AB[0] * AC[2] - AC[0] * AB[2];
 }

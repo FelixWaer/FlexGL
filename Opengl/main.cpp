@@ -25,8 +25,6 @@ bool CameraFirstMove = true;
 
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
-
-
 int main()
 {
     EngineManager* EM = EngineManager::create_EngineManager();
@@ -110,5 +108,5 @@ void mouse_Button_Callback(GLFWwindow* window, double xPos, double yPos)
     XPosMouse = xPos;
     YPosMouse = yPos;
 
-    EngineManager::TheEngineManager->TheCamera->update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
+    EngineManager::TheEngineManager->get_ActiveCamera().update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
 }

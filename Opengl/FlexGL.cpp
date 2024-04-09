@@ -24,7 +24,7 @@ void FlexGL::game_Start(EngineManager* EM)
     Testing.load_Model(FilePathModel2);
     //Testing.draw_ModelAsLines(true);
 
-    EngineManager::TheEngineManager->TheCamera = &ThePlayer.TheCamera;
+    EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.TheCamera;
     create_Cube(Floor_1, glm::vec3(0.5f, 0.5f, 0.f));
     Floor_1.set_ModelPosition(glm::vec3(0.f, -20.f, 0.f));
     Floor_1.scale_Model(glm::vec3(50.f, 1.f, 50.f));
@@ -94,7 +94,7 @@ void FlexGL::tick(float deltaTime)
     //std::cout << ThePlayer.get_GameObjectPosition().x << ThePlayer.get_GameObjectPosition().y << ThePlayer.get_GameObjectPosition().z << std::endl;
 	if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == true)
 	{
-        EngineManager::TheEngineManager->TheCamera = &Camera_1;
+        EngineManager::TheEngineManager->set_ActiveCamera(&Camera_1);
 	}
 }
 
@@ -130,12 +130,7 @@ void FlexGL::Input(GLFWwindow* window)
 	{
 		if (KeyPressed == false)
 		{
-  /*          CameraIndex += 1;
-            if (CameraIndex >= camera.size())
-            {
-                CameraIndex = 0;
-            }
-            EngineManager::TheEngineManager->TheCamera = camera[CameraIndex];*/
+			
             if (DebugTurnedOff == true)
             {
                 EngineManager::TheEngineManager->turnOff_DebugMode(true);
@@ -164,15 +159,14 @@ void FlexGL::Input(GLFWwindow* window)
     {
         if (KeyPressed2 == false)
         {
-            std::cout << "no";
             if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == true)
             {
-                EngineManager::TheEngineManager->TheCamera = &Camera_2;
+                EngineManager::TheEngineManager->set_ActiveCamera(&Camera_2);
                 CameraIs1 = false;
             }
             else if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == false)
             {
-                EngineManager::TheEngineManager->TheCamera = &Camera_1;
+                EngineManager::TheEngineManager->set_ActiveCamera(&Camera_1);
                 CameraIs1 = true;
             }
         }

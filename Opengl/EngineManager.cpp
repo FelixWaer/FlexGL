@@ -61,7 +61,7 @@ void EngineManager::tick_Engine()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(TheShader.ShaderProgram);
-	glLineWidth(5);
+	glLineWidth(10);
 	glPointSize(5);
 
 	glUniform3fv(CameraPosLoc, 1, glm::value_ptr(get_ActiveCamera().get_CameraPosition()));
@@ -89,8 +89,8 @@ void EngineManager::tick_Engine()
 		}
 	}
 
-	std::cout << 1 / DeltaTime << std::endl;
-	//move_Light(DeltaTime);
+	//std::cout << 1 / DeltaTime << std::endl;
+	move_Light(DeltaTime);
 }
 
 void EngineManager::check_Collision()
@@ -234,23 +234,23 @@ void EngineManager::switch_YZ(glm::vec3& vector)
 void EngineManager::move_Light(float deltaTime)
 {
 	TheLight.set_LightPosition(glm::vec3(Radius * sin(glm::radians(Degrees)), -10.f, Radius * cos(glm::radians(Degrees))));
-	TheLight.set_LightColor(glm::vec3(sin(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor))));
-	Degrees += 180.f * deltaTime;
-	DegreesColor += 90.f * deltaTime * SmallerBiggerColor;
+	//TheLight.set_LightColor(glm::vec3(sin(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor))));
+	Degrees += 45.f * deltaTime;
+	DegreesColor += 45.f * deltaTime * SmallerBiggerColor;
 	Radius += 5.f * SmallerBigger * deltaTime;
 	if (Degrees >= 360.f)
 	{
 		Degrees = 0.f;
 	}
 
-	if (DegreesColor >= 180.f)
-	{
-		SmallerBiggerColor = -1;
-	}
-	else if(DegreesColor <= 0.f)
-	{
-		SmallerBiggerColor = 1;
-	}
+	//if (DegreesColor >= 180.f)
+	//{
+	//	SmallerBiggerColor = -1;
+	//}
+	//else if(DegreesColor <= 0.f)
+	//{
+	//	SmallerBiggerColor = 1;
+	//}
 	
 
 	if (Radius >= 50.f || Radius <= 15.f)

@@ -7,6 +7,7 @@ void NPC::game_Start()
 	NPCModel.init_Model();
 	create_Cube(NPCModel, glm::vec3(0.8f, 0.5f, 0.5f));
 	NPCModel.bind_ToGameObject(this);
+	NPCModel.set_ModelPosition(glm::vec3(0.f));
 
 	BoxCollider.attach_ToGameObject(this);
 	BoxCollider.enable_BoxVisible(true);
@@ -88,7 +89,7 @@ float NPC::calculate_NPCPath(float x)
 void NPC::calculate_CirclePath(float deltaTime)
 {
 	set_GameObjectPosition(glm::vec3(Radius * sin(glm::radians(Degrees)), -19.f, Radius * cos(glm::radians(Degrees))));
-	Degrees += 180.f * deltaTime;
+	Degrees += 45.f * deltaTime;
 	Radius += 5.f * SmallerBigger *deltaTime;
 	if (Degrees >= 360.f)
 	{

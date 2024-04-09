@@ -30,27 +30,29 @@ private:
 	NPC TheNPC;
 	NPC NPC_2;
 	NPC NPC_3;
-	Door TheDoor;
 
-	PickUpItem item_1;
-	PickUpItem item_2;
-	PickUpItem item_3;
-	PickUpItem item_4;
-	PickUpItem item_5;
-	PickUpItem item_6;
-	PickUpItem item_7;
-	PickUpItem item_8;
+	std::vector<PickUpItem*> items;
+	//PickUpItem item_1;
+	//PickUpItem item_2;
+	//PickUpItem item_3;
+	//PickUpItem item_4;
+	//PickUpItem item_5;
+	//PickUpItem item_6;
+	//PickUpItem item_7;
+	//PickUpItem item_8;
 	PickUpItem HouseItem;
 
-	Model Floor_1;
-	Model Wall_1;
-	Model Wall_2;
-	Model Wall_3;
-	Model Wall_4;
-	Model Wall_5;
-	Model Roof_1;
+	//Model Floor_1;
+	//Model Wall_1;
+	//Model Wall_2;
+	//Model Wall_3;
+	//Model Wall_4;
+	//Model Wall_5;
+	//Model Roof_1;
+	//Door TheDoor;
 
-	Model Testing;
+	Model Terrain;
+	Model TerrainLine;
 
 	Box box;
 

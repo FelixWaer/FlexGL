@@ -26,7 +26,7 @@ void GameObject::set_GameObjectPosition(glm::vec3 newPosition)
 	GameObjectPosition = newPosition;
 }
 
-glm::vec3 GameObject::get_GameObjectPosition()
+glm::vec3& GameObject::get_GameObjectPosition()
 {
 	return GameObjectPosition;
 }

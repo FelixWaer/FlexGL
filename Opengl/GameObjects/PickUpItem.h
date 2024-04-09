@@ -13,9 +13,9 @@ public:
 	void set_Color(const glm::vec3& color);
 
 private:
-	Model Model;
+	Model* ItemModel = nullptr;
 	SphereCollision Collider;
 
-	glm::vec3 Color = glm::vec3(1.f, 0.f, 0.f);
+	glm::vec3 Color = glm::vec3(0.7f, 0.f, 1.f);
 };
 

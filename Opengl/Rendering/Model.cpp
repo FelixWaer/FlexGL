@@ -187,7 +187,7 @@ void Model::draw_Model()
 	if (DrawLines == true)
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawElements(GL_LINE_STRIP, Indices.size()*3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_LINES, Indices.size()*3, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		
 		return;
@@ -297,6 +297,33 @@ void create_BoxLines(Model& lineModel, float height, float width, float depth, c
 	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
 
 	lineModel.bind_Buffer();
+}
+
+float line_Function(float x)
+{
+	return x*-x;
+}
+
+void create_LinesOnTerrain(Model& lineModel, Model& terrainModel, float xStart, float xEnd, float deltaX)
+{
+	for (float x = xStart; x <= xEnd; x += deltaX)
+	{
+		glm::vec3 vertexPos(x, 0.f, line_Function(x));
+
+		for (const Triangle& triangle : terrainModel.Indices)
+		{
+			if (EngineManager::calculate_PointOnTriangle(vertexPos, terrainModel.Vertices[triangle.FirstIndex].XYZ, 
+				terrainModel.Vertices[triangle.SecondIndex].XYZ, terrainModel.Vertices[triangle.ThirdIndex].XYZ, terrainModel.get_WorldPosition()))
+			{
+				vertexPos.y += 0.1f;
+				break;
+			}
+		}
+
+		lineModel.Vertices.emplace_back(vertexPos, glm::vec3(0.f), glm::vec3(1.f, 1.f, 1.f));
+	}
+	lineModel.bind_Buffer();
+	lineModel.turn_OnLine();
 }
 
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)

@@ -19,7 +19,7 @@ void Player::game_Start()
 	BoxCollider.set_BoxWidth(2.f);
 	BoxCollider.set_BoxDepth(2.f);
 	BoxCollider.enable_BoxVisible(true);
-	TheCamera.update_CameraPosition(glm::vec3(0.f, -14.f, 25.f));
+	TheCamera.update_CameraPosition(glm::vec3(-4.f, -20.f, 40.f));
 	TheCamera.set_CameraSpeed(0.1f);
 
 	add_Tag("Player");

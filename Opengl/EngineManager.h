@@ -50,6 +50,7 @@ public:
 	Camera& get_ActiveCamera();
 
 	void turnOff_DebugMode(bool turnOff);
+	static bool calculate_PointOnTriangle(glm::vec3& x, const glm::vec3& P, const glm::vec3& Q, const glm::vec3& R, const glm::vec3& position);
 private:
 	FlexGL TheGame;
 
@@ -67,7 +68,6 @@ private:
 
 	bool calculate_SphereCollision(glm::vec3 spherePos_1, glm::vec3 spherePos_2, float sphereRadius_1, float sphereRadius_2);
 	bool calculate_BoxCollision(glm::vec3 boxPos_1, glm::vec3 boxPos_2, float boxHeight_1, float boxWidth_1, float boxDepth_1, float boxHeight_2, float boxWidth_2, float boxDepth_2);
-	static bool calculate_PointOnTriangle(glm::vec3& x, const glm::vec3& P, const glm::vec3& Q, const glm::vec3& R, const glm::vec3& position);
 	static void switch_YZ(glm::vec3& vector);
 
 	float Degrees = 0.f;

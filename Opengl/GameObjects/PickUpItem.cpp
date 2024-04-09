@@ -6,9 +6,10 @@
 
 void PickUpItem::game_Start()
 {
-    Model.init_Model();
-    create_Cube(Model, Color);
-	Model.bind_ToGameObject(this);
+    ItemModel = new Model();
+    ItemModel->init_Model();
+    create_Cube(*ItemModel, Color);
+    ItemModel->bind_ToGameObject(this);
     Collider.attach_ToGameObject(this);
     Collider.set_SphereRadius(3.f);
     Collider.enable_SphereVisible(true);
@@ -23,7 +24,7 @@ void PickUpItem::on_Collision(GameObject* otherGameObject)
 {
 	if (otherGameObject->has_Tag("Player"))
 	{
-        Model.hide_Model(true);
+        ItemModel->hide_Model(true);
         Collider.enable_SphereVisible(false);
 	}
 }

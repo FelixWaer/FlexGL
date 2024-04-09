@@ -88,7 +88,7 @@ void EngineManager::tick_Engine()
 		}
 	}
 
-	//std::cout << 1 / DeltaTime << std::endl;
+	std::cout << 1 / DeltaTime << std::endl;
 	//move_Light(DeltaTime);
 }
 
@@ -203,12 +203,12 @@ bool EngineManager::calculate_PointOnTriangle(glm::vec3& x, glm::vec3 P, glm::ve
 
 	U = glm::cross(Q - tempVector, R - tempVector).z / A;
 	V = glm::cross(R - tempVector, P - tempVector).z / A;
-	W = glm::cross(P - tempVector, Q - tempVector).z / A;
-
-	float triangleHeight = U * (P.z - position.y) + V * (Q.z - position.y) + W * (R.z - position.y);
+	//W = glm::cross(P - tempVector, Q - tempVector).z / A;
+	W = 1 - U - V;
 
 	if (U >= 0 && V >= 0 && W >= 0)
 	{
+		float triangleHeight = U * (P.z - position.y) + V * (Q.z - position.y) + W * (R.z - position.y);
 		x.y = (triangleHeight+position.y);
 		return true;
 	}

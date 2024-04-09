@@ -13,8 +13,6 @@ float AmbientStrength = 0.3;
 float SpecularStrength = 0.5;
 float Shininess = 32;
 
-//vec3 lightColor = vec3(1.0, 1.0, 1.0);
-
 void main()
 {   	
 	vec3 viewDirection = normalize(CameraPos - FragPos);
@@ -23,6 +21,7 @@ void main()
 	vec3 lightDirection = normalize(LightPos - FragPos);
    
    	float diffuseStrength = max(dot(normal, lightDirection), 0.0);
+
    	vec3 diffuse = diffuseStrength * LightColor;
 
 	vec3 ambient = AmbientStrength * LightColor;

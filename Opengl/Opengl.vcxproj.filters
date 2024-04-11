@@ -25,6 +25,9 @@
     <Filter Include="Rendering">
       <UniqueIdentifier>{daa76ade-094c-4706-aa5c-929d629d1e21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{9b85f562-d787-49db-8d85-803fa7d8a7c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -32,15 +35,6 @@
     </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineManager.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlexGL.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\PickUpItem.cpp">
       <Filter>GameObject</Filter>
@@ -81,6 +75,21 @@
     <ClCompile Include="Rendering\Light.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FlexGL.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameObject.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Terrain.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\ModelCreation.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -94,15 +103,6 @@
     </ClInclude>
     <ClInclude Include="ProjectDependencies\Includes\KHR\khrplatform.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineManager.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FlexGL.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\PickUpItem.h">
       <Filter>GameObject</Filter>
@@ -147,6 +147,21 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\Light.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FlexGL.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameObject.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Terrain.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\ModelCreation.h">
       <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>

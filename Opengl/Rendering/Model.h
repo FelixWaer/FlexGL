@@ -10,16 +10,20 @@ class GameObject;
 struct Vertex
 {
 	//Vertex() = default;
-	Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color);
+	Vertex(const glm::vec3& position, const glm::vec3& color) :
+		Position(position), Color(color){}
+	Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color) :
+		Position(position), Normal(normal), Color(color){}
 
-	glm::vec3 XYZ;
-	glm::vec3 Normal;
-	glm::vec3 RGB;
+	glm::vec3 Position = glm::vec3(0.f);
+	glm::vec3 Normal = glm::vec3(0.f);
+	glm::vec3 Color = glm::vec3(0.f);
 };
 
 struct Triangle
 {
-	Triangle(unsigned int firstIndex, unsigned int secondIndex, unsigned int thirdIndex);
+	Triangle(unsigned int firstIndex, unsigned int secondIndex, unsigned int thirdIndex) :
+		FirstIndex(firstIndex), SecondIndex(secondIndex), ThirdIndex(thirdIndex){}
 
 	unsigned int FirstIndex;
 	unsigned int SecondIndex;

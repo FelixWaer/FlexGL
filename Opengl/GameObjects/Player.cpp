@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-#include "../EngineManager.h"
+#include "../Engine/EngineManager.h"
+#include "../Engine/Terrain.h"
 
 void Player::game_Start()
 {
@@ -20,7 +21,7 @@ void Player::game_Start()
 	BoxCollider.set_BoxDepth(2.f);
 	BoxCollider.enable_BoxVisible(true);
 	TheCamera.update_CameraPosition(glm::vec3(-4.f, -20.f, 40.f));
-	TheCamera.set_CameraSpeed(0.1f);
+	TheCamera.set_CameraSpeed(50.f);
 
 	add_Tag("Player");
 }
@@ -28,6 +29,19 @@ void Player::game_Start()
 void Player::tick(float deltaTime)
 {
 	GameObject::tick(deltaTime);
+
+	int32_t chunkXPos = static_cast<int32_t>(floor(PlayerModel.get_WorldPosition().x / 30));
+	int32_t chunkYPos = static_cast<int32_t>(floor(PlayerModel.get_WorldPosition().z / 30));
+	std::cout << chunkXPos << " " << chunkYPos << std::endl;
+
+	for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
+	{
+		if (chunkXPos == chunk.xPos && chunkYPos == chunk.yPos)
+		{
+			EngineManager::TheEngineManager->TheTerrain = chunk.ChunkModel;
+		}
+	}
+
 	//if (Jumping == true)
 	//{
 	//	TheCamera.move_CameraUp(20.f * deltaTime);

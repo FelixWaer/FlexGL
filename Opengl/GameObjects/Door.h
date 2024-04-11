@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameObject.h"
+#include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
 #include "../GameObject Components/BoxCollision.h"
 

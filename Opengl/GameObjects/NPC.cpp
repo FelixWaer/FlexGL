@@ -1,6 +1,6 @@
 #include "NPC.h"
 
-#include "../EngineManager.h"
+#include "../Engine/EngineManager.h"
 
 void NPC::game_Start()
 {

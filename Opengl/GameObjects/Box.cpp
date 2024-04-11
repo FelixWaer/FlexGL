@@ -7,15 +7,15 @@ void Box::game_Start()
 	BoxModel.init_Model();
 	BoxModel.bind_ToGameObject(this);
 	create_Cube(BoxModel, glm::vec3(0.f, 0.f, 1.f));
-	BoxModel.scale_Model(glm::vec3(10.f, 1.f, 10.f));
+	BoxModel.scale_Model(glm::vec3(50.f, 1.f, 50.f));
 
-	set_GameObjectPosition(glm::vec3(-40.f, 0.f, -40.f));
+	set_GameObjectPosition(glm::vec3(25.f, -2.f, 25.f));
 
 	BoxCollider.attach_ToGameObject(this);
 	BoxCollider.enable_BoxVisible(true);
-	BoxCollider.set_BoxWidth(10.1f);
+	BoxCollider.set_BoxWidth(50.f);
 	BoxCollider.set_BoxHeight(1.1f);
-	BoxCollider.set_BoxDepth(10.1f);
+	BoxCollider.set_BoxDepth(50.f);
 	add_Tag("Box");
 }
 

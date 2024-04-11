@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameObject.h"
+#include "../Engine/GameObject.h"
 
 #include "../Rendering/Camera.h"
 #include "../GameObject Components/SphereCollision.h"

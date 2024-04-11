@@ -1,7 +1,7 @@
 #include "SphereCollision.h"
 
-#include "../EngineManager.h"
-#include "../GameObject.h"
+#include "../Engine/EngineManager.h"
+#include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
 
 void SphereCollision::attach_ToGameObject(GameObject* GO)

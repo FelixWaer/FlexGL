@@ -5,10 +5,11 @@
 #include "EngineManager.h"
 
 std::string FilePathModel = "Models/Data Points";
-std::string FilePathModel3 = "Models/Data Points Vertex";
 std::string FilePathModel2 = "Models/Function Points";
+std::string FilePathModel3 = "Models/Data Points Vertex";
+std::string FilePathModel4 = "Models/PerlinNoise";
 
-void FlexGL::game_Start(EngineManager* EM)
+void FlexGL::game_Start()
 {
     //Floor_1.init_Model();
     //Wall_1.init_Model();
@@ -18,14 +19,17 @@ void FlexGL::game_Start(EngineManager* EM)
     //Wall_5.init_Model();
     //Roof_1.init_Model();
 
-    Terrain.init_Model();
-    Terrain.set_ModelPosition(glm::vec3(20.f, -30.f, 0.f));
-    Terrain.scale_Model(glm::vec3(1.f));
-    Terrain.load_Model(FilePathModel2);
+    //Terrain.init_Model();
+    //Terrain.set_ModelPosition(glm::vec3(0.f));
+    //Terrain.scale_Model(glm::vec3(1.f));
+ //  Terrain.load_Model(FilePathModel4);
+
+    Terrain::get_Terrain()->generate_Chunk(0, 0);
+    Terrain::get_Terrain()->generate_ChunksAroundChunk(Terrain::get_Terrain()->Chunks[0]);
 
     TerrainLine.init_Model();
     TerrainLine.set_ModelPosition(glm::vec3(0.f));
-    create_LinesOnTerrain(TerrainLine, Terrain, -5.f, 5.f, 0.1f);
+    create_LinesOnTerrain(TerrainLine, *Terrain::get_Terrain()->Chunks[0].ChunkModel, -5.f, 5.f, 0.1f);
 
     EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.TheCamera;
 
@@ -81,7 +85,7 @@ void FlexGL::game_Start(EngineManager* EM)
 
     box.init_GameObject();
 
-    EngineManager::TheEngineManager->TheTerrain = &Terrain;
+    EngineManager::TheEngineManager->TheTerrain = Terrain::get_Terrain()->Chunks[0].ChunkModel;
 }
 
 void FlexGL::tick(float deltaTime)
@@ -181,23 +185,46 @@ void FlexGL::spawn_PickupRandom()
     int yDistance = 0.f;
     int zDistance = 25.f;
     int numberOfItems = 8;
+    float tempXPos = 0.f;
+    float tempZPos = 0.f;
 
     items.reserve(numberOfItems);
-    PickUpItem* tempItem;
+
     for (int i = 0; i < numberOfItems; i++)
     {
-        tempItem = new PickUpItem;
+        tempXPos = (rand() % xDistance * 2) - xDistance;
+        tempZPos = (rand() % zDistance * 2) - zDistance;
+
+        PickUpItem* tempItem = new PickUpItem;
         tempItem->init_GameObject();
-        tempItem->set_GameObjectPosition(glm::vec3((rand() % xDistance * 2) - xDistance, yDistance, (rand() % zDistance * 2) - zDistance));
-        for (const Triangle& triangle : Terrain.Indices)
+        tempItem->set_GameObjectPosition(glm::vec3(tempXPos - xDistance, yDistance, tempZPos));
+
+        int32_t chunkXPos = static_cast<int32_t>(floor(tempXPos / 30));
+        int32_t chunkYPos = static_cast<int32_t>(floor(tempZPos / 30));
+
+        std::cout << chunkXPos << " " << chunkYPos << std::endl;
+
+        for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
         {
-            if (EngineManager::calculate_PointOnTriangle(tempItem->get_GameObjectPosition(), Terrain.Vertices[triangle.FirstIndex].XYZ,
-                Terrain.Vertices[triangle.SecondIndex].XYZ, Terrain.Vertices[triangle.ThirdIndex].XYZ, Terrain.get_WorldPosition()))
+            if (chunkXPos == chunk.xPos && chunkYPos == chunk.yPos)
             {
-                tempItem->get_GameObjectPosition().y += 0.5f;
+                for (const Triangle& triangle : Terrain::get_Terrain()->Chunks[0].ChunkModel->Indices)
+                {
+                    if (EngineManager::calculate_PointOnTriangle(tempItem->get_GameObjectPosition(),
+                        chunk.ChunkModel->Vertices[triangle.FirstIndex].Position,
+                        chunk.ChunkModel->Vertices[triangle.SecondIndex].Position,
+                        chunk.ChunkModel->Vertices[triangle.ThirdIndex].Position,
+                        chunk.ChunkModel->get_WorldPosition()))
+                    {
+                        tempItem->get_GameObjectPosition().y += 0.5f;
+                        break;
+                    }
+                }
                 break;
             }
         }
+
+
         items.emplace_back(tempItem);
     }
 }

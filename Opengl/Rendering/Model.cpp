@@ -5,22 +5,8 @@
 
 #include <glm/ext.hpp>
 
-#include "../EngineManager.h"
-#include "../GameObject.h"
-Vertex::Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color)
-{
-	XYZ = position;
-	Normal = normal;
-	RGB = color;
-}
-
-Triangle::Triangle(unsigned int firstIndex, unsigned int secondIndex, unsigned int thirdIndex)
-{
-	FirstIndex = firstIndex;
-	SecondIndex = secondIndex;
-	ThirdIndex = thirdIndex;
-}
-
+#include "../Engine/EngineManager.h"
+#include "../Engine/GameObject.h"
 
 void Model::init_Model()
 {
@@ -310,12 +296,24 @@ void create_LinesOnTerrain(Model& lineModel, Model& terrainModel, float xStart, 
 	{
 		glm::vec3 vertexPos(x, 0.f, line_Function(x));
 
-		for (const Triangle& triangle : terrainModel.Indices)
+		int32_t chunkXPos = static_cast<int32_t>(floor(x / 30));
+		int32_t chunkYPos = static_cast<int32_t>(floor(line_Function(x) / 30));
+
+		std::cout << chunkXPos << " " << chunkYPos << std::endl;
+
+		for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
 		{
-			if (EngineManager::calculate_PointOnTriangle(vertexPos, terrainModel.Vertices[triangle.FirstIndex].XYZ, 
-				terrainModel.Vertices[triangle.SecondIndex].XYZ, terrainModel.Vertices[triangle.ThirdIndex].XYZ, terrainModel.get_WorldPosition()))
+			if (chunkXPos == chunk.xPos && chunkYPos == chunk.yPos)
 			{
-				vertexPos.y += 0.1f;
+				for (const Triangle& triangle : chunk.ChunkModel->Indices)
+				{
+					if (EngineManager::calculate_PointOnTriangle(vertexPos, chunk.ChunkModel->Vertices[triangle.FirstIndex].Position,
+						chunk.ChunkModel->Vertices[triangle.SecondIndex].Position, chunk.ChunkModel->Vertices[triangle.ThirdIndex].Position, terrainModel.get_WorldPosition()))
+					{
+						vertexPos.y += 0.1f;
+						break;
+					}
+				}
 				break;
 			}
 		}
@@ -328,7 +326,7 @@ void create_LinesOnTerrain(Model& lineModel, Model& terrainModel, float xStart, 
 
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)
 {
-	glm::vec3 normal = glm::cross(vertexB.XYZ - vertexA.XYZ, vertexC.XYZ - vertexA.XYZ);
+	glm::vec3 normal = glm::cross(vertexB.Position - vertexA.Position, vertexC.Position - vertexA.Position);
 
 	vertexA.Normal += glm::normalize(normal);
 	vertexB.Normal += glm::normalize(normal);

@@ -133,11 +133,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EngineManager.cpp" />
-    <ClCompile Include="FlexGL.cpp" />
+    <ClCompile Include="Engine\EngineManager.cpp" />
+    <ClCompile Include="Engine\FlexGL.cpp" />
+    <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="Engine\Terrain.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjects\Box.cpp" />
     <ClCompile Include="GameObjects\Door.cpp" />
     <ClCompile Include="GameObjects\Graphs.cpp" />
@@ -150,15 +151,17 @@
     <ClCompile Include="Rendering\Light.cpp" />
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Model.cpp" />
+    <ClCompile Include="Rendering\ModelCreation.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
-    <ClInclude Include="EngineManager.h" />
-    <ClInclude Include="FlexGL.h" />
+    <ClInclude Include="Engine\EngineManager.h" />
+    <ClInclude Include="Engine\FlexGL.h" />
+    <ClInclude Include="Engine\GameObject.h" />
+    <ClInclude Include="Engine\Terrain.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjects\Box.h" />
     <ClInclude Include="GameObjects\Door.h" />
     <ClInclude Include="GameObjects\Graphs.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="Rendering\Light.h" />
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\Model.h" />
+    <ClInclude Include="Rendering\ModelCreation.h" />
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Rendering\Vertex.h" />
   </ItemGroup>

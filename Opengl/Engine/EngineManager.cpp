@@ -34,7 +34,7 @@ void EngineManager::init_Engine()
 	TheLight.set_LightColor(glm::vec3(1.f));
 	TheLight.set_LightPosition(glm::vec3(0.f));
 
-	TheGame.game_Start(this);
+	TheGame.game_Start();
 	for (GameObject* gameObject : GameObjectHandler)
 	{
 		gameObject->game_Start();
@@ -80,9 +80,9 @@ void EngineManager::tick_Engine()
 	{
 		for (const Triangle& triangle : TheTerrain->Indices)
 		{
-			if (calculate_PointOnTriangle(*CharacterPoint, TheTerrain->Vertices[triangle.FirstIndex].XYZ,
-				TheTerrain->Vertices[triangle.SecondIndex].XYZ,
-				TheTerrain->Vertices[triangle.ThirdIndex].XYZ, TheTerrain->get_WorldPosition()))
+			if (calculate_PointOnTriangle(*CharacterPoint, TheTerrain->Vertices[triangle.FirstIndex].Position,
+				TheTerrain->Vertices[triangle.SecondIndex].Position,
+				TheTerrain->Vertices[triangle.ThirdIndex].Position, TheTerrain->get_WorldPosition()))
 			{
 				get_ActiveCamera().get_CameraPosition().y = CharacterPoint->y+3;
 			}
@@ -146,6 +146,11 @@ void EngineManager::add_ToSphereCollisionHandler(SphereCollision* sphereCollisio
 void EngineManager::add_ToBoxCollisionHandler(BoxCollision* boxCollisionPtr)
 {
 	BoxCollisionHandler.emplace_back(boxCollisionPtr);
+}
+
+float EngineManager::get_DeltaTime()
+{
+	return DeltaTime;
 }
 
 void EngineManager::add_ToCameraHandler(Camera* CameraPtr)

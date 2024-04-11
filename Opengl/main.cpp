@@ -7,7 +7,8 @@
 #include "Rendering/Camera.h"
 
 
-#include "EngineManager.h"
+#include "Engine/EngineManager.h"
+#include "Engine/Terrain.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_Button_Callback(GLFWwindow*, double xPos, double yPos);
@@ -27,6 +28,11 @@ bool CameraFirstMove = true;
 // ------------------------------------------------------------------
 int main()
 {
+    //Chunk test;
+    //test.ChunkPosition = glm::vec2(1, -4);
+    //Terrain::get_Terrain()->generate_Chunk(test);
+
+
     EngineManager* EM = EngineManager::create_EngineManager();
     // glfw: initialize and configure
     // ------------------------------

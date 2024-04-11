@@ -3,8 +3,8 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "../EngineManager.h"
-#include "../GameObject.h"
+#include "../Engine/EngineManager.h"
+#include "../Engine/GameObject.h"
 
 void Camera::init_Camera()
 {
@@ -45,11 +45,11 @@ void Camera::move_CameraFront(bool moveFront)
 {
 	if (moveFront == true)
 	{
-		CameraPos += CameraSpeed * CameraTarget;
+		CameraPos += CameraTarget * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
 	}
 	else
 	{
-		CameraPos -= CameraSpeed * CameraTarget;
+		CameraPos -= CameraTarget * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
 	}
 }
 
@@ -57,11 +57,11 @@ void Camera::move_CameraSide(bool moveRight)
 {
 	if (moveRight == true)
 	{
-		CameraPos += glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed;
+		CameraPos += glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
 	}
 	else
 	{
-		CameraPos -= glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed;
+		CameraPos -= glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
 	}
 }
 

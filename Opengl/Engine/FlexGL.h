@@ -1,20 +1,22 @@
 #pragma once
 
-#include "Rendering/Camera.h"
-#include "GameObjects/Door.h"
-#include "GameObjects/PickUpItem.h"
-#include "GameObjects/Player.h"
-#include "GameObjects/Graphs.h"
-#include "GameObjects/NPC.h"
-#include "GameObjects/Box.h"
-	
-class EngineManager;
+#include "../Rendering/Camera.h"
+#include "../GameObjects/Door.h"
+#include "../GameObjects/PickUpItem.h"
+#include "../GameObjects/Player.h"
+#include "../GameObjects/Graphs.h"
+#include "../GameObjects/NPC.h"
+#include "../GameObjects/Box.h"
+#include "Terrain.h"
+
+
+class Terrain;
 struct GLFWwindow;
 
 class FlexGL
 {
 public:
-	void game_Start(EngineManager* EM);
+	void game_Start();
 	void tick(float deltaTime);
 	void Input(GLFWwindow* window);
 private:
@@ -30,6 +32,8 @@ private:
 	NPC TheNPC;
 	NPC NPC_2;
 	NPC NPC_3;
+
+	Terrain theTerrain;
 
 	std::vector<PickUpItem*> items;
 	//PickUpItem item_1;
@@ -51,7 +55,7 @@ private:
 	//Model Roof_1;
 	//Door TheDoor;
 
-	Model Terrain;
+	//Model Terrain;
 	Model TerrainLine;
 
 	Box box;

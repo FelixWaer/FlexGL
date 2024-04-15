@@ -47,6 +47,7 @@ private:
 	//Door TheDoor;
 
 	Model TerrainLine;
+	Camera Camera2;
 
 	bool KeyPressed = false;
 	bool KeyPressed2 = false;
@@ -55,6 +56,5 @@ private:
 	bool CameraIs1 = true;
 
 	void spawn_PickupRandom();
-	void spawn_Item();
 };
 

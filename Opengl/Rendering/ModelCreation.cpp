@@ -1,6 +1,7 @@
 #include "ModelCreation.h"
 
 #include "Mesh.h"
+#include "../Engine/EngineManager.h"
 #include "../Engine/Terrain.h"
 
 float interPolate(float pointA, float pointB, float weight)
@@ -14,11 +15,17 @@ glm::vec2 calculate_RandomGradient(int xPos, int yPos)
 	uint32_t w = 8 * sizeof(uint32_t);
 	uint32_t s = w / 2;
 
-	xPos *= 3284157443;
+	//xPos *= 3284157443;
+	//yPos ^= xPos << s | xPos >> w - s;
+	//yPos *= 3284157443;
+	//xPos ^= yPos << s | yPos >> w - s;
+	//xPos *= 3284157443;
+
+	xPos *= EngineManager::TheEngineManager->Seed;
 	yPos ^= xPos << s | xPos >> w - s;
-	yPos *= 1911520717;
+	yPos *= EngineManager::TheEngineManager->Seed;
 	xPos ^= yPos << s | yPos >> w - s;
-	xPos *= 2048419325;
+	xPos *= EngineManager::TheEngineManager->Seed;
 
 	float random = xPos * (3.14159265 / ~(~0u >> 1));
 
@@ -64,7 +71,7 @@ void create_ChunkTerrain(Chunk& chunk)
 {
 	float stepLength = 0.1f;
 	float terrainLength = 3.f;
-	float terrainHeight = 50.f;
+	//float terrainHeight = 50.f;
 	uint32_t modelZLength = 0;
 	uint32_t modelXLength = 0;
 	int64_t chunkXPos = chunk.ChunkPosition.x * 30;
@@ -91,7 +98,7 @@ void create_ChunkTerrain(Chunk& chunk)
 				amp *= 0.5f;
 			}
 
-			yHeight *= terrainHeight;
+			yHeight *= EngineManager::TheEngineManager->TerrainHeight;
 			chunk.ChunkModel->ModelMesh->Vertices.emplace_back(glm::vec3(xPos, yHeight, zPos), glm::vec3(0.5f));
 
 			if (xPos == chunkXPos)

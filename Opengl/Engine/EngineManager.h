@@ -34,6 +34,8 @@ public:
 	int lightColorLoc;
 
 	bool Scene_2 = false;
+	int Seed = 4576782387;
+	float TerrainHeight = 100.f;
 
 	void init_Window();
 	void init_Engine();

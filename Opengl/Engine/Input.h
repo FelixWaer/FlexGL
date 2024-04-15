@@ -5,7 +5,10 @@ class Input
 {
 public:
 	static void key_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	inline static bool FKey = false;
-	inline static int OldAction = GLFW_RELEASE;
+	static bool key_Pressed(int key);
+	static void reset_Keys();
+
+private:
+	static inline bool Keys[256] = {};
 };
 

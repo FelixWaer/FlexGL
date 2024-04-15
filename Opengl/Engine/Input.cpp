@@ -1,11 +1,29 @@
 #include "Input.h"
 
+#include <iostream>
+
 void Input::key_Callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	FKey = false;
-	if (key == GLFW_KEY_F && action == GLFW_RELEASE && OldAction == GLFW_PRESS)
+	if (action == GLFW_PRESS)
 	{
-		FKey = true;
+		switch (key)
+		{
+			case GLFW_KEY_F:
+				Keys[GLFW_KEY_F] = true;
+			break;
+		}
 	}
-	OldAction = action;
+}
+
+bool Input::key_Pressed(int key)
+{
+	return Keys[key];
+}
+
+void Input::reset_Keys()
+{
+	for (int i = 0; i < 256; i++)
+	{
+		Keys[i] = false;
+	}
 }

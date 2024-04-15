@@ -5,6 +5,8 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/Terrain.h"
 #include "../Rendering/Renderer.h"
+#include "../Engine/Input.h"
+#include "Graphs.h"
 
 void Player::game_Start()
 {
@@ -22,6 +24,7 @@ void Player::game_Start()
 	BoxCollider.enable_BoxVisible(true);
 	TheCamera.update_CameraPosition(glm::vec3(0));
 	TheCamera.set_CameraSpeed(50.f);
+	EngineManager::TheEngineManager->add_ToCameraHandler(&TheCamera);
 
 	add_Tag("Player");
 	int chunkXPos = static_cast<int>(floor(PlayerModel.get_WorldPosition().x / 30));
@@ -67,6 +70,11 @@ void Player::tick(float deltaTime)
 	PlayerModel.rotate_Model(glm::vec3(0.f, -TheCamera.get_CameraRotation().x, 0.f));
 	set_GameObjectPosition(tempVec+tempVec2);
 	EngineManager::TheEngineManager->CharacterPoint = get_GameObjectPositionPtr();
+
+	if (Input::key_Pressed(GLFW_KEY_F))
+	{
+		spawn_Item();
+	}
 }
 
 void Player::on_Collision(GameObject* otherGameObject)
@@ -82,4 +90,39 @@ glm::ivec2 Player::get_PlayerChunkPosition() const
 void Player::jump()
 {
 	Jumping = true;
+}
+
+void Player::spawn_Item()
+{
+	auto* spawnItem = new Graphs;
+	//spawnItem->init_GameObject();
+	glm::vec3 spawnItemPosition = get_GameObjectPosition();
+	glm::vec3 forwardVector = glm::normalize(EngineManager::TheEngineManager->get_ActiveCamera().get_CameraTarget());
+	forwardVector *= 2;
+	spawnItem->set_GameObjectPosition(spawnItemPosition + forwardVector);
+
+	glm::ivec2 itemChunkPosition;
+	itemChunkPosition.x = static_cast<int32_t>(floor(spawnItem->get_GameObjectPosition().x / 30));
+	itemChunkPosition.y = static_cast<int32_t>(floor(spawnItem->get_GameObjectPosition().z / 30));
+
+	for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
+	{
+		if (chunk.ChunkPosition == itemChunkPosition)
+		{
+			for (const Triangle& triangle : chunk.ChunkModel->ModelMesh->Triangles)
+			{
+				if (EngineManager::calculate_PointOnTriangle(spawnItem->get_GameObjectPosition(),
+					chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex].Position,
+					chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex].Position,
+					chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position,
+					chunk.ChunkModel->get_WorldPosition()))
+				{
+					spawnItem->get_GameObjectPosition().y += 0.5f;
+					break;
+				}
+			}
+			break;
+		}
+	}
+	spawnItem->game_Start();
 }

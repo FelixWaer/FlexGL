@@ -1,9 +1,11 @@
 #include "EngineManager.h"
 
 #include <iostream>
+#include <windows.h>
 
 #include "../Rendering/Mesh.h"
 #include "../Rendering/Renderer.h"
+#include "Input.h"
 
 const unsigned int SCR_WIDTH = 1800;
 const unsigned int SCR_HEIGHT = 900;
@@ -79,7 +81,7 @@ void EngineManager::tick_Engine()
 			continue;
 		}
 		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
-		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 300.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
+		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
 
 		model->draw_Model();
 	}
@@ -92,14 +94,15 @@ void EngineManager::tick_Engine()
 				TheTerrain->ModelMesh->Vertices[triangle.SecondIndex].Position,
 				TheTerrain->ModelMesh->Vertices[triangle.ThirdIndex].Position, TheTerrain->get_WorldPosition()))
 			{
-				get_ActiveCamera().get_CameraPosition().y = CharacterPoint->y+20;
+				CameraHandler[0]->get_CameraPosition().y = CharacterPoint->y+20;
 			}
 		}
 	}
 
-	std::cout << 1 / DeltaTime << std::endl;
+	//std::cout << 1 / DeltaTime << std::endl;
 	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
 	//move_Light(DeltaTime);
+	Input::reset_Keys();
 }
 
 void EngineManager::check_Collision()

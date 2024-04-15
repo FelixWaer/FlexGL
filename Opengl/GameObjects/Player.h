@@ -31,5 +31,7 @@ private:
 	float zPos = 0.f;
 
 	glm::ivec2 ChunkPosition = glm::ivec2(0);
+
+	void spawn_Item();
 };
 

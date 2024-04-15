@@ -10,7 +10,7 @@ uniform vec3 LightColor;
 out vec4 OutColor;
 
 float AmbientStrength = 0.3;
-float SpecularStrength = 0.5;
+float SpecularStrength = 0.2;
 float Shininess = 32;
 
 void main()

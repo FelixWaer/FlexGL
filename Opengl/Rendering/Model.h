@@ -80,7 +80,7 @@ void create_Cube(Mesh& model, const glm::vec3& color);
 void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color);
 void create_BoxLines(Mesh& lineModel, float height, float width, float depth, const glm::vec3& color);
 float line_Function(float x);
-void create_LinesOnTerrain(Mesh& lineModel, Model& terrainModel, float xStart, float xEnd, float deltaX);
+void create_LinesOnTerrain(Mesh& lineModel, float xStart, float xEnd, float deltaX);
 
 void calculate_VertexNormal(Vertex& vertexA, const Vertex& vertexB, const Vertex& vertexC, const Vertex& vertexD);
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC);

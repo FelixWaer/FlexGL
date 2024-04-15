@@ -42,7 +42,6 @@ void Player::tick(float deltaTime)
 	if (ChunkPosition.x != newChunkPosition.x || ChunkPosition.y != newChunkPosition.y)
 	{
 		Terrain::get_Terrain()->generate_RenderDistanceChunks(newChunkPosition-ChunkPosition);
-
 		ChunkPosition = newChunkPosition;
 	}
 
@@ -50,6 +49,7 @@ void Player::tick(float deltaTime)
 	{
 		if (newChunkPosition == chunk.ChunkPosition)
 		{
+			//Terrain::get_Terrain()->generate_ChunksAroundChunk(chunk);
 			EngineManager::TheEngineManager->TheTerrain = chunk.ChunkModel;
 		}
 	}

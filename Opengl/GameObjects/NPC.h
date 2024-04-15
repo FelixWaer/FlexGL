@@ -29,5 +29,6 @@ private:
 	void move_NPC(float deltaTime);
 	float calculate_NPCPath(float x);
 	void calculate_CirclePath(float deltaTime);
+	void calculate_Height();
 };
 

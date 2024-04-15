@@ -22,17 +22,14 @@ void FlexGL::game_Start()
     //Wall_5.init_Model();
     //Roof_1.init_Model();
 
-    //Terrain.init_Model();
-    //Terrain.set_ModelPosition(glm::vec3(0.f));
-    //Terrain.scale_Model(glm::vec3(1.f));
- //  Terrain.load_Model(FilePathModel4);
-
     Terrain::get_Terrain()->generate_Chunk(glm::ivec2(0));
     Terrain::get_Terrain()->generate_ChunksAroundChunk(Terrain::get_Terrain()->Chunks[0]);
 
     TerrainLine.init_Model();
+    TerrainLine.set_ModelMesh(&Renderer::get()->Line);
     TerrainLine.set_ModelPosition(glm::vec3(0.f));
-    create_LinesOnTerrain(Renderer::get()->Line, *Terrain::get_Terrain()->Chunks[0].ChunkModel, -5.f, 5.f, 0.1f);
+    create_LinesOnTerrain(*TerrainLine.ModelMesh, -10.f, 10.f, 0.1f);
+    TerrainLine.turn_OnLine();
 
     EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.TheCamera;
 
@@ -60,10 +57,6 @@ void FlexGL::game_Start()
     //Roof_1.set_ModelPosition(glm::vec3(0.f, -13.5f, 5.f));
     //Roof_1.scale_Model(glm::vec3(11.f, 1.f, 11.f));
 	//TheDoor.init_GameObject();
-
-    HouseItem.init_GameObject();
-    HouseItem.set_Color(glm::vec3(1.f, 1.f, 0.f));
-    HouseItem.set_GameObjectPosition(glm::vec3(0.f, -19.f, 5.f));
 
     graph_1.init_GameObject();
     ThePlayer.init_GameObject();
@@ -182,20 +175,6 @@ void FlexGL::input(GLFWwindow* window)
     {
         KeyPressed2 = false;
     }
-
-    //if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
-    //{
-    //    KeyPressed2 = false;
-    //}
-    //KeyPressed2 = false;
-    //if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-    //{
-    //    KeyPressed2 = true;
-    //}
-    ////if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
-    ////{
-    ////    KeyPressed2 = true;
-    ////}
 }
 
 void FlexGL::spawn_PickupRandom()

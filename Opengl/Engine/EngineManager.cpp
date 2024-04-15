@@ -97,7 +97,7 @@ void EngineManager::tick_Engine()
 		}
 	}
 
-	//std::cout << 1 / DeltaTime << std::endl;
+	std::cout << 1 / DeltaTime << std::endl;
 	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
 	//move_Light(DeltaTime);
 }

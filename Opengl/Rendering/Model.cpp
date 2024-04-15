@@ -367,10 +367,10 @@ void create_BoxLines(Mesh& lineModel, float height, float width, float depth, co
 
 float line_Function(float x)
 {
-	return x*-x;
+	return x*x-x;
 }
 
-void create_LinesOnTerrain(Mesh& lineModel, Model& terrainModel, float xStart, float xEnd, float deltaX)
+void create_LinesOnTerrain(Mesh& lineModel, float xStart, float xEnd, float deltaX)
 {
 	for (float x = xStart; x <= xEnd; x += deltaX)
 	{
@@ -387,17 +387,16 @@ void create_LinesOnTerrain(Mesh& lineModel, Model& terrainModel, float xStart, f
 				{
 					if (EngineManager::calculate_PointOnTriangle(vertexPos, chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex].Position,
 						chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex].Position, 
-						chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position, terrainModel.get_WorldPosition()))
+						chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position, chunk.ChunkModel->get_WorldPosition()))
 					{
 						vertexPos.y += 0.1f;
+						lineModel.Vertices.emplace_back(vertexPos, glm::vec3(0.f), glm::vec3(1.f, 0.f, 0.f));
 						break;
 					}
 				}
 				break;
 			}
 		}
-
-		lineModel.Vertices.emplace_back(vertexPos, glm::vec3(0.f), glm::vec3(1.f, 0.f, 0.f));
 	}
 	lineModel.bind_Buffer();
 }

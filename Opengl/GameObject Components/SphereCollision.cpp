@@ -26,6 +26,7 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 		SphereModel->attach_ToPosition(SpherePosition);
 		SphereModel->turn_OnLine();
 		SphereModel->set_ModelMesh(&Renderer::get()->DebugSphere);
+		SphereModel->scale_Model(glm::vec3(SphereRadius, SphereRadius, SphereRadius));
 
 		return;
 	}
@@ -38,6 +39,10 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 void SphereCollision::set_SphereRadius(float radius)
 {
 	SphereRadius = radius;
+	if (SphereModel != nullptr)
+	{
+		SphereModel->scale_Model(glm::vec3(radius, radius, radius));
+	}
 }
 
 float SphereCollision::get_SphereRadius() const

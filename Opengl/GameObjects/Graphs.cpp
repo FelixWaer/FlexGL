@@ -20,4 +20,5 @@ void Graphs::game_Start()
 
 void Graphs::on_Collision(GameObject* otherGameObject)
 {
+
 }

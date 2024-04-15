@@ -36,7 +36,6 @@ private:
 	Terrain theTerrain;
 
 	std::vector<PickUpItem*> items;
-	PickUpItem HouseItem;
 
 	//Model Floor_1;
 	//Model Wall_1;
@@ -47,7 +46,6 @@ private:
 	//Model Roof_1;
 	//Door TheDoor;
 
-	//Model Terrain;
 	Model TerrainLine;
 
 	bool KeyPressed = false;

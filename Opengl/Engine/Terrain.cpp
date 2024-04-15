@@ -50,11 +50,11 @@ void Terrain::generate_ChunksAroundChunk(Chunk& chunk)
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			if (i == 2 && j == 2)
+		/*	if (i == 2 && j == 2)
 			{
 				tempVec.y++;
 				continue;
-			}
+			}*/
 			generate_Chunk(tempVec);
 			tempVec.y++;
 		}

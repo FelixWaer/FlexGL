@@ -38,6 +38,8 @@ void NPC::tick(float deltaTime)
 			move_NPC(deltaTime);
 		}
 	}
+
+	calculate_Height();
 }
 
 void NPC::enable_CircleDriving(bool enable)
@@ -99,6 +101,33 @@ void NPC::calculate_CirclePath(float deltaTime)
 	if (Radius >= 50.f || Radius <= 15.f)
 	{
 		SmallerBigger *= -1;
+	}
+}
+
+void NPC::calculate_Height()
+{
+	glm::ivec2 itemChunkPosition;
+	itemChunkPosition.x = static_cast<int32_t>(floor(get_GameObjectPosition().x / 30));
+	itemChunkPosition.y = static_cast<int32_t>(floor(get_GameObjectPosition().z / 30));
+
+	for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
+	{
+		if (chunk.ChunkPosition == itemChunkPosition)
+		{
+			for (const Triangle& triangle : chunk.ChunkModel->ModelMesh->Triangles)
+			{
+				if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(),
+					chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex].Position,
+					chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex].Position,
+					chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position,
+					chunk.ChunkModel->get_WorldPosition()))
+				{
+					get_GameObjectPosition().y += 0.5f;
+					break;
+				}
+			}
+			break;
+		}
 	}
 }
 

@@ -136,6 +136,7 @@
     <ClCompile Include="Engine\EngineManager.cpp" />
     <ClCompile Include="Engine\FlexGL.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Terrain.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Model.cpp" />
     <ClCompile Include="Rendering\ModelCreation.cpp" />
+    <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +161,7 @@
     <ClInclude Include="Engine\EngineManager.h" />
     <ClInclude Include="Engine\FlexGL.h" />
     <ClInclude Include="Engine\GameObject.h" />
+    <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Terrain.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\Model.h" />
     <ClInclude Include="Rendering\ModelCreation.h" />
+    <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Rendering\Vertex.h" />
   </ItemGroup>

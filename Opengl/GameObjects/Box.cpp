@@ -1,12 +1,13 @@
 #include "Box.h"
 
 #include "../Rendering/Model.h"
+#include "../Rendering/Renderer.h"
 
 void Box::game_Start()
 {
 	BoxModel.init_Model();
 	BoxModel.bind_ToGameObject(this);
-	create_Cube(BoxModel, glm::vec3(0.f, 0.f, 1.f));
+	BoxModel.set_ModelMesh(&Renderer::get()->Cube);
 	BoxModel.scale_Model(glm::vec3(50.f, 1.f, 50.f));
 
 	set_GameObjectPosition(glm::vec3(25.f, -2.f, 25.f));

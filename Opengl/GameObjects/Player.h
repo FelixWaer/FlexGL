@@ -12,6 +12,7 @@ public:
 	void game_Start() override;
 	void tick(float deltaTime) override;
 	void on_Collision(GameObject* otherGameObject) override;
+	glm::ivec2 get_PlayerChunkPosition() const;
 
 	Camera TheCamera;
 	SphereCollision SphereCollider;
@@ -28,5 +29,7 @@ private:
 	float xPos = 0.f;
 	float yPos = 0.f;
 	float zPos = 0.f;
+
+	glm::ivec2 ChunkPosition = glm::ivec2(0);
 };
 

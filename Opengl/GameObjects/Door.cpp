@@ -1,11 +1,12 @@
 #include "Door.h"
 
 #include "../Engine/EngineManager.h"
+#include "../Rendering/Renderer.h"
 
 void Door::game_Start()
 {
 	DoorModel.init_Model();
-	create_Cube(DoorModel, glm::vec3(0.5f, 0.8f, 0.5f));
+	DoorModel.set_ModelMesh(&Renderer::get()->Cube);
 	DoorModel.bind_ToGameObject(this);
 
 	set_GameObjectPosition(glm::vec3(0.f, -17.f, 10.f));

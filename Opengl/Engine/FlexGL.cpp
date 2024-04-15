@@ -3,6 +3,9 @@
 #include <ctime>
 
 #include "EngineManager.h"
+#include "../Rendering/Mesh.h"
+#include "../Rendering/Renderer.h"
+#include "../Engine/Input.h"
 
 std::string FilePathModel = "Models/Data Points";
 std::string FilePathModel2 = "Models/Function Points";
@@ -24,12 +27,12 @@ void FlexGL::game_Start()
     //Terrain.scale_Model(glm::vec3(1.f));
  //  Terrain.load_Model(FilePathModel4);
 
-    Terrain::get_Terrain()->generate_Chunk(0, 0);
+    Terrain::get_Terrain()->generate_Chunk(glm::ivec2(0));
     Terrain::get_Terrain()->generate_ChunksAroundChunk(Terrain::get_Terrain()->Chunks[0]);
 
     TerrainLine.init_Model();
     TerrainLine.set_ModelPosition(glm::vec3(0.f));
-    create_LinesOnTerrain(TerrainLine, *Terrain::get_Terrain()->Chunks[0].ChunkModel, -5.f, 5.f, 0.1f);
+    create_LinesOnTerrain(Renderer::get()->Line, *Terrain::get_Terrain()->Chunks[0].ChunkModel, -5.f, 5.f, 0.1f);
 
     EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.TheCamera;
 
@@ -61,7 +64,6 @@ void FlexGL::game_Start()
     HouseItem.init_GameObject();
     HouseItem.set_Color(glm::vec3(1.f, 1.f, 0.f));
     HouseItem.set_GameObjectPosition(glm::vec3(0.f, -19.f, 5.f));
-    spawn_PickupRandom();
 
     graph_1.init_GameObject();
     ThePlayer.init_GameObject();
@@ -83,9 +85,9 @@ void FlexGL::game_Start()
 	Cameras.emplace_back(&ThePlayer.TheCamera);
     Cameras.emplace_back(&Camera_1);
 
-    box.init_GameObject();
-
     EngineManager::TheEngineManager->TheTerrain = Terrain::get_Terrain()->Chunks[0].ChunkModel;
+
+    spawn_PickupRandom();
 }
 
 void FlexGL::tick(float deltaTime)
@@ -95,9 +97,13 @@ void FlexGL::tick(float deltaTime)
 	{
         EngineManager::TheEngineManager->set_ActiveCamera(&Camera_1);
 	}
+    if (Input::FKey == true)
+    {
+        spawn_Item();
+    }
 }
 
-void FlexGL::Input(GLFWwindow* window)
+void FlexGL::input(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
@@ -176,6 +182,20 @@ void FlexGL::Input(GLFWwindow* window)
     {
         KeyPressed2 = false;
     }
+
+    //if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+    //{
+    //    KeyPressed2 = false;
+    //}
+    //KeyPressed2 = false;
+    //if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    //{
+    //    KeyPressed2 = true;
+    //}
+    ////if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+    ////{
+    ////    KeyPressed2 = true;
+    ////}
 }
 
 void FlexGL::spawn_PickupRandom()
@@ -197,23 +217,22 @@ void FlexGL::spawn_PickupRandom()
 
         PickUpItem* tempItem = new PickUpItem;
         tempItem->init_GameObject();
-        tempItem->set_GameObjectPosition(glm::vec3(tempXPos - xDistance, yDistance, tempZPos));
+        tempItem->set_GameObjectPosition(glm::vec3(tempXPos, yDistance, tempZPos));
 
-        int32_t chunkXPos = static_cast<int32_t>(floor(tempXPos / 30));
-        int32_t chunkYPos = static_cast<int32_t>(floor(tempZPos / 30));
-
-        std::cout << chunkXPos << " " << chunkYPos << std::endl;
+        glm::ivec2 itemChunkPosition;
+        itemChunkPosition.x = static_cast<int32_t>(floor(tempXPos / 30));
+        itemChunkPosition.y = static_cast<int32_t>(floor(tempZPos / 30));
 
         for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
         {
-            if (chunkXPos == chunk.xPos && chunkYPos == chunk.yPos)
+            if (itemChunkPosition == chunk.ChunkPosition)
             {
-                for (const Triangle& triangle : Terrain::get_Terrain()->Chunks[0].ChunkModel->Indices)
+                for (const Triangle& triangle : chunk.ChunkModel->ModelMesh->Triangles)
                 {
                     if (EngineManager::calculate_PointOnTriangle(tempItem->get_GameObjectPosition(),
-                        chunk.ChunkModel->Vertices[triangle.FirstIndex].Position,
-                        chunk.ChunkModel->Vertices[triangle.SecondIndex].Position,
-                        chunk.ChunkModel->Vertices[triangle.ThirdIndex].Position,
+                        chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex].Position,
+                        chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex].Position,
+                        chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position,
                         chunk.ChunkModel->get_WorldPosition()))
                     {
                         tempItem->get_GameObjectPosition().y += 0.5f;
@@ -227,4 +246,42 @@ void FlexGL::spawn_PickupRandom()
 
         items.emplace_back(tempItem);
     }
+}
+
+void FlexGL::spawn_Item()
+{
+    Graphs* spawnItem = new Graphs;
+    spawnItem->init_GameObject();
+    glm::vec3 spawnItemPosition = ThePlayer.get_GameObjectPosition();
+    glm::vec3 forwardVector = glm::normalize(EngineManager::TheEngineManager->get_ActiveCamera().get_CameraTarget());
+    forwardVector *= 2;
+    spawnItem->set_GameObjectPosition(spawnItemPosition+forwardVector);
+
+    std::cout << spawnItem->get_GameObjectPosition().x << " " << spawnItem->get_GameObjectPosition().y
+        << " " << spawnItem->get_GameObjectPosition().z << std::endl;
+
+    glm::ivec2 itemChunkPosition;
+    itemChunkPosition.x = static_cast<int32_t>(floor(spawnItem->get_GameObjectPosition().x / 30));
+    itemChunkPosition.y = static_cast<int32_t>(floor(spawnItem->get_GameObjectPosition().z / 30));
+
+    for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
+    {
+	    if (chunk.ChunkPosition == itemChunkPosition)
+	    {
+            for (const Triangle& triangle : chunk.ChunkModel->ModelMesh->Triangles)
+            {
+                if (EngineManager::calculate_PointOnTriangle(spawnItem->get_GameObjectPosition(), 
+                    chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex].Position,
+                    chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex].Position,
+                    chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position,
+                    chunk.ChunkModel->get_WorldPosition()))
+                {
+                    spawnItem->get_GameObjectPosition().y += 0.5f;
+                    break;
+                }
+            }
+            break;
+	    }
+    }
+    spawnItem->game_Start();
 }

@@ -3,6 +3,7 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
+#include "../Rendering/Renderer.h"
 
 void SphereCollision::attach_ToGameObject(GameObject* GO)
 {
@@ -24,7 +25,7 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 		SphereModel->init_Model();
 		SphereModel->attach_ToPosition(SpherePosition);
 		SphereModel->turn_OnLine();
-		create_SphereLines(*SphereModel, SphereRadius, glm::vec3(1.f, 0.f, 0.f));
+		SphereModel->set_ModelMesh(&Renderer::get()->DebugSphere);
 
 		return;
 	}

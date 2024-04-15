@@ -18,7 +18,7 @@ class FlexGL
 public:
 	void game_Start();
 	void tick(float deltaTime);
-	void Input(GLFWwindow* window);
+	void input(GLFWwindow* window);
 private:
 
 	Graphs graph_1;
@@ -36,14 +36,6 @@ private:
 	Terrain theTerrain;
 
 	std::vector<PickUpItem*> items;
-	//PickUpItem item_1;
-	//PickUpItem item_2;
-	//PickUpItem item_3;
-	//PickUpItem item_4;
-	//PickUpItem item_5;
-	//PickUpItem item_6;
-	//PickUpItem item_7;
-	//PickUpItem item_8;
 	PickUpItem HouseItem;
 
 	//Model Floor_1;
@@ -58,8 +50,6 @@ private:
 	//Model Terrain;
 	Model TerrainLine;
 
-	Box box;
-
 	bool KeyPressed = false;
 	bool KeyPressed2 = false;
 	bool DebugTurnedOff = false;
@@ -67,5 +57,6 @@ private:
 	bool CameraIs1 = true;
 
 	void spawn_PickupRandom();
+	void spawn_Item();
 };
 

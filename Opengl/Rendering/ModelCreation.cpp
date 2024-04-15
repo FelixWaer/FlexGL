@@ -1,5 +1,6 @@
 #include "ModelCreation.h"
 
+#include "Mesh.h"
 #include "../Engine/Terrain.h"
 
 float interPolate(float pointA, float pointB, float weight)
@@ -63,22 +64,35 @@ void create_ChunkTerrain(Chunk& chunk)
 {
 	float stepLength = 0.1f;
 	float terrainLength = 3.f;
-	float terrainHeight = 8.f;
+	float terrainHeight = 50.f;
 	uint32_t modelZLength = 0;
 	uint32_t modelXLength = 0;
-	float chunkXPos = static_cast<float>(chunk.xPos * terrainLength);
-	float chunkZPos = static_cast<float>(chunk.yPos * terrainLength);
-	float yHeight;
+	int64_t chunkXPos = chunk.ChunkPosition.x * 30;
+	int64_t chunkZPos = chunk.ChunkPosition.y * 30;
 
 	chunk.ChunkModel = new Model;
+	chunk.ChunkModel->create_NewMesh();
 
-	for (float xPos = chunkXPos; xPos < chunkXPos + terrainLength; xPos += stepLength)
+	float gridSize = 200.f;
+
+	chunk.ChunkModel->ModelMesh->Vertices.reserve(900);
+	for (int64_t xPos = chunkXPos; xPos <= chunkXPos + 30; xPos++)
 	{
 		modelXLength++;
-		for (float zPos = chunkZPos; zPos < chunkZPos + terrainLength; zPos += stepLength)
+		for (int64_t zPos = chunkZPos; zPos <= chunkZPos + 30; zPos++)
 		{
-			yHeight = calculate_PerlinNoise(xPos, zPos) * terrainHeight;
-			chunk.ChunkModel->Vertices.emplace_back(glm::vec3(xPos*10.f, yHeight, zPos*10.f), glm::vec3(chunk.xPos*0.5+0.5, chunk.yPos*0.5+0.5, 0.3f));
+			float yHeight = 0.f;
+			float freq = 2.f;
+			float amp = 1.f;
+			for (int i = 0; i < 12; i++)
+			{
+				yHeight += calculate_PerlinNoise(static_cast<float>(xPos) * freq / gridSize, static_cast<float>(zPos) * freq / gridSize) * amp;
+				freq *= 1.5f;
+				amp *= 0.5f;
+			}
+
+			yHeight *= terrainHeight;
+			chunk.ChunkModel->ModelMesh->Vertices.emplace_back(glm::vec3(xPos, yHeight, zPos), glm::vec3(0.5f));
 
 			if (xPos == chunkXPos)
 			{
@@ -93,18 +107,18 @@ void create_ChunkTerrain(Chunk& chunk)
 	{
 		for (uint32_t j = 0; j < modelZLength - 1; j++)
 		{
-			chunk.ChunkModel->Indices.emplace_back(rowIndex + j, rowIndex + modelZLength + j, rowIndex + modelZLength + j + 1);
-			chunk.ChunkModel->Indices.emplace_back(rowIndex + modelZLength + j + 1, rowIndex + j + 1, rowIndex + j);
+			chunk.ChunkModel->ModelMesh->Triangles.emplace_back(rowIndex + j, rowIndex + modelZLength + j, rowIndex + modelZLength + j + 1);
+			chunk.ChunkModel->ModelMesh->Triangles.emplace_back(rowIndex + modelZLength + j + 1, rowIndex + j + 1, rowIndex + j);
 
 		}
 		rowIndex += modelZLength;
 	}
 
-	for (const Triangle& triangle : chunk.ChunkModel->Indices)
+	for (const Triangle& triangle : chunk.ChunkModel->ModelMesh->Triangles)
 	{
-		calculate_TriangleNormal(chunk.ChunkModel->Vertices[triangle.FirstIndex], 
-			chunk.ChunkModel->Vertices[triangle.SecondIndex], chunk.ChunkModel->Vertices[triangle.ThirdIndex]);
+		calculate_TriangleNormal(chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex],
+			chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex], chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex]);
 	}
 
-	chunk.ChunkModel->bind_Buffer();
+	chunk.ChunkModel->ModelMesh->bind_Buffer();
 }

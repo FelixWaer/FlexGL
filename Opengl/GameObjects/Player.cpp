@@ -4,12 +4,12 @@
 
 #include "../Engine/EngineManager.h"
 #include "../Engine/Terrain.h"
+#include "../Rendering/Renderer.h"
 
 void Player::game_Start()
 {
 	PlayerModel.init_Model();
-	create_Cube(PlayerModel, glm::vec3(0.f, 0.f, 1.f));
-
+	PlayerModel.set_ModelMesh(&Renderer::get()->Cube);
 
 	TheCamera.attach_ToGameObject(this);
 	SphereCollider.attach_ToGameObject(this);
@@ -20,47 +20,46 @@ void Player::game_Start()
 	BoxCollider.set_BoxWidth(2.f);
 	BoxCollider.set_BoxDepth(2.f);
 	BoxCollider.enable_BoxVisible(true);
-	TheCamera.update_CameraPosition(glm::vec3(-4.f, -20.f, 40.f));
+	TheCamera.update_CameraPosition(glm::vec3(0));
 	TheCamera.set_CameraSpeed(50.f);
 
 	add_Tag("Player");
+	int chunkXPos = static_cast<int>(floor(PlayerModel.get_WorldPosition().x / 30));
+	int chunkZPos = static_cast<int>(floor(PlayerModel.get_WorldPosition().z / 30));
+	ChunkPosition.x = chunkXPos;
+	ChunkPosition.y = chunkZPos;
+	Terrain::get_Terrain()->set_CurrentChunkPosition(ChunkPosition);
 }
 
 void Player::tick(float deltaTime)
 {
 	GameObject::tick(deltaTime);
 
-	int32_t chunkXPos = static_cast<int32_t>(floor(PlayerModel.get_WorldPosition().x / 30));
-	int32_t chunkYPos = static_cast<int32_t>(floor(PlayerModel.get_WorldPosition().z / 30));
-	std::cout << chunkXPos << " " << chunkYPos << std::endl;
+	glm::ivec2 newChunkPosition(0);
+	newChunkPosition.x = static_cast<int>(floor(PlayerModel.get_WorldPosition().x / 30));
+	newChunkPosition.y = static_cast<int>(floor(PlayerModel.get_WorldPosition().z / 30));
+
+	if (ChunkPosition.x != newChunkPosition.x || ChunkPosition.y != newChunkPosition.y)
+	{
+		Terrain::get_Terrain()->generate_RenderDistanceChunks(newChunkPosition-ChunkPosition);
+
+		ChunkPosition = newChunkPosition;
+	}
 
 	for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
 	{
-		if (chunkXPos == chunk.xPos && chunkYPos == chunk.yPos)
+		if (newChunkPosition == chunk.ChunkPosition)
 		{
 			EngineManager::TheEngineManager->TheTerrain = chunk.ChunkModel;
 		}
 	}
 
-	//if (Jumping == true)
-	//{
-	//	TheCamera.move_CameraUp(20.f * deltaTime);
-	//	Jumping = false;
-	//}
-	//else
-	//{
-	//	if (TheCamera.get_CameraPosition().y < -16.f)
-	//	{
-	//		TheCamera.set_CameraHeight(-16.f);
-	//	}
-	//	TheCamera.move_CameraUp(-5.f * deltaTime);
-	//}
-	//TheCamera.lock_CameraPitch(-10.f);
+
 	glm::vec3 tempVec = TheCamera.get_CameraPosition();
 	glm::vec3 tempVec2 = TheCamera.get_CameraTarget();
 	tempVec2 *= 5;
 	tempVec2.y = 0;
-	tempVec.y -= 2;
+	tempVec.y -= 19;
 	glm::vec3 tempVec3 = tempVec + tempVec2;
 	
 	PlayerModel.set_ModelPosition(tempVec+tempVec2);
@@ -73,6 +72,11 @@ void Player::tick(float deltaTime)
 void Player::on_Collision(GameObject* otherGameObject)
 {
 
+}
+
+glm::ivec2 Player::get_PlayerChunkPosition() const
+{
+	return ChunkPosition;
 }
 
 void Player::jump()

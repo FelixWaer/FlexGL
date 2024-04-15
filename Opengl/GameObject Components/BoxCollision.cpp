@@ -3,6 +3,7 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
+#include "../Rendering/Renderer.h"
 
 void BoxCollision::attach_ToGameObject(GameObject* GO)
 {
@@ -24,7 +25,7 @@ void BoxCollision::enable_BoxVisible(bool isVisible)
 		BoxModel->init_Model();
 		BoxModel->draw_ModelAsLines(true);
 		BoxModel->attach_ToPosition(BoxPosition);
-		create_Cube(*BoxModel, glm::vec3(1.f, 0.f, 0.f));
+		BoxModel->set_ModelMesh(&Renderer::get()->Cube);
 		BoxModel->scale_Model(glm::vec3(BoxWidth, BoxHeight, BoxDepth));
 
 		return;

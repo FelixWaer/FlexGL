@@ -14,11 +14,23 @@ Terrain* Terrain::get_Terrain()
 	return TheTerrain;
 }
 
-void Terrain::generate_Chunk(int64_t chunkXPos, int64_t chunkYPos)
+void Terrain::set_CurrentChunkPosition(glm::ivec2 currentPosition)
 {
+	CurrentPosition = currentPosition;
+}
+
+void Terrain::generate_Chunk(glm::ivec2 chunkPosition)
+{
+	for (Chunk chunk : Chunks)
+	{
+		if (chunk.ChunkPosition == chunkPosition)
+		{
+			return;
+		}
+	}
+
 	Chunk tempChunk;
-	tempChunk.xPos = chunkXPos;
-	tempChunk.yPos = chunkYPos;
+	tempChunk.ChunkPosition = chunkPosition;
 
 	create_ChunkTerrain(tempChunk);
 	tempChunk.ChunkModel->init_Model();
@@ -26,12 +38,13 @@ void Terrain::generate_Chunk(int64_t chunkXPos, int64_t chunkYPos)
 	tempChunk.ChunkModel->scale_Model(glm::vec3(1.f));
 
 	Chunks.emplace_back(tempChunk);
+
+	TotalAmountOfChunks++;
 }
 
 void Terrain::generate_ChunksAroundChunk(Chunk& chunk)
 {
-	int64_t tempXPos = chunk.xPos -2;
-	int64_t tempYPos = chunk.yPos -2;
+	glm::ivec2 tempVec(chunk.ChunkPosition-2);
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -39,13 +52,38 @@ void Terrain::generate_ChunksAroundChunk(Chunk& chunk)
 		{
 			if (i == 2 && j == 2)
 			{
-				tempYPos++;
+				tempVec.y++;
 				continue;
 			}
-			generate_Chunk(tempXPos, tempYPos);
-			tempYPos++;
+			generate_Chunk(tempVec);
+			tempVec.y++;
 		}
-		tempXPos ++;
-		tempYPos -= 5;
+		tempVec.x++;
+		tempVec.y -= 5;
+	}
+}
+
+void Terrain::generate_RenderDistanceChunks(glm::ivec2 directionVector)
+{
+	CurrentPosition += directionVector;
+	glm::ivec2 reverseDirection(0);
+	reverseDirection.x = directionVector.y;
+	reverseDirection.y = directionVector.x;
+	glm::ivec2 tempVec2 = reverseDirection;
+	directionVector *= 2;
+	reverseDirection *= 2;
+
+	if (reverseDirection.x > 0 || reverseDirection.y > 0)
+	{
+		reverseDirection *= -1;
+	}
+	if (tempVec2.x < 0 || tempVec2.y < 0)
+	{
+		tempVec2 *= -1;
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		generate_Chunk((CurrentPosition + directionVector + reverseDirection) + (tempVec2 * i));
 	}
 }

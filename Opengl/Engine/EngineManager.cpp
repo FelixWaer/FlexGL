@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "../Rendering/Mesh.h"
+#include "../Rendering/Renderer.h"
+
 const unsigned int SCR_WIDTH = 1800;
 const unsigned int SCR_HEIGHT = 900;
 
@@ -24,6 +27,7 @@ void EngineManager::init_Engine()
 {
 	TheShader.set_ShaderPath(FilePathVert, FilePathFrag);
 	TheShader.init_Shader();
+	Renderer::get()->init_Renderer();
 
 	ModelLoc = glGetUniformLocation(TheShader.ShaderProgram, "ModelMatrix");
 	PositionLoc = glGetUniformLocation(TheShader.ShaderProgram, "PositionMatrix");
@@ -32,7 +36,7 @@ void EngineManager::init_Engine()
 	lightColorLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightColor");
 
 	TheLight.set_LightColor(glm::vec3(1.f));
-	TheLight.set_LightPosition(glm::vec3(0.f));
+	TheLight.set_LightPosition(glm::vec3(0.f, 30.f, 0.f));
 
 	TheGame.game_Start();
 	for (GameObject* gameObject : GameObjectHandler)
@@ -47,7 +51,7 @@ void EngineManager::tick_Engine()
 	DeltaTime = currentFrame - LastFrame;
 	LastFrame = currentFrame;
 
-	TheGame.Input(TheWindow);
+	TheGame.input(TheWindow);
 	check_Collision();
 
 	for (GameObject* gameObject  : GameObjectHandler)
@@ -70,27 +74,32 @@ void EngineManager::tick_Engine()
 
 	for (auto model : ModelHandler)
 	{
+		if (model->ModelMesh == nullptr)
+		{
+			continue;
+		}
 		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
-		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 200.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
+		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 300.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
 
 		model->draw_Model();
 	}
 
 	if (TheTerrain != nullptr)
 	{
-		for (const Triangle& triangle : TheTerrain->Indices)
+		for (const Triangle& triangle : TheTerrain->ModelMesh->Triangles)
 		{
-			if (calculate_PointOnTriangle(*CharacterPoint, TheTerrain->Vertices[triangle.FirstIndex].Position,
-				TheTerrain->Vertices[triangle.SecondIndex].Position,
-				TheTerrain->Vertices[triangle.ThirdIndex].Position, TheTerrain->get_WorldPosition()))
+			if (calculate_PointOnTriangle(*CharacterPoint, TheTerrain->ModelMesh->Vertices[triangle.FirstIndex].Position,
+				TheTerrain->ModelMesh->Vertices[triangle.SecondIndex].Position,
+				TheTerrain->ModelMesh->Vertices[triangle.ThirdIndex].Position, TheTerrain->get_WorldPosition()))
 			{
-				get_ActiveCamera().get_CameraPosition().y = CharacterPoint->y+3;
+				get_ActiveCamera().get_CameraPosition().y = CharacterPoint->y+20;
 			}
 		}
 	}
 
 	//std::cout << 1 / DeltaTime << std::endl;
-	move_Light(DeltaTime);
+	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
+	//move_Light(DeltaTime);
 }
 
 void EngineManager::check_Collision()
@@ -209,12 +218,10 @@ bool EngineManager::calculate_PointOnTriangle(glm::vec3& x, const glm::vec3& P, 
 	glm::vec3 tempVector = x;
 	tempVector.y -= 0.5;
 
-	//arealet er 1 akkurat nå så ikke vits i å regne det ug og gjøre matte med det
-	//float A = calculate_Normal(Q - P, R - P);
-	//float A = 1.f/2;
+	float A = calculate_Normal(Q - P, R - P);
 	
 	float U = calculate_Normal((Q + position) - tempVector, (R + position) - tempVector);
-	float V = calculate_Normal((R+ position) - tempVector, (P + position) - tempVector);
+	float V = calculate_Normal((R + position) - tempVector, (P + position) - tempVector);
 	float W = 1 - U - V;
 
 	if (U >= 0 && V >= 0 && W >= 0)
@@ -238,7 +245,7 @@ void EngineManager::switch_YZ(glm::vec3& vector)
 
 void EngineManager::move_Light(float deltaTime)
 {
-	TheLight.set_LightPosition(glm::vec3(Radius * sin(glm::radians(Degrees)), -10.f, Radius * cos(glm::radians(Degrees))));
+	TheLight.set_LightPosition(glm::vec3(Radius * sin(glm::radians(Degrees)), 0.f, Radius * cos(glm::radians(Degrees))));
 	//TheLight.set_LightColor(glm::vec3(sin(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor))));
 	Degrees += 45.f * deltaTime;
 	DegreesColor += 45.f * deltaTime * SmallerBiggerColor;

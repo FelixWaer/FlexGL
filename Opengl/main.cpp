@@ -5,10 +5,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Rendering/Camera.h"
-
+#include "Engine/Terrain.h"
 
 #include "Engine/EngineManager.h"
-#include "Engine/Terrain.h"
+#include "Engine/Input.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_Button_Callback(GLFWwindow*, double xPos, double yPos);
@@ -28,11 +29,6 @@ bool CameraFirstMove = true;
 // ------------------------------------------------------------------
 int main()
 {
-    //Chunk test;
-    //test.ChunkPosition = glm::vec2(1, -4);
-    //Terrain::get_Terrain()->generate_Chunk(test);
-
-
     EngineManager* EM = EngineManager::create_EngineManager();
     // glfw: initialize and configure
     // ------------------------------
@@ -59,6 +55,7 @@ int main()
     glfwSwapInterval(0);
     glfwSetFramebufferSizeCallback(EM->TheWindow, framebuffer_size_callback);
     glfwSetCursorPosCallback(EM->TheWindow, mouse_Button_Callback);
+    glfwSetKeyCallback(EM->TheWindow, Input::key_Callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -87,6 +84,9 @@ int main()
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
+
+    std::cout << Terrain::get_Terrain()->TotalAmountOfChunks << std::endl;
+
     return 0;
 }
 

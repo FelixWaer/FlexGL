@@ -6,6 +6,7 @@
 #include "glad/glad.h"
 
 class GameObject;
+class Mesh;
 
 struct Vertex
 {
@@ -33,12 +34,16 @@ struct Triangle
 class Model
 {
 public:
-	std::vector<Vertex> Vertices;
-	std::vector<Triangle> Indices;
+	//std::vector<Vertex> Vertices;
+	//std::vector<Triangle> Indices;
+	Mesh* ModelMesh;
 
 	void init_Model();
-	void load_Model(std::string& filePath);
-	void bind_Buffer();
+	//void load_Model(std::string& filePath);
+	//void bind_Buffer();
+	void set_ModelMesh(Mesh* modelMesh);
+	void create_NewMesh();
+
 	void bind_ToGameObject(GameObject* GO);
 	void attach_ToPosition(glm::vec3* attachedPosition);
 	void hide_Model(bool hidingModel);
@@ -54,12 +59,13 @@ public:
 	glm::mat4 get_ModelMatrix() const;
 
 private:
-	unsigned int VAO;
-	unsigned int VBO;
-	unsigned int EBO;
+	//unsigned int VAO;
+	//unsigned int VBO;
+	//unsigned int EBO;
 	bool HidingModel = false;
 	bool DrawLines = false;
 	bool IsLine = false;
+
 
 	glm::vec3* AttachedModelPosition = nullptr;
 	glm::vec3 ModelPosition = glm::vec3(0.f);
@@ -69,11 +75,12 @@ private:
 	void cleanup_Model();
 };
 
-void create_Cube(Model& model, const glm::vec3& color);
-void create_SphereLines(Model& lineModel, float radius, const glm::vec3& color);
-void create_BoxLines(Model& lineModel, float height, float width, float depth, const glm::vec3& color);
+void load_Model(std::string& filePath, Mesh& mesh);
+void create_Cube(Mesh& model, const glm::vec3& color);
+void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color);
+void create_BoxLines(Mesh& lineModel, float height, float width, float depth, const glm::vec3& color);
 float line_Function(float x);
-void create_LinesOnTerrain(Model& lineModel, Model& terrainModel, float xStart, float xEnd, float deltaX);
+void create_LinesOnTerrain(Mesh& lineModel, Model& terrainModel, float xStart, float xEnd, float deltaX);
 
 void calculate_VertexNormal(Vertex& vertexA, const Vertex& vertexB, const Vertex& vertexC, const Vertex& vertexD);
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC);

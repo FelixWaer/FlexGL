@@ -1,11 +1,12 @@
 #include "NPC.h"
 
 #include "../Engine/EngineManager.h"
+#include "../Rendering/Renderer.h"
 
 void NPC::game_Start()
 {
 	NPCModel.init_Model();
-	create_Cube(NPCModel, glm::vec3(0.8f, 0.5f, 0.5f));
+	NPCModel.set_ModelMesh(&Renderer::get()->Cube);
 	NPCModel.bind_ToGameObject(this);
 	NPCModel.set_ModelPosition(glm::vec3(0.f));
 

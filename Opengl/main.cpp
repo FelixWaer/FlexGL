@@ -56,6 +56,7 @@ int main()
     glfwSetFramebufferSizeCallback(EM->TheWindow, framebuffer_size_callback);
     glfwSetCursorPosCallback(EM->TheWindow, mouse_Button_Callback);
     glfwSetKeyCallback(EM->TheWindow, Input::key_Callback);
+    glfwSetMouseButtonCallback(EM->TheWindow, Input::mouse_Callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------

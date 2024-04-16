@@ -22,7 +22,6 @@ EngineManager* EngineManager::create_EngineManager()
 void EngineManager::init_Window()
 {
 	TheWindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Triangle window", NULL, NULL);
-
 }
 
 void EngineManager::init_Engine()
@@ -49,6 +48,9 @@ void EngineManager::init_Engine()
 
 void EngineManager::tick_Engine()
 {
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glFrontFace(GL_CW);
 	float currentFrame = static_cast<float>(glfwGetTime());
 	DeltaTime = currentFrame - LastFrame;
 	LastFrame = currentFrame;
@@ -99,10 +101,11 @@ void EngineManager::tick_Engine()
 		}
 	}
 
-	//std::cout << 1 / DeltaTime << std::endl;
+	std::cout << 1 / DeltaTime << std::endl;
 	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
 	//move_Light(DeltaTime);
 	Input::reset_Keys();
+	Input::reset_Buttons();
 }
 
 void EngineManager::check_Collision()

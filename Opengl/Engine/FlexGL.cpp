@@ -31,9 +31,8 @@ void FlexGL::game_Start()
     create_LinesOnTerrain(*TerrainLine.ModelMesh, -10.f, 10.f, 0.1f);
     TerrainLine.turn_OnLine();
 
-    EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.TheCamera;
-    Camera2.set_CameraSpeed(100.f);
-    Camera2.set_CameraHeight(10.f);
+    EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.PlayerCamera;
+
 
     //create_Cube(Floor_1, glm::vec3(0.5f, 0.5f, 0.f));
     //Floor_1.set_ModelPosition(glm::vec3(0.f, -20.f, 0.f));
@@ -70,15 +69,8 @@ void FlexGL::game_Start()
     NPC_3.set_GameObjectVelocity(glm::vec3(0.f, 0.f, -1.f));
     NPC_3.set_GameObjectPosition(glm::vec3(-40.f, 0.f, -25.f));
 
-    Camera_1.update_CameraPosition(glm::vec3(4.f, -14.f, 1.f));
-    Camera_1.set_CameraSpeed(0.0f);
-    Camera_1.turn_CameraAround();
-    Camera_2.update_CameraPosition(glm::vec3(-4.f, -14.f, 1.f));
-    Camera_2.set_CameraSpeed(0.0f);
-    Camera_2.turn_CameraAround();
-
-	Cameras.emplace_back(&ThePlayer.TheCamera);
-    Cameras.emplace_back(&Camera_1);
+	Cameras.emplace_back(&ThePlayer.PlayerCamera);
+    Cameras.emplace_back(&ThePlayer.FreeCamera);
 
     EngineManager::TheEngineManager->TheTerrain = Terrain::get_Terrain()->Chunks[0].ChunkModel;
 
@@ -92,30 +84,6 @@ void FlexGL::tick(float deltaTime)
 
 void FlexGL::input(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-	{
-        EngineManager::TheEngineManager->set_ActiveCamera(&ThePlayer.TheCamera);
-	}
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-    {
-        EngineManager::TheEngineManager->set_ActiveCamera(&Camera2);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        EngineManager::TheEngineManager->ActiveCamera->move_CameraSide(true);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        EngineManager::TheEngineManager->ActiveCamera->move_CameraSide(false);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        EngineManager::TheEngineManager->ActiveCamera->move_CameraFront(false);
-    }
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        EngineManager::TheEngineManager->ActiveCamera->move_CameraFront(true);
-    }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         ThePlayer.jump();
@@ -153,29 +121,6 @@ void FlexGL::input(GLFWwindow* window)
 	{
         KeyPressed = false;
 	}
-
-    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-    {
-        if (KeyPressed2 == false)
-        {
-            if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == true)
-            {
-                EngineManager::TheEngineManager->set_ActiveCamera(&Camera_2);
-                CameraIs1 = false;
-            }
-            else if (EngineManager::TheEngineManager->Scene_2 == true && CameraIs1 == false)
-            {
-                EngineManager::TheEngineManager->set_ActiveCamera(&Camera_1);
-                CameraIs1 = true;
-            }
-        }
-
-        KeyPressed2 = true;
-    }
-    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_RELEASE)
-    {
-        KeyPressed2 = false;
-    }
 }
 
 void FlexGL::spawn_PickupRandom()

@@ -24,9 +24,7 @@ private:
 	Graphs graph_1;
 
 	std::vector<Camera*> Cameras;
-	int CameraIndex = 0;
-	Camera Camera_1;
-	Camera Camera_2;
+
 
 	Player ThePlayer;
 	NPC TheNPC;
@@ -47,7 +45,6 @@ private:
 	//Door TheDoor;
 
 	Model TerrainLine;
-	Camera Camera2;
 
 	bool KeyPressed = false;
 	bool KeyPressed2 = false;

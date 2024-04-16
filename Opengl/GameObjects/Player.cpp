@@ -13,18 +13,22 @@ void Player::game_Start()
 	PlayerModel.init_Model();
 	PlayerModel.set_ModelMesh(&Renderer::get()->Cube);
 
-	TheCamera.attach_ToGameObject(this);
 	SphereCollider.attach_ToGameObject(this);
 	SphereCollider.set_SphereRadius(1.f);
 	SphereCollider.enable_SphereVisible(true);
+
 	BoxCollider.attach_ToGameObject(this);
 	BoxCollider.set_BoxHeight(2.f);
 	BoxCollider.set_BoxWidth(2.f);
 	BoxCollider.set_BoxDepth(2.f);
 	BoxCollider.enable_BoxVisible(true);
-	TheCamera.update_CameraPosition(glm::vec3(0));
-	TheCamera.set_CameraSpeed(50.f);
-	EngineManager::TheEngineManager->add_ToCameraHandler(&TheCamera);
+
+	PlayerCamera.attach_ToGameObject(this);
+	PlayerCamera.update_CameraPosition(glm::vec3(0));
+	PlayerCamera.set_CameraSpeed(50.f);
+	EngineManager::TheEngineManager->add_ToCameraHandler(&PlayerCamera);
+	FreeCamera.set_CameraSpeed(100.f);
+	FreeCamera.set_CameraHeight(10.f);
 
 	add_Tag("Player");
 	int chunkXPos = static_cast<int>(floor(PlayerModel.get_WorldPosition().x / 30));
@@ -58,8 +62,8 @@ void Player::tick(float deltaTime)
 	}
 
 
-	glm::vec3 tempVec = TheCamera.get_CameraPosition();
-	glm::vec3 tempVec2 = TheCamera.get_CameraTarget();
+	glm::vec3 tempVec = PlayerCamera.get_CameraPosition();
+	glm::vec3 tempVec2 = PlayerCamera.get_CameraTarget();
 	tempVec2 *= 5;
 	tempVec2.y = 0;
 	tempVec.y -= 19;
@@ -67,15 +71,40 @@ void Player::tick(float deltaTime)
 	
 	PlayerModel.set_ModelPosition(tempVec+tempVec2);
 	
-	PlayerModel.rotate_Model(glm::vec3(0.f, -TheCamera.get_CameraRotation().x, 0.f));
+	PlayerModel.rotate_Model(glm::vec3(0.f, -PlayerCamera.get_CameraRotation().x, 0.f));
 	set_GameObjectPosition(tempVec+tempVec2);
 	EngineManager::TheEngineManager->CharacterPoint = get_GameObjectPositionPtr();
 
-	if (Input::key_Pressed(GLFW_KEY_F))
+	if (Input::key_Pressed(GLFW_KEY_1))
+	{
+		EngineManager::TheEngineManager->set_ActiveCamera(&PlayerCamera);
+	}
+	if (Input::key_Pressed(GLFW_KEY_2))
+	{
+		EngineManager::TheEngineManager->set_ActiveCamera(&FreeCamera);
+	}
+	if (Input::key_HeldDown(GLFW_KEY_D))
+	{
+		EngineManager::TheEngineManager->ActiveCamera->move_CameraSide(true);
+	}
+	if (Input::key_HeldDown(GLFW_KEY_A))
+	{
+		EngineManager::TheEngineManager->ActiveCamera->move_CameraSide(false);
+	}
+	if (Input::key_HeldDown(GLFW_KEY_S))
+	{
+		EngineManager::TheEngineManager->ActiveCamera->move_CameraFront(false);
+	}
+	if (Input::key_HeldDown(GLFW_KEY_W))
+	{
+		EngineManager::TheEngineManager->ActiveCamera->move_CameraFront(true);
+	}
+	if (Input::mouse_Pressed(GLFW_MOUSE_BUTTON_1))
 	{
 		spawn_Item();
 	}
 }
+
 
 void Player::on_Collision(GameObject* otherGameObject)
 {

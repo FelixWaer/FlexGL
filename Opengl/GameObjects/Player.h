@@ -14,7 +14,8 @@ public:
 	void on_Collision(GameObject* otherGameObject) override;
 	glm::ivec2 get_PlayerChunkPosition() const;
 
-	Camera TheCamera;
+	Camera PlayerCamera;
+	Camera FreeCamera;
 	SphereCollision SphereCollider;
 	BoxCollision BoxCollider;
 	Model PlayerModel;
@@ -22,13 +23,6 @@ public:
 	void jump();
 private:
 	bool Jumping = false;
-	bool MovingXPos = false;
-	bool MovingYPos = false;
-	bool MovingZPos = false;
-
-	float xPos = 0.f;
-	float yPos = 0.f;
-	float zPos = 0.f;
 
 	glm::ivec2 ChunkPosition = glm::ivec2(0);
 

@@ -30,6 +30,7 @@ private:
 	glm::vec3 CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 CameraSide = glm::vec3(1.f, 0.f, 1.f);
 	float CameraSpeed = 1.f;
 	float Yaw = -90.f;
 	float Pitch = 0.f;

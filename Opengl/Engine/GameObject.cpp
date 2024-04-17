@@ -11,6 +11,7 @@ void GameObject::init_GameObject()
 void GameObject::tick(float deltaTime)
 {
 	GameObjectPosition += GameObjectVelocity * deltaTime;
+	GameObjectVelocity = glm::vec3(0.f);
 }
 
 void GameObject::game_Start()
@@ -38,12 +39,22 @@ glm::vec3* GameObject::get_GameObjectPositionPtr()
 
 void GameObject::set_GameObjectVelocity(const glm::vec3& newVelocity)
 {
-	GameObjectVelocity = newVelocity;
+	GameObjectVelocity += newVelocity;
 }
 
 glm::vec3& GameObject::get_GameObjectVelocity()
 {
 	return GameObjectVelocity;
+}
+
+void GameObject::set_GameObjectFront(const glm::vec3& newFront)
+{
+	GameObjectFront = newFront;
+}
+
+glm::vec3& GameObject::get_GameObjectFront()
+{
+	return GameObjectFront;
 }
 
 void GameObject::add_Tag(const std::string& tag)

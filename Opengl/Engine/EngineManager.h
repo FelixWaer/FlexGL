@@ -36,6 +36,7 @@ public:
 	bool Scene_2 = false;
 	int Seed = 4576782387;
 	float TerrainHeight = 100.f;
+	float GreedSize = 1000.f;
 
 	void init_Window();
 	void init_Engine();
@@ -57,7 +58,6 @@ public:
 private:
 	FlexGL TheGame;
 
-	//glm::vec3 LightPosition = glm::vec3(0.f);
 	Light TheLight;
 
 	std::vector<Model*> ModelHandler;

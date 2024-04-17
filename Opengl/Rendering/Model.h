@@ -84,3 +84,5 @@ void create_LinesOnTerrain(Mesh& lineModel, float xStart, float xEnd, float delt
 
 void calculate_VertexNormal(Vertex& vertexA, const Vertex& vertexB, const Vertex& vertexC, const Vertex& vertexD);
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC);
+int find_Interval(float value);
+void calculate_BSplineCurve();

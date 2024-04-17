@@ -19,11 +19,14 @@ public:
 	glm::vec3* get_GameObjectPositionPtr();
 	void set_GameObjectVelocity(const glm::vec3& newVelocity);
 	glm::vec3& get_GameObjectVelocity();
+	void set_GameObjectFront(const glm::vec3& newFront);
+	glm::vec3& get_GameObjectFront();
 	void add_Tag(const std::string& tag);
 	bool has_Tag(const std::string& tag);
 protected:
 	glm::vec3 GameObjectPosition;
 	glm::vec3 GameObjectVelocity;
+	glm::vec3 GameObjectFront = glm::vec3(0.f);
 
 private:
 	std::vector<std::string> tags;

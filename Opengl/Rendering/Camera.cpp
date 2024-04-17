@@ -13,6 +13,11 @@ void Camera::init_Camera()
 
 glm::mat4 Camera::get_CameraView()
 {
+	if (AttachedGameObject != nullptr)
+	{
+		CameraPos = AttachedGameObject->get_GameObjectPosition();
+		CameraPos.y += 10.f;
+	}
 	return glm::lookAt(CameraPos, CameraPos+CameraTarget, CameraUp);
 }
 
@@ -72,8 +77,6 @@ void Camera::move_CameraUp(float yPos)
 
 void Camera::update_CameraRotation(float xRotation, float yRotation)
 {
-	glm::vec3 tempRotationVector;
-
 	Yaw += xRotation;
 	Pitch += yRotation;
 	if (Pitch > 89.f)
@@ -83,6 +86,13 @@ void Camera::update_CameraRotation(float xRotation, float yRotation)
 	else if (Pitch < -89.f)
 	{
 		Pitch = -89.f;
+	}
+
+	glm::vec3 tempRotationVector;
+	if (AttachedGameObject != nullptr)
+	{
+		AttachedGameObject->get_GameObjectFront().x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+		AttachedGameObject->get_GameObjectFront().z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	}
 
 	tempRotationVector.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));

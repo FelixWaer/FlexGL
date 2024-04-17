@@ -80,8 +80,6 @@ void create_ChunkTerrain(Chunk& chunk)
 	chunk.ChunkModel = new Model;
 	chunk.ChunkModel->create_NewMesh();
 
-	float gridSize = 200.f;
-
 	chunk.ChunkModel->ModelMesh->Vertices.reserve(900);
 	for (int64_t xPos = chunkXPos; xPos <= chunkXPos + 30; xPos++)
 	{
@@ -93,7 +91,8 @@ void create_ChunkTerrain(Chunk& chunk)
 			float amp = 1.f;
 			for (int i = 0; i < 12; i++)
 			{
-				yHeight += calculate_PerlinNoise(static_cast<float>(xPos) * freq / gridSize, static_cast<float>(zPos) * freq / gridSize) * amp;
+				yHeight += calculate_PerlinNoise(static_cast<float>(xPos) * freq / EngineManager::TheEngineManager->GreedSize,
+					static_cast<float>(zPos) * freq / EngineManager::TheEngineManager->GreedSize) * amp;
 				freq *= 1.5f;
 				amp *= 0.5f;
 			}

@@ -409,3 +409,25 @@ void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)
 	vertexB.Normal += glm::normalize(normal);
 	vertexC.Normal += glm::normalize(normal);
 }
+
+//int find_Interval(std::vector<float> tList, float value)
+//{
+//	int my = tList.size() - 1;
+//
+//	while (value < tList[my])
+//	{
+//		my--;
+//	}
+//	return my;
+//}
+//
+//void calculate_BSplineCurve(std::vector<float> tList, float value)
+//{
+//	int my = find_Interval(value);
+//
+//	std::vector<glm::vec3> vectors;
+//	for (int i = 0; i <= 2; i++)
+//	{
+//		vectors[2-i] = 
+//	}
+//}

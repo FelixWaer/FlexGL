@@ -6,6 +6,8 @@
 #include "../GameObject Components/BoxCollision.h"
 #include "../Rendering/Model.h"
 
+class Terrain;
+
 class Player : public GameObject
 {
 public:
@@ -24,8 +26,11 @@ public:
 private:
 	bool Jumping = false;
 
+	Terrain* TerrainPtr = nullptr;
 	glm::ivec2 ChunkPosition = glm::ivec2(0);
+	uint64_t CurrentChunkIndex = 0;
 
 	void spawn_Item();
+	bool find_Height();
 };
 

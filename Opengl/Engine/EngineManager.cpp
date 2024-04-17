@@ -96,13 +96,13 @@ void EngineManager::tick_Engine()
 				TheTerrain->ModelMesh->Vertices[triangle.SecondIndex].Position,
 				TheTerrain->ModelMesh->Vertices[triangle.ThirdIndex].Position, TheTerrain->get_WorldPosition()))
 			{
-				CameraHandler[0]->get_CameraPosition().y = CharacterPoint->y+20;
+				//CameraHandler[0]->get_CameraPosition().y = CharacterPoint->y+5;
 			}
 		}
 	}
 
-	std::cout << 1 / DeltaTime << std::endl;
-	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
+	//std::cout << 1 / DeltaTime << std::endl;
+	TheLight.set_LightPosition(ActiveCamera->get_CameraPosition());
 	//move_Light(DeltaTime);
 	Input::reset_Keys();
 	Input::reset_Buttons();

@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "../Rendering/Mesh.h"
 #include "../Rendering/ModelCreation.h"
 
 Terrain* Terrain::get_Terrain()
@@ -25,6 +26,7 @@ void Terrain::generate_Chunk(glm::ivec2 chunkPosition)
 	{
 		if (chunk.ChunkPosition == chunkPosition)
 		{
+			chunk.ChunkModel->hide_Model(false);
 			return;
 		}
 	}
@@ -85,5 +87,21 @@ void Terrain::generate_RenderDistanceChunks(glm::ivec2 directionVector)
 	for (int i = 0; i < 5; i++)
 	{
 		generate_Chunk((CurrentPosition + directionVector + reverseDirection) + (tempVec2 * i));
+		for (Chunk chunk : Chunks)
+		{
+			if (directionVector.x < 0 || directionVector.y < 0)
+			{
+				if (chunk.ChunkPosition == (CurrentPosition + directionVector + reverseDirection) + (tempVec2 * i) + directionVector * 5)
+				{
+					chunk.ChunkModel->hide_Model(true);
+					return;
+				}
+			}
+			if (chunk.ChunkPosition == (CurrentPosition + directionVector + reverseDirection) + (tempVec2 * i) + directionVector * -5)
+			{
+				chunk.ChunkModel->hide_Model(true);
+				return;
+			}
+		}
 	}
 }

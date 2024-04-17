@@ -12,6 +12,7 @@ void Player::game_Start()
 {
 	PlayerModel.init_Model();
 	PlayerModel.set_ModelMesh(&Renderer::get()->Cube);
+	PlayerModel.bind_ToGameObject(this);
 
 	SphereCollider.attach_ToGameObject(this);
 	SphereCollider.set_SphereRadius(1.f);
@@ -24,7 +25,7 @@ void Player::game_Start()
 	BoxCollider.enable_BoxVisible(true);
 
 	PlayerCamera.attach_ToGameObject(this);
-	PlayerCamera.update_CameraPosition(glm::vec3(0));
+	PlayerCamera.update_CameraPosition(glm::vec3(10.f, 0.f, 10.f));
 	PlayerCamera.set_CameraSpeed(50.f);
 	EngineManager::TheEngineManager->add_ToCameraHandler(&PlayerCamera);
 	FreeCamera.set_CameraSpeed(100.f);
@@ -42,39 +43,6 @@ void Player::tick(float deltaTime)
 {
 	GameObject::tick(deltaTime);
 
-	glm::ivec2 newChunkPosition(0);
-	newChunkPosition.x = static_cast<int>(floor(PlayerModel.get_WorldPosition().x / 30));
-	newChunkPosition.y = static_cast<int>(floor(PlayerModel.get_WorldPosition().z / 30));
-
-	if (ChunkPosition.x != newChunkPosition.x || ChunkPosition.y != newChunkPosition.y)
-	{
-		Terrain::get_Terrain()->generate_RenderDistanceChunks(newChunkPosition-ChunkPosition);
-		ChunkPosition = newChunkPosition;
-	}
-
-	for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
-	{
-		if (newChunkPosition == chunk.ChunkPosition)
-		{
-			//Terrain::get_Terrain()->generate_ChunksAroundChunk(chunk);
-			EngineManager::TheEngineManager->TheTerrain = chunk.ChunkModel;
-		}
-	}
-
-
-	glm::vec3 tempVec = PlayerCamera.get_CameraPosition();
-	glm::vec3 tempVec2 = PlayerCamera.get_CameraTarget();
-	tempVec2 *= 5;
-	tempVec2.y = 0;
-	tempVec.y -= 19;
-	glm::vec3 tempVec3 = tempVec + tempVec2;
-	
-	PlayerModel.set_ModelPosition(tempVec+tempVec2);
-	
-	PlayerModel.rotate_Model(glm::vec3(0.f, -PlayerCamera.get_CameraRotation().x, 0.f));
-	set_GameObjectPosition(tempVec+tempVec2);
-	EngineManager::TheEngineManager->CharacterPoint = get_GameObjectPositionPtr();
-
 	if (Input::key_Pressed(GLFW_KEY_1))
 	{
 		EngineManager::TheEngineManager->set_ActiveCamera(&PlayerCamera);
@@ -85,24 +53,49 @@ void Player::tick(float deltaTime)
 	}
 	if (Input::key_HeldDown(GLFW_KEY_D))
 	{
-		EngineManager::TheEngineManager->ActiveCamera->move_CameraSide(true);
+		glm::vec3 normal = glm::normalize(glm::cross(get_GameObjectFront(), glm::vec3(0.f, 1.f, 0.f)));
+		set_GameObjectVelocity((normal *= 100.f));
 	}
 	if (Input::key_HeldDown(GLFW_KEY_A))
 	{
-		EngineManager::TheEngineManager->ActiveCamera->move_CameraSide(false);
+		glm::vec3 normal = glm::normalize(glm::cross(get_GameObjectFront(), glm::vec3(0.f, 1.f, 0.f)));
+		set_GameObjectVelocity(-(normal *= 100.f));
 	}
 	if (Input::key_HeldDown(GLFW_KEY_S))
 	{
-		EngineManager::TheEngineManager->ActiveCamera->move_CameraFront(false);
+		glm::vec3 normal = glm::normalize(get_GameObjectFront());
+		set_GameObjectVelocity(-(normal *= 100.f));
 	}
 	if (Input::key_HeldDown(GLFW_KEY_W))
 	{
-		EngineManager::TheEngineManager->ActiveCamera->move_CameraFront(true);
+		glm::vec3 normal = glm::normalize(get_GameObjectFront());
+		set_GameObjectVelocity(normal*=100.f);
 	}
 	if (Input::mouse_Pressed(GLFW_MOUSE_BUTTON_1))
 	{
 		spawn_Item();
 	}
+
+	EngineManager::TheEngineManager->CharacterPoint = get_GameObjectPositionPtr();
+
+	glm::ivec2 newChunkPosition(0);
+	newChunkPosition.x = static_cast<int>(floor(PlayerModel.get_WorldPosition().x / 30));
+	newChunkPosition.y = static_cast<int>(floor(PlayerModel.get_WorldPosition().z / 30));
+
+	if (ChunkPosition.x != newChunkPosition.x || ChunkPosition.y != newChunkPosition.y)
+	{
+		Terrain::get_Terrain()->generate_RenderDistanceChunks(newChunkPosition - ChunkPosition);
+		ChunkPosition = newChunkPosition;
+		for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
+		{
+			if (newChunkPosition == chunk.ChunkPosition)
+			{
+				EngineManager::TheEngineManager->TheTerrain = chunk.ChunkModel;
+			}
+		}
+	}
+
+	//find_Height();
 }
 
 
@@ -154,4 +147,53 @@ void Player::spawn_Item()
 		}
 	}
 	spawnItem->game_Start();
+}
+
+bool Player::find_Height()
+{
+	if (EngineManager::TheEngineManager->TheTerrain != nullptr)
+	{
+
+		float xPosition = ChunkPosition.x * 30;
+		float yPosition = ChunkPosition.y * 30;
+		float playerXPosition = floor(get_GameObjectPosition().x);
+		float playerZPosition = floor(get_GameObjectPosition().z);
+
+		float xIndex = playerXPosition - xPosition;
+		float yIndex = playerZPosition - yPosition;
+
+		if (xPosition < 0)
+		{
+			xPosition *= -1;
+			playerXPosition *= -1;
+			xIndex = xPosition - playerXPosition;
+		}
+		if (yPosition < 0)
+		{
+			yPosition *= -1;
+			playerZPosition *= -1;
+			xIndex = yPosition - playerZPosition;
+		}
+
+		Vertex v1 = EngineManager::TheEngineManager->TheTerrain->ModelMesh->Vertices[(xIndex * 30)+yIndex];
+		Vertex v2 = EngineManager::TheEngineManager->TheTerrain->ModelMesh->Vertices[((xIndex+1) * 30) + yIndex];
+		Vertex v3 = EngineManager::TheEngineManager->TheTerrain->ModelMesh->Vertices[(((xIndex + 1) * 30) + yIndex) + 1];
+		Vertex v4 = EngineManager::TheEngineManager->TheTerrain->ModelMesh->Vertices[((xIndex * 30) + yIndex)+1];
+
+		if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(), v1.Position,
+			v2.Position, v3.Position,
+			EngineManager::TheEngineManager->TheTerrain->get_WorldPosition()))
+		{
+			std::cout << " sds" << std::endl;
+			PlayerCamera.get_CameraPosition().y = get_GameObjectPosition().y + 5;
+		}
+		if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(), v3.Position,
+			v4.Position, v1.Position,
+			EngineManager::TheEngineManager->TheTerrain->get_WorldPosition()))
+		{
+			std::cout << " sds" << std::endl;
+			PlayerCamera.get_CameraPosition().y = get_GameObjectPosition().y + 5;
+		}
+	}
+	return true;
 }

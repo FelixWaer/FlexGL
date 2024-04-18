@@ -39,7 +39,8 @@ void NPC::tick(float deltaTime)
 		}
 	}
 
-	calculate_Height();
+	//calculate_Height();
+	find_Height();
 }
 
 void NPC::enable_CircleDriving(bool enable)
@@ -129,5 +130,66 @@ void NPC::calculate_Height()
 			break;
 		}
 	}
+}
+
+bool NPC::find_Height()
+{
+	glm::ivec2 itemChunkPosition;
+	itemChunkPosition.x = static_cast<int32_t>(floor(get_GameObjectPosition().x / 30));
+	itemChunkPosition.y = static_cast<int32_t>(floor(get_GameObjectPosition().z / 30));
+
+	float xPosition = itemChunkPosition.x * 30;
+	float yPosition = itemChunkPosition.y * 30;
+
+	float playerXPosition = floor(get_GameObjectPosition().x);
+	float playerZPosition = floor(get_GameObjectPosition().z);
+	glm::vec3 tempVec = get_GameObjectPosition();
+
+	float xIndex = xPosition - playerXPosition;
+	float yIndex = yPosition - playerZPosition;
+	xIndex *= -1;
+	yIndex *= -1;
+
+	int index = (xIndex * 31) + yIndex;
+	int index2 = ((xIndex + 1) * 31) + yIndex;
+
+	Chunk* tempChunkPtr = nullptr;
+
+	for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
+	{
+		if (chunk.ChunkPosition == itemChunkPosition)
+		{
+			tempChunkPtr = &chunk;
+			break;
+		}
+	}
+
+	if (tempChunkPtr == nullptr)
+	{
+		return false;
+	}
+
+	Vertex v1 = tempChunkPtr->ChunkModel->ModelMesh->Vertices[index];
+	Vertex v2 = tempChunkPtr->ChunkModel->ModelMesh->Vertices[index2];
+	Vertex v3 = tempChunkPtr->ChunkModel->ModelMesh->Vertices[index2 + 1];
+	Vertex v4 = tempChunkPtr->ChunkModel->ModelMesh->Vertices[index + 1];
+
+	if (EngineManager::calculate_PointOnTriangle(tempVec, v1.Position,
+		v2.Position, v3.Position,
+		tempChunkPtr->ChunkModel->get_WorldPosition()))
+	{
+
+	}
+	if (EngineManager::calculate_PointOnTriangle(tempVec, v3.Position,
+		v4.Position, v1.Position,
+		tempChunkPtr->ChunkModel->get_WorldPosition()))
+	{
+	}
+
+	tempVec.y += 0.5f;
+
+	set_GameObjectPosition(tempVec);
+
+	return true;
 }
 

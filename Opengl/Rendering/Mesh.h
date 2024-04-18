@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-class Vertex;
+struct Vertex;
 struct Triangle;
 
 class Mesh

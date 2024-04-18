@@ -115,9 +115,8 @@ void EngineManager::tick_Engine()
 
 		model->draw_Model();
 	}
-
-	//std::cout << 1 / DeltaTime << std::endl;
-	TheLight.set_LightPosition(glm::vec3(0.f, 50.f, 0.f));
+	std::cout << 1 / DeltaTime << std::endl;
+	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
 	//move_Light(DeltaTime);
 	Input::reset_Keys();
 	Input::reset_Buttons();

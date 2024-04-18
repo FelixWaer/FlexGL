@@ -145,8 +145,8 @@ void Player::tick(float deltaTime)
 		ChunkPosition = newChunkPosition;
 	}
 
-	calculate_Height();
-	//find_Height();
+	//calculate_Height();
+	find_Height();
 }
 
 
@@ -208,48 +208,55 @@ void Player::spawn_Item()
 
 bool Player::find_Height()
 {
-	if (EngineManager::get_Engine()->TheTerrain != nullptr)
+	if (EngineManager::get_Engine()->TheTerrain == nullptr)
+	{
+		return false;
+	}
+
+	float xPosition = ChunkPosition.x * 30;
+	float yPosition = ChunkPosition.y * 30;
+	float playerXPosition = floor(get_GameObjectPosition().x);
+	float playerZPosition = floor(get_GameObjectPosition().z);
+	glm::vec3 tempVec = get_GameObjectPosition();
+
+	float xIndex = xPosition - playerXPosition;
+	float yIndex = yPosition - playerZPosition;
+	xIndex *= -1;
+	yIndex *= -1;
+
+	int index = (xIndex * 31) + yIndex;
+	int index2 = ((xIndex + 1) * 31) + yIndex;
+	Vertex v1 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index];
+	Vertex v2 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index2];
+	Vertex v3 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index2 + 1];
+	Vertex v4 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index + 1];
+
+	if (EngineManager::calculate_PointOnTriangle(tempVec, v1.Position,
+		v2.Position, v3.Position,
+		EngineManager::get_Engine()->TheTerrain->get_WorldPosition()))
 	{
 
-		float xPosition = ChunkPosition.x * 30;
-		float yPosition = ChunkPosition.y * 30;
-		float playerXPosition = floor(get_GameObjectPosition().x);
-		float playerZPosition = floor(get_GameObjectPosition().z);
+	}
+	if (EngineManager::calculate_PointOnTriangle(tempVec, v3.Position,
+		v4.Position, v1.Position,
+		EngineManager::get_Engine()->TheTerrain->get_WorldPosition()))
+	{
+	}
 
-		float xIndex = playerXPosition - xPosition;
-		float yIndex = playerZPosition - yPosition;
+	tempVec.y += 0.5f;
 
-		if (xPosition < 0)
+	if (get_GameObjectPosition().y > tempVec.y)
+	{
+		falling = true;
+	}
+	else
+	{
+		get_GameObjectPosition().y = tempVec.y;
+		if (falling == true)
 		{
-			xPosition *= -1;
-			playerXPosition *= -1;
-			xIndex = xPosition - playerXPosition;
+			Jumping = false;
 		}
-		if (yPosition < 0)
-		{
-			yPosition *= -1;
-			playerZPosition *= -1;
-			xIndex = yPosition - playerZPosition;
-		}
-
-		Vertex v1 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[(xIndex * 30)+yIndex];
-		Vertex v2 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[((xIndex+1) * 30) + yIndex];
-		Vertex v3 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[(((xIndex + 1) * 30) + yIndex) + 1];
-		Vertex v4 = EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[((xIndex * 30) + yIndex)+1];
-
-		if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(), v1.Position,
-			v2.Position, v3.Position,
-			EngineManager::get_Engine()->TheTerrain->get_WorldPosition()))
-		{
-			std::cout << " sds" << std::endl;
-			PlayerCamera.get_CameraPosition().y = get_GameObjectPosition().y + 5;
-		}
-		if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(), v3.Position,
-			v4.Position, v1.Position,
-			EngineManager::get_Engine()->TheTerrain->get_WorldPosition()))
-		{
-			PlayerCamera.get_CameraPosition().y = get_GameObjectPosition().y + 5;
-		}
+		falling = false;
 	}
 	return true;
 }
@@ -315,17 +322,14 @@ void Player::mine()
 
 			if (index % 31 != 30)
 			{
-				std::cout << "1" << std::endl;
 				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index + 1].Position.y -= 1.f;
 			}
 			if (index % 31 != 0)
 			{
-				std::cout << "2" << std::endl;
 				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index - 1].Position.y -= 1.f;
 			}
 			if (indexNumber != 0)
 			{
-				std::cout << "3" << std::endl;
 				uint64_t tempInt = index - ((indexNumber - 1) * 31);
 				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt].Position.y -= 1.f;
 				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt + 1].Position.y -= 0.5f;
@@ -333,7 +337,6 @@ void Player::mine()
 			}
 			if (indexNumber != 30)
 			{
-				std::cout << "4" << std::endl;
 				uint64_t tempInt = index - ((indexNumber - 1) * 31);
 				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt].Position.y -= 1.f;
 				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt + 1].Position.y -= 0.5f;

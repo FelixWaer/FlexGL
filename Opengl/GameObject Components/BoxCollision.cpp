@@ -9,7 +9,7 @@ void BoxCollision::attach_ToGameObject(GameObject* GO)
 {
 	AttachedGameObject = GO;
 	BoxPosition = GO->get_GameObjectPositionPtr();
-	EngineManager::TheEngineManager->add_ToBoxCollisionHandler(this);
+	EngineManager::get_Engine()->add_ToBoxCollisionHandler(this);
 }
 
 void BoxCollision::enable_Collider(bool isColliding)

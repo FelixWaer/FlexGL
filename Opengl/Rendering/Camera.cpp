@@ -8,7 +8,7 @@
 
 void Camera::init_Camera()
 {
-	EngineManager::TheEngineManager->add_ToCameraHandler(this);
+	EngineManager::get_Engine()->add_ToCameraHandler(this);
 }
 
 glm::mat4 Camera::get_CameraView()
@@ -16,7 +16,10 @@ glm::mat4 Camera::get_CameraView()
 	if (AttachedGameObject != nullptr)
 	{
 		CameraPos = AttachedGameObject->get_GameObjectPosition();
-		CameraPos.y += 10.f;
+		glm::vec3 tempVec = AttachedGameObject->get_GameObjectFront();
+		tempVec *= 3;
+		CameraPos -= tempVec;
+		CameraPos.y += 20.f;
 	}
 	return glm::lookAt(CameraPos, CameraPos+CameraTarget, CameraUp);
 }
@@ -50,11 +53,11 @@ void Camera::move_CameraFront(bool moveFront)
 {
 	if (moveFront == true)
 	{
-		CameraPos += CameraTarget * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
+		CameraPos += CameraTarget * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
 	}
 	else
 	{
-		CameraPos -= CameraTarget * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
+		CameraPos -= CameraTarget * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
 	}
 }
 
@@ -62,11 +65,11 @@ void Camera::move_CameraSide(bool moveRight)
 {
 	if (moveRight == true)
 	{
-		CameraPos += glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
+		CameraPos += glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
 	}
 	else
 	{
-		CameraPos -= glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::TheEngineManager->get_DeltaTime();
+		CameraPos -= glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
 	}
 }
 

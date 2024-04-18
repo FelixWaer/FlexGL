@@ -4,8 +4,7 @@
 
 void GameObject::init_GameObject()
 {
-	EngineManager::TheEngineManager->add_ToGameObjectHandler(this);
-	GameObjectVelocity = glm::vec3(0.f);
+	EngineManager::get_Engine()->add_ToGameObjectHandler(this);
 }
 
 void GameObject::tick(float deltaTime)

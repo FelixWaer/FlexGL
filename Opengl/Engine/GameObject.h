@@ -24,8 +24,8 @@ public:
 	void add_Tag(const std::string& tag);
 	bool has_Tag(const std::string& tag);
 protected:
-	glm::vec3 GameObjectPosition;
-	glm::vec3 GameObjectVelocity;
+	glm::vec3 GameObjectPosition = glm::vec3(0.f);
+	glm::vec3 GameObjectVelocity = glm::vec3(0.f);
 	glm::vec3 GameObjectFront = glm::vec3(0.f);
 
 private:

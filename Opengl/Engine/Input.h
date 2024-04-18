@@ -15,8 +15,8 @@ public:
 	static void reset_Buttons();
 
 private:
-	static inline bool Keys[256] = {};
-	static inline bool KeysHeldDown[256] = {};
+	static inline bool Keys[341] = {};
+	static inline bool KeysHeldDown[341] = {};
 
 	static inline bool buttons[7] = {};
 	static inline bool buttonsHeldDown[7] = {};

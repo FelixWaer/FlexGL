@@ -31,7 +31,7 @@ void FlexGL::game_Start()
     create_LinesOnTerrain(*TerrainLine.ModelMesh, -10.f, 10.f, 0.1f);
     TerrainLine.turn_OnLine();
 
-    EngineManager::TheEngineManager->ActiveCamera = &ThePlayer.PlayerCamera;
+    EngineManager::get_Engine()->ActiveCamera = &ThePlayer.PlayerCamera;
 
 
     //create_Cube(Floor_1, glm::vec3(0.5f, 0.5f, 0.f));
@@ -72,7 +72,7 @@ void FlexGL::game_Start()
 	Cameras.emplace_back(&ThePlayer.PlayerCamera);
     Cameras.emplace_back(&ThePlayer.FreeCamera);
 
-    EngineManager::TheEngineManager->TheTerrain = Terrain::get_Terrain()->Chunks[0].ChunkModel;
+    EngineManager::get_Engine()->TheTerrain = Terrain::get_Terrain()->Chunks[0].ChunkModel;
 
     spawn_PickupRandom();
 }
@@ -84,10 +84,6 @@ void FlexGL::tick(float deltaTime)
 
 void FlexGL::input(GLFWwindow* window)
 {
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    {
-        ThePlayer.jump();
-    }
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -100,14 +96,14 @@ void FlexGL::input(GLFWwindow* window)
 			
             if (DebugTurnedOff == true)
             {
-                EngineManager::TheEngineManager->turnOff_DebugMode(true);
+                EngineManager::get_Engine()->turnOff_DebugMode(true);
                 DebugTurnedOff = false;
                 //TheNPC.switch_Path();
                 //NPC_2.switch_Path();
             }
             else
             {
-                EngineManager::TheEngineManager->turnOff_DebugMode(false);
+                EngineManager::get_Engine()->turnOff_DebugMode(false);
                 DebugTurnedOff = true;
                 //TheNPC.switch_Path();
                 //NPC_2.switch_Path();

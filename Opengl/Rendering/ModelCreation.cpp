@@ -21,11 +21,11 @@ glm::vec2 calculate_RandomGradient(int xPos, int yPos)
 	//xPos ^= yPos << s | yPos >> w - s;
 	//xPos *= 3284157443;
 
-	xPos *= EngineManager::TheEngineManager->Seed;
+	xPos *= EngineManager::get_Engine()->Seed;
 	yPos ^= xPos << s | xPos >> w - s;
-	yPos *= EngineManager::TheEngineManager->Seed;
+	yPos *= EngineManager::get_Engine()->Seed;
 	xPos ^= yPos << s | yPos >> w - s;
-	xPos *= EngineManager::TheEngineManager->Seed;
+	xPos *= EngineManager::get_Engine()->Seed;
 
 	float random = xPos * (3.14159265 / ~(~0u >> 1));
 
@@ -91,13 +91,13 @@ void create_ChunkTerrain(Chunk& chunk)
 			float amp = 1.f;
 			for (int i = 0; i < 12; i++)
 			{
-				yHeight += calculate_PerlinNoise(static_cast<float>(xPos) * freq / EngineManager::TheEngineManager->GreedSize,
-					static_cast<float>(zPos) * freq / EngineManager::TheEngineManager->GreedSize) * amp;
+				yHeight += calculate_PerlinNoise(static_cast<float>(xPos) * freq / EngineManager::get_Engine()->GreedSize,
+					static_cast<float>(zPos) * freq / EngineManager::get_Engine()->GreedSize) * amp;
 				freq *= 1.5f;
 				amp *= 0.5f;
 			}
 
-			yHeight *= EngineManager::TheEngineManager->TerrainHeight;
+			yHeight *= EngineManager::get_Engine()->TerrainHeight;
 			chunk.ChunkModel->ModelMesh->Vertices.emplace_back(glm::vec3(xPos, yHeight, zPos), glm::vec3(0.5f));
 
 			if (xPos == chunkXPos)

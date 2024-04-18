@@ -29,7 +29,7 @@ bool CameraFirstMove = true;
 // ------------------------------------------------------------------
 int main()
 {
-    EngineManager* EM = EngineManager::create_EngineManager();
+    EngineManager* EM = EngineManager::get_Engine();
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -115,5 +115,5 @@ void mouse_Button_Callback(GLFWwindow* window, double xPos, double yPos)
     XPosMouse = xPos;
     YPosMouse = yPos;
 
-    EngineManager::TheEngineManager->get_ActiveCamera().update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
+    EngineManager::get_Engine()->get_ActiveCamera().update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
 }

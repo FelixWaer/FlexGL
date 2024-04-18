@@ -22,9 +22,14 @@ public:
 	BoxCollision BoxCollider;
 	Model PlayerModel;
 
-	void jump();
+	void jump(float deltaTime);
 private:
 	bool Jumping = false;
+	bool falling = false;
+	bool CanMine = true;
+	float MineTimer = 0.f;
+	float JumpSpeed = 100.f;
+	float MovementSpeed = 10.f;
 
 	Terrain* TerrainPtr = nullptr;
 	glm::ivec2 ChunkPosition = glm::ivec2(0);
@@ -32,5 +37,7 @@ private:
 
 	void spawn_Item();
 	bool find_Height();
+	void calculate_Height();
+	void mine();
 };
 

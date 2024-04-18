@@ -33,7 +33,7 @@ void Door::on_Collision(GameObject* otherGameObject)
 	if (otherGameObject->has_Tag("Player"))
 	{
 		OpenDoor = true;
-		EngineManager::TheEngineManager->Scene_2 = true;
+		EngineManager::get_Engine()->Scene_2 = true;
 	}
 }
 

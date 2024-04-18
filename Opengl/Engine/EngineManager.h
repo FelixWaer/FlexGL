@@ -17,8 +17,7 @@
 class EngineManager
 {
 public:
-	inline static EngineManager* TheEngineManager = nullptr;
-	static EngineManager* create_EngineManager();
+	static EngineManager* get_Engine();
 
 	FXGL::Shader TheShader;
 	Camera* ActiveCamera;
@@ -36,7 +35,7 @@ public:
 	bool Scene_2 = false;
 	int Seed = 4576782387;
 	float TerrainHeight = 100.f;
-	float GreedSize = 1000.f;
+	float GreedSize = 400.f;
 
 	void init_Window();
 	void init_Engine();
@@ -56,12 +55,14 @@ public:
 	void turnOff_DebugMode(bool turnOff);
 	static bool calculate_PointOnTriangle(glm::vec3& x, const glm::vec3& P, const glm::vec3& Q, const glm::vec3& R, const glm::vec3& position);
 private:
-	FlexGL TheGame;
+	inline static EngineManager* TheEngineManager = nullptr;
 
+	FlexGL TheGame;
 	Light TheLight;
 
 	std::vector<Model*> ModelHandler;
 	std::vector<GameObject*> GameObjectHandler;
+	std::vector<GameObject*> GameObjectsToBeAdded;
 	std::vector<SphereCollision*> SphereCollisionHandler;
 	std::vector<BoxCollision*> BoxCollisionHandler;
 	std::vector<Camera*> CameraHandler;

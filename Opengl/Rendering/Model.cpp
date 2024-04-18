@@ -11,7 +11,7 @@
 
 void Model::init_Model()
 {
-	EngineManager::TheEngineManager->add_ToModelHandler(this);
+	EngineManager::get_Engine()->add_ToModelHandler(this);
 }
 
 //void Model::load_Model(std::string& filePath)

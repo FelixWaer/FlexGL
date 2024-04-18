@@ -13,9 +13,12 @@ const unsigned int SCR_HEIGHT = 900;
 std::string FilePathVert = "Shader/Vertex_Shader.txt";
 std::string FilePathFrag = "Shader/Fragment_Shader.txt";
 
-EngineManager* EngineManager::create_EngineManager()
+EngineManager* EngineManager::get_Engine()
 {
-	TheEngineManager = new EngineManager;
+	if (TheEngineManager == nullptr)
+	{
+		TheEngineManager = new EngineManager;
+	}
 	return TheEngineManager;
 }
 
@@ -40,6 +43,13 @@ void EngineManager::init_Engine()
 	TheLight.set_LightPosition(glm::vec3(0.f, 30.f, 0.f));
 
 	TheGame.game_Start();
+
+	for (GameObject* gameObject : GameObjectsToBeAdded)
+	{
+		GameObjectHandler.emplace_back(gameObject);
+	}
+	GameObjectsToBeAdded.clear();
+
 	for (GameObject* gameObject : GameObjectHandler)
 	{
 		gameObject->game_Start();
@@ -48,6 +58,12 @@ void EngineManager::init_Engine()
 
 void EngineManager::tick_Engine()
 {
+	for (GameObject* gameObject : GameObjectsToBeAdded)
+	{
+		GameObjectHandler.emplace_back(gameObject);
+	}
+	GameObjectsToBeAdded.clear();
+
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glFrontFace(GL_CW);
@@ -58,12 +74,11 @@ void EngineManager::tick_Engine()
 	TheGame.input(TheWindow);
 	check_Collision();
 
+	TheGame.tick(DeltaTime);
 	for (GameObject* gameObject  : GameObjectHandler)
 	{
 		gameObject->tick(DeltaTime);
 	}
-
-	TheGame.tick(DeltaTime);
 
 	glClearColor(0.f, 0.f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -76,6 +91,18 @@ void EngineManager::tick_Engine()
 	glUniform3fv(lightPosLoc, 1, glm::value_ptr(TheLight.get_LightPosition()));
 	glUniform3fv(lightColorLoc, 1, glm::value_ptr(TheLight.get_LightColor()));
 
+	for (Model* chunkModel : Terrain::get_Terrain()->RenderedChunks)
+	{
+		if (chunkModel->ModelMesh == nullptr)
+		{
+			continue;
+		}
+		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(chunkModel->get_ModelMatrix()));
+		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), 
+			static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * chunkModel->get_ModelMatrix()));
+
+		chunkModel->draw_Model();
+	}
 	for (auto model : ModelHandler)
 	{
 		if (model->ModelMesh == nullptr)
@@ -83,26 +110,14 @@ void EngineManager::tick_Engine()
 			continue;
 		}
 		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
-		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
+		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f),
+			static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
 
 		model->draw_Model();
 	}
 
-	if (TheTerrain != nullptr)
-	{
-		for (const Triangle& triangle : TheTerrain->ModelMesh->Triangles)
-		{
-			if (calculate_PointOnTriangle(*CharacterPoint, TheTerrain->ModelMesh->Vertices[triangle.FirstIndex].Position,
-				TheTerrain->ModelMesh->Vertices[triangle.SecondIndex].Position,
-				TheTerrain->ModelMesh->Vertices[triangle.ThirdIndex].Position, TheTerrain->get_WorldPosition()))
-			{
-				//CameraHandler[0]->get_CameraPosition().y = CharacterPoint->y+5;
-			}
-		}
-	}
-
 	//std::cout << 1 / DeltaTime << std::endl;
-	TheLight.set_LightPosition(ActiveCamera->get_CameraPosition());
+	TheLight.set_LightPosition(glm::vec3(0.f, 50.f, 0.f));
 	//move_Light(DeltaTime);
 	Input::reset_Keys();
 	Input::reset_Buttons();
@@ -150,7 +165,7 @@ void EngineManager::add_ToModelHandler(Model* modelPtr)
 
 void EngineManager::add_ToGameObjectHandler(GameObject* gameObjectPtr)
 {
-	GameObjectHandler.emplace_back(gameObjectPtr);
+	GameObjectsToBeAdded.emplace_back(gameObjectPtr);
 }
 
 void EngineManager::add_ToSphereCollisionHandler(SphereCollision* sphereCollisionPtr)

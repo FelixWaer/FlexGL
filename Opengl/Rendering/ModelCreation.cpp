@@ -126,5 +126,5 @@ void create_ChunkTerrain(Chunk& chunk)
 			chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex], chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex]);
 	}
 
-	chunk.ChunkModel->ModelMesh->bind_Buffer();
+	chunk.ChunkModel->ModelMesh->bind_Buffer(GL_DYNAMIC_DRAW);
 }

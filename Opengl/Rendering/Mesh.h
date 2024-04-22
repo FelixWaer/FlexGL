@@ -12,8 +12,10 @@ public:
 	unsigned int VAO;
 	unsigned int VBO;
 	unsigned int EBO;
+	uint64_t TotalDraws = 0;
 
-	void bind_Buffer();
-private:
+	void bind_Buffer(int drawType);
+	void rebind_Buffer(int drawType);
+	void delete_Buffer();
 };
 

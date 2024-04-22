@@ -92,7 +92,7 @@ void Player::tick(float deltaTime)
 	{
 		if (CanMine == true)
 		{
-			mine();
+			mine(-1.f);
 			CanMine = false;
 		}
 	}
@@ -100,13 +100,21 @@ void Player::tick(float deltaTime)
 	{
 		if (CanMine == true)
 		{
-			mine();
+			mine(-1.f);
 			CanMine = false;
 		}
 	}
 	if (Input::mouse_Pressed(GLFW_MOUSE_BUTTON_2))
 	{
-		spawn_Item();
+		if (CanMine == true)
+		{
+			CanMine = false;
+		}
+		//spawn_Item();
+	}
+	if (Input::mouse_HeldDown(GLFW_MOUSE_BUTTON_2))
+	{
+		flatten_Terrain(get_GameObjectPosition().y - 0.5f);
 	}
 
 	if (MineTimer >= 1.f )
@@ -294,14 +302,16 @@ void Player::calculate_Height()
 	}
 }
 
-void Player::mine()
+void Player::mine(float heightChange)
 {
 	if (EngineManager::get_Engine()->TheTerrain == nullptr)
 	{
 		return;
 	}
 	Mesh* modelMesh = EngineManager::get_Engine()->TheTerrain->ModelMesh;
-	for (size_t i = 0; i < modelMesh->Triangles.size(); i++)
+	int triangleIndex = 0;
+
+	for (int i = 0; i < modelMesh->Triangles.size(); i++)
 	{
 		if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(),
 			modelMesh->Vertices[modelMesh->Triangles[i].FirstIndex].Position,
@@ -309,42 +319,138 @@ void Player::mine()
 			modelMesh->Vertices[modelMesh->Triangles[i].ThirdIndex].Position,
 			EngineManager::get_Engine()->TheTerrain->get_WorldPosition()))
 		{
-			if (i % 2 == 0)
-			{
-				
-			}
-			get_GameObjectPosition().y += 0.5f;
-
-			uint64_t index = modelMesh->Triangles[i].ThirdIndex;
-			uint64_t indexNumber = index / 31;
-
-			EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index].Position.y -= 2.f;
-
-			if (index % 31 != 30)
-			{
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index + 1].Position.y -= 1.f;
-			}
-			if (index % 31 != 0)
-			{
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[index - 1].Position.y -= 1.f;
-			}
-			if (indexNumber != 0)
-			{
-				uint64_t tempInt = index - ((indexNumber - 1) * 31);
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt].Position.y -= 1.f;
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt + 1].Position.y -= 0.5f;
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt - 1].Position.y -= 0.5f;
-			}
-			if (indexNumber != 30)
-			{
-				uint64_t tempInt = index - ((indexNumber - 1) * 31);
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt].Position.y -= 1.f;
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt + 1].Position.y -= 0.5f;
-				EngineManager::get_Engine()->TheTerrain->ModelMesh->Vertices[tempInt - 1].Position.y -= 0.5f;
-			}
-
-
-			EngineManager::get_Engine()->TheTerrain->ModelMesh->bind_Buffer();
+			triangleIndex = i;
+			break;
 		}
 	}
+
+	if (triangleIndex % 2 != 0)
+	{
+		triangleIndex -= 1;
+	}
+
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex].FirstIndex].Position.y += heightChange;
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex].SecondIndex].Position.y += heightChange;
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex].ThirdIndex].Position.y += heightChange;
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 1].SecondIndex].Position.y += heightChange;
+
+	if (triangleIndex % 59 != 0)
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].FirstIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].SecondIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].ThirdIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 3].SecondIndex].Position.y += heightChange;
+	}
+
+	if (triangleIndex % 60 != 0)
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 2].FirstIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 2].SecondIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 2].ThirdIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 1].SecondIndex].Position.y += heightChange;
+	}
+	if (triangleIndex - 60 > 0)
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 60].FirstIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 60].SecondIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 60].ThirdIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[(triangleIndex - 60) + 1].SecondIndex].Position.y += heightChange;
+	}
+	if (triangleIndex + 60 < modelMesh->Triangles.size())
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 60].FirstIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 60].SecondIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 60].ThirdIndex].Position.y += heightChange;
+		modelMesh->Vertices[modelMesh->Triangles[(triangleIndex + 60) + 1].SecondIndex].Position.y += heightChange;
+	}
+
+	for (Vertex& vertex : modelMesh->Vertices)
+	{
+		vertex.Normal = glm::vec3(0.f);
+	}
+
+	for (const Triangle& triangle : modelMesh->Triangles)
+	{
+		calculate_TriangleNormal(modelMesh->Vertices[triangle.FirstIndex],
+			modelMesh->Vertices[triangle.ThirdIndex], modelMesh->Vertices[triangle.SecondIndex]);
+	}
+
+	modelMesh->rebind_Buffer(GL_DYNAMIC_DRAW);
+}
+
+void Player::flatten_Terrain(float newTerrainHeight)
+{
+	if (EngineManager::get_Engine()->TheTerrain == nullptr)
+	{
+		return;
+	}
+	Mesh* modelMesh = EngineManager::get_Engine()->TheTerrain->ModelMesh;
+	int triangleIndex = 0;
+
+	for (int i = 0; i < modelMesh->Triangles.size(); i++)
+	{
+		if (EngineManager::calculate_PointOnTriangle(get_GameObjectPosition(),
+			modelMesh->Vertices[modelMesh->Triangles[i].FirstIndex].Position,
+			modelMesh->Vertices[modelMesh->Triangles[i].SecondIndex].Position,
+			modelMesh->Vertices[modelMesh->Triangles[i].ThirdIndex].Position,
+			EngineManager::get_Engine()->TheTerrain->get_WorldPosition()))
+		{
+			triangleIndex = i;
+			break;
+		}
+	}
+
+	if (triangleIndex % 2 != 0)
+	{
+		triangleIndex -= 1;
+	}
+
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex].FirstIndex].Position.y = newTerrainHeight;
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex].SecondIndex].Position.y = newTerrainHeight;
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex].ThirdIndex].Position.y = newTerrainHeight;
+	modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 1].SecondIndex].Position.y = newTerrainHeight;
+
+	if ((triangleIndex - 58) % 60 != 0 && (triangleIndex - 58) != 0)
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].FirstIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].SecondIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].ThirdIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 3].SecondIndex].Position.y = newTerrainHeight;
+		std::cout << triangleIndex << std::endl;
+	}
+
+	if (triangleIndex % 60 != 0 && triangleIndex != 0)
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 2].FirstIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 2].SecondIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 2].ThirdIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 1].SecondIndex].Position.y = newTerrainHeight;
+	}
+	if (triangleIndex - 60 > 0)
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 60].FirstIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 60].SecondIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex - 60].ThirdIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[(triangleIndex - 60) + 1].SecondIndex].Position.y = newTerrainHeight;
+	}
+	if (triangleIndex + 60 < modelMesh->Triangles.size())
+	{
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 60].FirstIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 60].SecondIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 60].ThirdIndex].Position.y = newTerrainHeight;
+		modelMesh->Vertices[modelMesh->Triangles[(triangleIndex + 60) + 1].SecondIndex].Position.y = newTerrainHeight;
+	}
+
+	for (Vertex& vertex : modelMesh->Vertices)
+	{
+		vertex.Normal = glm::vec3(0.f);
+	}
+
+	for (const Triangle& triangle : modelMesh->Triangles)
+	{
+		calculate_TriangleNormal(modelMesh->Vertices[triangle.FirstIndex],
+			modelMesh->Vertices[triangle.ThirdIndex], modelMesh->Vertices[triangle.SecondIndex]);
+	}
+
+	modelMesh->rebind_Buffer(GL_DYNAMIC_DRAW);
 }

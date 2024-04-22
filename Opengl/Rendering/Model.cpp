@@ -111,6 +111,7 @@ void Model::init_Model()
 void Model::set_ModelMesh(Mesh* modelMesh)
 {
 	ModelMesh = modelMesh;
+	modelMesh->TotalDraws++;
 }
 
 void Model::create_NewMesh()
@@ -277,7 +278,7 @@ void load_Model(std::string& filePath, Mesh& mesh)
 		}
 	}
 
-	mesh.bind_Buffer();
+	mesh.bind_Buffer(GL_STATIC_DRAW);
 }
 
 void create_Cube(Mesh& mesh, const glm::vec3& color)
@@ -322,7 +323,7 @@ void create_Cube(Mesh& mesh, const glm::vec3& color)
 			mesh.Vertices[triangle.SecondIndex], mesh.Vertices[triangle.ThirdIndex]);
 	}
 
-	mesh.bind_Buffer();
+	mesh.bind_Buffer(GL_STATIC_DRAW);
 }
 
 void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color)
@@ -345,7 +346,7 @@ void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color)
 		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
 	}
 
-	lineModel.bind_Buffer();
+	lineModel.bind_Buffer(GL_STATIC_DRAW);
 }
 
 void create_BoxLines(Mesh& lineModel, float height, float width, float depth, const glm::vec3& color)
@@ -362,7 +363,7 @@ void create_BoxLines(Mesh& lineModel, float height, float width, float depth, co
 	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
 	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
 
-	lineModel.bind_Buffer();
+	lineModel.bind_Buffer(GL_STATIC_DRAW);
 }
 
 float line_Function(float x)
@@ -398,7 +399,7 @@ void create_LinesOnTerrain(Mesh& lineModel, float xStart, float xEnd, float delt
 			}
 		}
 	}
-	lineModel.bind_Buffer();
+	lineModel.bind_Buffer(GL_STATIC_DRAW);
 }
 
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)

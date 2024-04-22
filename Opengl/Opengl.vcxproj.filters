@@ -28,6 +28,9 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{9b85f562-d787-49db-8d85-803fa7d8a7c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{d6bea946-37b6-4db1-bb2b-88576892734f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -184,5 +187,13 @@
     <Library Include="ProjectDependencies\Libraries\glfw3.lib" />
     <Library Include="ProjectDependencies\Libraries\glfw3_mt.lib" />
     <Library Include="ProjectDependencies\Libraries\glfw3dll.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shader\Fragment_Shader.frag">
+      <Filter>Shader</Filter>
+    </Text>
+    <Text Include="Shader\Vertex_Shader.vert">
+      <Filter>Shader</Filter>
+    </Text>
   </ItemGroup>
 </Project>

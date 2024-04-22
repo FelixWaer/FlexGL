@@ -19,7 +19,7 @@ glm::mat4 Camera::get_CameraView()
 		glm::vec3 tempVec = AttachedGameObject->get_GameObjectFront();
 		tempVec *= 3;
 		CameraPos -= tempVec;
-		CameraPos.y += 2.f;
+		CameraPos.y += 5.f;
 	}
 	return glm::lookAt(CameraPos, CameraPos+CameraTarget, CameraUp);
 }

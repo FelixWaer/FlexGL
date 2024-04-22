@@ -38,6 +38,7 @@ private:
 	void spawn_Item();
 	bool find_Height();
 	void calculate_Height();
-	void mine();
+	void mine(float heightChange);
+	void flatten_Terrain(float newTerrainHeight);
 };
 

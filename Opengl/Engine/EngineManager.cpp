@@ -10,8 +10,8 @@
 const unsigned int SCR_WIDTH = 1800;
 const unsigned int SCR_HEIGHT = 900;
 
-std::string FilePathVert = "Shader/Vertex_Shader.txt";
-std::string FilePathFrag = "Shader/Fragment_Shader.txt";
+std::string FilePathVert = "Shader/Vertex_Shader.vert";
+std::string FilePathFrag = "Shader/Fragment_Shader.frag";
 
 EngineManager* EngineManager::get_Engine()
 {

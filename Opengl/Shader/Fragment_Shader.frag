@@ -29,7 +29,7 @@ vec3 calculate_PointLight(){
 	vec3 reflectDirection = reflect(-lightDirection, normal);
 	float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), Shininess);
 	vec3 specular = SpecularStrength * spec * LightColor;
-
+	
 	vec3 result = (ambient + diffuse + specular) * FragColor;
 	return result;
 }

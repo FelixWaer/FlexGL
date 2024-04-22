@@ -270,9 +270,6 @@ void load_Model(std::string& filePath, Mesh& mesh)
 			mesh.Triangles.emplace_back(I_1, I_2, I_3);
 			break;
 
-		case 'O':
-			break;
-
 		default:
 			break;
 		}

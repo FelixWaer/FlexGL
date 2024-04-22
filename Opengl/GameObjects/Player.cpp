@@ -416,7 +416,6 @@ void Player::flatten_Terrain(float newTerrainHeight)
 		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].SecondIndex].Position.y = newTerrainHeight;
 		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 2].ThirdIndex].Position.y = newTerrainHeight;
 		modelMesh->Vertices[modelMesh->Triangles[triangleIndex + 3].SecondIndex].Position.y = newTerrainHeight;
-		std::cout << triangleIndex << std::endl;
 	}
 
 	if (triangleIndex % 60 != 0 && triangleIndex != 0)

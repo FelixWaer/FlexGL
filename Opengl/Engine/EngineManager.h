@@ -20,6 +20,8 @@ public:
 	static EngineManager* get_Engine();
 
 	FXGL::Shader TheShader;
+	FXGL::Shader TestShader;
+
 	Camera* ActiveCamera;
 	GLFWwindow* TheWindow;
 
@@ -32,9 +34,12 @@ public:
 	int lightPosLoc;
 	int lightColorLoc;
 
+	int TestModelLoc;
+	int TestPositionMatrix;
+
 	bool Scene_2 = false;
-	int Seed = 4576782387;
-	float TerrainHeight = 100.f;
+	int Seed = 64363626;
+	float TerrainHeight = 200.f;
 	float GreedSize = 400.f;
 
 	void init_Window();

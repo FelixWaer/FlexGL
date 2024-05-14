@@ -14,6 +14,7 @@ public:
 	unsigned int EBO;
 	uint64_t TotalDraws = 0;
 
+	void load_Model(const char* filePath);
 	void bind_Buffer(int drawType);
 	void rebind_Buffer(int drawType);
 	void delete_Buffer();

@@ -7,22 +7,31 @@
 
 class GameObject;
 class Mesh;
+class Texture;
 
 struct Vertex
 {
-	//Vertex() = default;
+	Vertex() = default;
 	Vertex(const glm::vec3& position, const glm::vec3& color) :
 		Position(position), Color(color){}
-	Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color) :
-		Position(position), Normal(normal), Color(color){}
+	Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& color, const glm::vec2& texCord) :
+		Position(position), Normal(normal), Color(color), Texture(texCord){}
+
+	//Vertex& operator=(const Vertex&) = default;
+	bool operator==(const Vertex& other) const
+	{
+		return Position == other.Position && Color == other.Color && Texture == other.Texture && Normal == other.Normal;
+	}
 
 	glm::vec3 Position = glm::vec3(0.f);
 	glm::vec3 Normal = glm::vec3(0.f);
 	glm::vec3 Color = glm::vec3(0.f);
+	glm::vec2 Texture = glm::vec2(0.f);
 };
 
 struct Triangle
 {
+	Triangle() = default;
 	Triangle(unsigned int firstIndex, unsigned int secondIndex, unsigned int thirdIndex) :
 		FirstIndex(firstIndex), SecondIndex(secondIndex), ThirdIndex(thirdIndex){}
 
@@ -34,15 +43,14 @@ struct Triangle
 class Model
 {
 public:
-	//std::vector<Vertex> Vertices;
-	//std::vector<Triangle> Indices;
+
 	Mesh* ModelMesh;
+	Texture* ModelTexture;
 
 	void init_Model();
-	//void load_Model(std::string& filePath);
-	//void bind_Buffer();
 	void set_ModelMesh(Mesh* modelMesh);
 	void create_NewMesh();
+	void set_ModelTexture(Texture* modelTexture);
 
 	void bind_ToGameObject(GameObject* GO);
 	void attach_ToPosition(glm::vec3* attachedPosition);
@@ -59,9 +67,6 @@ public:
 	glm::mat4 get_ModelMatrix() const;
 
 private:
-	//unsigned int VAO;
-	//unsigned int VBO;
-	//unsigned int EBO;
 	bool HidingModel = false;
 	bool DrawLines = false;
 	bool IsLine = false;
@@ -71,8 +76,6 @@ private:
 	glm::vec3 ModelPosition = glm::vec3(0.f);
 	glm::vec3 ModelScale = glm::vec3(1.f);
 	glm::vec3 ModelRotation = glm::vec3(0.f);
-
-	void cleanup_Model();
 };
 
 void load_Model(std::string& filePath, Mesh& mesh);

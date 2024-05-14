@@ -9,7 +9,7 @@ void PickUpItem::game_Start()
 {
     ItemModel = new Model();
     ItemModel->init_Model();
-    ItemModel->set_ModelMesh(&Renderer::get()->Cube);
+    ItemModel->set_ModelMesh(&Renderer::get()->TestLoadMesh);
     ItemModel->bind_ToGameObject(this);
     Collider.attach_ToGameObject(this);
     Collider.set_SphereRadius(3.f);

@@ -12,6 +12,8 @@ const unsigned int SCR_HEIGHT = 900;
 
 std::string FilePathVert = "Shader/Vertex_Shader.vert";
 std::string FilePathFrag = "Shader/Fragment_Shader.frag";
+std::string FilePathTestVert = "Shader/TestVert.vert";
+std::string FilePathTestFrag = "Shader/TestFrag.frag";
 
 EngineManager* EngineManager::get_Engine()
 {
@@ -31,6 +33,8 @@ void EngineManager::init_Engine()
 {
 	TheShader.set_ShaderPath(FilePathVert, FilePathFrag);
 	TheShader.init_Shader();
+	TestShader.set_ShaderPath(FilePathTestVert, FilePathTestFrag);
+	TestShader.init_Shader();
 	Renderer::get()->init_Renderer();
 
 	ModelLoc = glGetUniformLocation(TheShader.ShaderProgram, "ModelMatrix");
@@ -38,6 +42,9 @@ void EngineManager::init_Engine()
 	CameraPosLoc = glGetUniformLocation(TheShader.ShaderProgram, "CameraPos");
 	lightPosLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightPos");
 	lightColorLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightColor");
+
+	TestModelLoc = glGetUniformLocation(TestShader.ShaderProgram, "ModelMatrix");
+	TestPositionMatrix = glGetUniformLocation(TestShader.ShaderProgram, "PositionMatrix");
 
 	TheLight.set_LightColor(glm::vec3(1.f));
 	TheLight.set_LightPosition(glm::vec3(0.f, 30.f, 0.f));
@@ -103,6 +110,10 @@ void EngineManager::tick_Engine()
 
 		chunkModel->draw_Model();
 	}
+
+	//glUseProgram(TestShader.ShaderProgram);
+	//Renderer::get()->TestTexture.use_Texture();
+
 	for (auto model : ModelHandler)
 	{
 		if (model->ModelMesh == nullptr)
@@ -112,7 +123,6 @@ void EngineManager::tick_Engine()
 		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
 		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f),
 			static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
-
 		model->draw_Model();
 	}
 	//std::cout << 1 / DeltaTime << std::endl;

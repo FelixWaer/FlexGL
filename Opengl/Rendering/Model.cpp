@@ -8,110 +8,22 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/GameObject.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 void Model::init_Model()
 {
 	EngineManager::get_Engine()->add_ToModelHandler(this);
 }
 
-//void Model::load_Model(std::string& filePath)
-//{
-//	std::ifstream file;
-//	file.open(filePath);
-//
-//	if (file.is_open() == false)
-//	{
-//		std::cout << "could not open model file!" << std::endl;
-//		return;
-//	}
-//
-//	char dataType = 'O';
-//	float vectorSize = 0;
-//	std::string line;
-//
-//	while (file.eof() == false)
-//	{
-//		file >> std::ws;
-//		if (file.peek() == EOF)
-//		{
-//			break;
-//		}
-//		if (file.peek() == 'V')
-//		{
-//			std::getline(file, line);
-//			dataType = 'V';
-//			file >> vectorSize;
-//			Vertices.reserve(static_cast<unsigned int>(vectorSize));
-//			continue;
-//		}
-//
-//		if (file.peek() == 'T')
-//		{
-//			std::getline(file, line);
-//			dataType = 'T';
-//			file >> vectorSize;
-//			Indices.reserve(static_cast<unsigned int>(vectorSize));
-//
-//			continue;
-//		}
-//
-//		switch (dataType)
-//		{
-//		case 'V':
-//			glm::vec3 position;
-//			glm::vec3 normal;
-//			glm::vec3 color;
-//			file >> position.x >> position.y >> position.z >> normal.x >> normal.y >> normal.z >> color.r >> color.g >> color.b;
-//			Vertices.emplace_back(position, normal, color);
-//			break;
-//
-//		case 'T':
-//			int I_1, I_2, I_3;
-//			file >> I_1 >> I_2 >> I_3;
-//			Indices.emplace_back(I_1, I_2, I_3);
-//			break;
-//
-//		case 'O':
-//			break;
-//
-//		default:
-//			break;
-//		}
-//	}
-//
-//	bind_Buffer();
-//}
-
-//void Model::bind_Buffer()
-//{
-//	glGenVertexArrays(1, &VAO);
-//	glGenBuffers(1, &VBO);
-//	glGenBuffers(1, &EBO);
-//
-//	glBindVertexArray(VAO);
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//	glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(Vertex), Vertices.data(), GL_STATIC_DRAW);
-//
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(Triangle), Indices.data(), GL_STATIC_DRAW);
-//
-//	glEnableVertexAttribArray(0);
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-//	glEnableVertexAttribArray(1);
-//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)12);
-//	glEnableVertexAttribArray(2);
-//	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)24),
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, 0);
-//
-//	glBindVertexArray(0);
-//}
-
 void Model::set_ModelMesh(Mesh* modelMesh)
 {
 	ModelMesh = modelMesh;
 	modelMesh->TotalDraws++;
+}
+
+void Model::set_ModelTexture(Texture* modelTexture)
+{
+	ModelTexture = modelTexture;
 }
 
 void Model::create_NewMesh()
@@ -261,7 +173,7 @@ void load_Model(std::string& filePath, Mesh& mesh)
 			glm::vec3 normal;
 			glm::vec3 color;
 			file >> position.x >> position.y >> position.z >> normal.x >> normal.y >> normal.z >> color.r >> color.g >> color.b;
-			mesh.Vertices.emplace_back(position, normal, color);
+			mesh.Vertices.emplace_back(position, normal, color, glm::vec2(0.0f));
 			break;
 
 		case 'T':
@@ -280,15 +192,15 @@ void load_Model(std::string& filePath, Mesh& mesh)
 
 void create_Cube(Mesh& mesh, const glm::vec3& color)
 {
-	mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f), color);
-	mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f), color);
-	mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.f), color);
-	mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.f), color);
+	mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f), color, glm::vec2(0.0f, 1.0f));
+	mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f), color, glm::vec2(0.0f, 0.0f));
+	mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.f), color, glm::vec2(1.0f, 1.0f));
+	mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.f), color, glm::vec2(1.0f, 0.0f));
 
-	mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.f), color);
-	mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.f), color);
-	mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.f), color);
-	mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.f), color);
+	mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.f), color, glm::vec2(1.0f, 1.0f));
+	mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.f), color, glm::vec2(1.0f, 0.0f));
+	mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.f), color, glm::vec2(0.0f, 0.0f));
+	mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.f), color, glm::vec2(0.0f, 1.0f));
 
 	mesh.Triangles.emplace_back(0, 1, 2);
 
@@ -330,17 +242,17 @@ void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color)
 	for (int i = 0; i < 18; i++)
 	{
 		position = glm::vec3(radius * sin(glm::radians(degrees * i)), radius * cos(glm::radians(degrees * i)), 0.f);
-		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
+		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color, glm::vec2(0.0f));
 	}
 	for (int i = 0; i < 21; i++)
 	{
 		position = glm::vec3(0.f, radius * cos(glm::radians(degrees * i)), radius * sin(glm::radians(degrees * i)));
-		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
+		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color, glm::vec2(0.0f));
 	}
 	for (int i = 0; i < 18; i++)
 	{
 		position = glm::vec3(radius * sin(glm::radians(degrees * i)), 0.f, radius * cos(glm::radians(degrees * i)));
-		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color);
+		lineModel.Vertices.emplace_back(position, glm::vec3(1.f), color, glm::vec2(0.0f));
 	}
 
 	lineModel.bind_Buffer(GL_STATIC_DRAW);
@@ -348,17 +260,17 @@ void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color)
 
 void create_BoxLines(Mesh& lineModel, float height, float width, float depth, const glm::vec3& color)
 {
-	lineModel.Vertices.emplace_back(glm::vec3(width / 2, height / 2, depth / 2), glm::vec3(1.f), color);
-	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, height / 2, depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, height / 2, depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, height / 2, depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
 
-	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, depth / 2), glm::vec3(1.f), color);
-	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
 
-	lineModel.Vertices.emplace_back(glm::vec3(width / 2, height / 2, -depth / 2), glm::vec3(1.f), color);
-	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, height / 2, -depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, height / 2, -depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, height / 2, -depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
 
-	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
-	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color);
+	lineModel.Vertices.emplace_back(glm::vec3(width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
+	lineModel.Vertices.emplace_back(glm::vec3(-width / 2, -height / 2, -depth / 2), glm::vec3(1.f), color, glm::vec2(0.0f));
 
 	lineModel.bind_Buffer(GL_STATIC_DRAW);
 }
@@ -388,7 +300,7 @@ void create_LinesOnTerrain(Mesh& lineModel, float xStart, float xEnd, float delt
 						chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position, chunk.ChunkModel->get_WorldPosition()))
 					{
 						vertexPos.y += 0.1f;
-						lineModel.Vertices.emplace_back(vertexPos, glm::vec3(0.f), glm::vec3(1.f, 0.f, 0.f));
+						lineModel.Vertices.emplace_back(vertexPos, glm::vec3(0.f), glm::vec3(1.f, 0.f, 0.f), glm::vec2(0.0f));
 						break;
 					}
 				}

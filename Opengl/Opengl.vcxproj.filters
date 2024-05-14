@@ -99,6 +99,9 @@
     <ClCompile Include="Engine\Input.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Rendering\Texture.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Input.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Texture.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

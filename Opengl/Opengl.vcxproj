@@ -155,6 +155,7 @@
     <ClCompile Include="Rendering\ModelCreation.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
+    <ClCompile Include="Rendering\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Rendering\ModelCreation.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Rendering\Shader.h" />
+    <ClInclude Include="Rendering\Texture.h" />
     <ClInclude Include="Rendering\Vertex.h" />
   </ItemGroup>
   <ItemGroup>

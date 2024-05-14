@@ -2,10 +2,13 @@
 in vec3 FragPos;
 in vec3 FragColor;
 in vec3 FragNormal;
+in vec2 FragTexPos;
 
 uniform vec3 CameraPos;
 uniform vec3 LightPos;
 uniform vec3 LightColor;
+
+uniform sampler2D Texture;
 
 out vec4 OutColor;
 

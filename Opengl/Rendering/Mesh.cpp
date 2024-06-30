@@ -27,7 +27,8 @@ void Mesh::load_Model(const char* filePath)
     {
 		Vertex tempVertex;
 		tempVertex.Position = {attribute.vertices[i], attribute.vertices[i+1] , attribute.vertices[i+2] };
-		tempVertex.Color = { attribute.colors[i], attribute.colors[i + 1] , attribute.colors[i + 2] };
+		//tempVertex.Color = { attribute.colors[i], attribute.colors[i + 1] , attribute.colors[i + 2] };
+		tempVertex.Color = glm::vec3(0.5f);
 	/*	tempVertex.Texture = { attribute.texcoords[textureCordIndex], attribute.texcoords[textureCordIndex + 1] };
 		tempVertex.Normal = { attribute.normals[i], attribute.normals[i + 1] , attribute.normals[i + 2] };*/
 		textureCordIndex += 2;

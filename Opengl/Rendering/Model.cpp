@@ -24,6 +24,7 @@ void Model::set_ModelMesh(Mesh* modelMesh)
 void Model::set_ModelTexture(Texture* modelTexture)
 {
 	ModelTexture = modelTexture;
+	HasTexture = true;
 }
 
 void Model::create_NewMesh()
@@ -75,6 +76,11 @@ glm::vec3 Model::get_WorldPosition()
 	return *AttachedModelPosition;
 }
 
+bool Model::has_Texture()
+{
+	return HasTexture;
+}
+
 void Model::turn_OnLine()
 {
 	IsLine = true;
@@ -82,6 +88,10 @@ void Model::turn_OnLine()
 
 void Model::draw_Model()
 {
+	if (HasTexture == true)
+	{
+		ModelTexture->use_Texture();
+	}
 	if (HidingModel == true)
 	{
 		return;
@@ -190,7 +200,7 @@ void load_Model(std::string& filePath, Mesh& mesh)
 	mesh.bind_Buffer(GL_STATIC_DRAW);
 }
 
-void create_Cube(Mesh& mesh, const glm::vec3& color)
+void create_Cube(Mesh& mesh, const glm::vec3& color, bool reverseNormals)
 {
 	mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f), color, glm::vec2(0.0f, 1.0f));
 	mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f), color, glm::vec2(0.0f, 0.0f));
@@ -228,8 +238,16 @@ void create_Cube(Mesh& mesh, const glm::vec3& color)
 
 	for (const Triangle& triangle : mesh.Triangles)
 	{
-		calculate_TriangleNormal(mesh.Vertices[triangle.FirstIndex], 
-			mesh.Vertices[triangle.SecondIndex], mesh.Vertices[triangle.ThirdIndex]);
+		if (reverseNormals == true)
+		{
+			calculate_TriangleNormal(mesh.Vertices[triangle.FirstIndex],
+				mesh.Vertices[triangle.ThirdIndex], mesh.Vertices[triangle.SecondIndex]);
+		}
+		else
+		{
+			calculate_TriangleNormal(mesh.Vertices[triangle.FirstIndex],
+				mesh.Vertices[triangle.SecondIndex], mesh.Vertices[triangle.ThirdIndex]);
+		}
 	}
 
 	mesh.bind_Buffer(GL_STATIC_DRAW);

@@ -60,16 +60,19 @@ public:
 	void rotate_Model(glm::vec3 newRotation);
 	void draw_ModelAsLines(bool drawModelLines);
 	glm::vec3 get_WorldPosition();
+	bool has_Texture();
 
 	void turn_OnLine();
 
 	void draw_Model();
 	glm::mat4 get_ModelMatrix() const;
 
+	bool skybox = false;
 private:
 	bool HidingModel = false;
 	bool DrawLines = false;
 	bool IsLine = false;
+	bool HasTexture = false;
 
 
 	glm::vec3* AttachedModelPosition = nullptr;
@@ -79,7 +82,7 @@ private:
 };
 
 void load_Model(std::string& filePath, Mesh& mesh);
-void create_Cube(Mesh& model, const glm::vec3& color);
+void create_Cube(Mesh& model, const glm::vec3& color, bool reverseNormals = false);
 void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color);
 void create_BoxLines(Mesh& lineModel, float height, float width, float depth, const glm::vec3& color);
 float line_Function(float x);

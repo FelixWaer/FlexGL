@@ -24,7 +24,7 @@ public:
 	void generate_RenderDistanceChunks(glm::ivec2 directionVector, Chunk& chunk);
 	uint64_t TotalAmountOfChunks = 0;
 private:
-	int RenderDistance = 5;
+	int RenderDistance = 10;
 	glm::ivec2 CurrentPosition = glm::ivec2(0);
 
 	inline static Terrain* TheTerrain = nullptr;

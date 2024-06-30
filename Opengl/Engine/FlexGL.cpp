@@ -14,14 +14,6 @@ std::string FilePathModel4 = "Models/PerlinNoise";
 
 void FlexGL::game_Start()
 {
-    //Floor_1.init_Model();
-    //Wall_1.init_Model();
-    //Wall_2.init_Model();
-    //Wall_3.init_Model();
-    //Wall_4.init_Model();
-    //Wall_5.init_Model();
-    //Roof_1.init_Model();
-
     Terrain::get_Terrain()->generate_Chunk(glm::ivec2(0));
     Terrain::get_Terrain()->generate_ChunksAroundChunk(Terrain::get_Terrain()->Chunks[0]);
 
@@ -34,30 +26,11 @@ void FlexGL::game_Start()
     EngineManager::get_Engine()->ActiveCamera = &ThePlayer.PlayerCamera;
 
 
-    //create_Cube(Floor_1, glm::vec3(0.5f, 0.5f, 0.f));
-    //Floor_1.set_ModelPosition(glm::vec3(0.f, -20.f, 0.f));
-    //Floor_1.scale_Model(glm::vec3(50.f, 1.f, 50.f));
-
-    //create_Cube(Wall_1, glm::vec3(0.5f, 0.5f, 0.8f));
-    //create_Cube(Wall_2, glm::vec3(0.5f, 0.5f, 0.8f));
-    //create_Cube(Wall_3, glm::vec3(0.5f, 0.5f, 0.8f));
-    //create_Cube(Wall_4, glm::vec3(0.5f, 0.5f, 0.8f));
-    //create_Cube(Wall_5, glm::vec3(0.5f, 0.5f, 0.8f));
-    //Wall_1.set_ModelPosition(glm::vec3(0.f, -17.f, 0.f));
-    //Wall_1.scale_Model(glm::vec3(10.f, 6.f, 1.f));
-    //Wall_2.set_ModelPosition(glm::vec3(5.f, -17.f, 5.f));
-    //Wall_2.scale_Model(glm::vec3(1.f, 6.f, 11.f));
-    //Wall_3.set_ModelPosition(glm::vec3(-5.f, -17.f, 5.f));
-    //Wall_3.scale_Model(glm::vec3(1.f, 6.f, 11.f));
-    //Wall_4.set_ModelPosition(glm::vec3(-3.f, -17.f, 10.f));
-    //Wall_4.scale_Model(glm::vec3(4.f, 6.f, 1.f));
-    //Wall_5.set_ModelPosition(glm::vec3(3.f, -17.f, 10.f));
-    //Wall_5.scale_Model(glm::vec3(4.f, 6.f, 1.f));
-
-    //create_Cube(Roof_1, glm::vec3(0.8f, 0.5f, 0.5f));
-    //Roof_1.set_ModelPosition(glm::vec3(0.f, -13.5f, 5.f));
-    //Roof_1.scale_Model(glm::vec3(11.f, 1.f, 11.f));
-	//TheDoor.init_GameObject();
+    SkyBox.init_Model();
+    SkyBox.set_ModelMesh(&Renderer::get()->Cube);
+    SkyBox.set_ModelTexture(&Renderer::get()->SkyboxTexture);
+    SkyBox.skybox = true;
+    EngineManager::get_Engine()->set_Skybox(&SkyBox);
 
     graph_1.init_GameObject();
     ThePlayer.init_GameObject();

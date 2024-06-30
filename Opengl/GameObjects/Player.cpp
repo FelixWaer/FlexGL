@@ -14,16 +14,17 @@ void Player::game_Start()
 	PlayerModel.init_Model();
 	PlayerModel.set_ModelMesh(&Renderer::get()->Cube);
 	PlayerModel.bind_ToGameObject(this);
+	//PlayerModel.set_ModelTexture(&Renderer::get()->TestTexture);
 
 	SphereCollider.attach_ToGameObject(this);
 	SphereCollider.set_SphereRadius(1.f);
 	SphereCollider.enable_SphereVisible(true);
 
-	BoxCollider.attach_ToGameObject(this);
-	BoxCollider.set_BoxHeight(2.f);
-	BoxCollider.set_BoxWidth(2.f);
-	BoxCollider.set_BoxDepth(2.f);
-	BoxCollider.enable_BoxVisible(true);
+	//BoxCollider.attach_ToGameObject(this);
+	//BoxCollider.set_BoxHeight(2.f);
+	//BoxCollider.set_BoxWidth(2.f);
+	//BoxCollider.set_BoxDepth(2.f);
+	//BoxCollider.enable_BoxVisible(true);
 
 	PlayerCamera.attach_ToGameObject(this);
 	PlayerCamera.update_CameraPosition(glm::vec3(10.f, 0.f, 10.f));
@@ -47,34 +48,64 @@ void Player::tick(float deltaTime)
 	if (Input::key_Pressed(GLFW_KEY_1))
 	{
 		EngineManager::get_Engine()->set_ActiveCamera(&PlayerCamera);
+		FreeFlying = false;
 	}
 	if (Input::key_Pressed(GLFW_KEY_2))
 	{
 		EngineManager::get_Engine()->set_ActiveCamera(&FreeCamera);
+		FreeFlying = true;
 	}
 	if (Input::key_HeldDown(GLFW_KEY_D))
 	{
-		glm::vec3 normal = glm::normalize(glm::cross(get_GameObjectFront(), glm::vec3(0.f, 1.f, 0.f)));
-		set_GameObjectVelocity((normal *= MovementSpeed));
+		if (FreeFlying == true)
+		{
+			FreeCamera.move_CameraSide(true);
+		}
+		else
+		{
+			glm::vec3 normal = glm::normalize(glm::cross(get_GameObjectFront(), glm::vec3(0.f, 1.f, 0.f)));
+			set_GameObjectVelocity((normal *= MovementSpeed));
+		}
 	}
 	if (Input::key_HeldDown(GLFW_KEY_A))
 	{
-		glm::vec3 normal = glm::normalize(glm::cross(get_GameObjectFront(), glm::vec3(0.f, 1.f, 0.f)));
-		set_GameObjectVelocity(-(normal *= MovementSpeed));
+		if (FreeFlying == true)
+		{
+			FreeCamera.move_CameraSide(false);
+		}
+		else
+		{
+			glm::vec3 normal = glm::normalize(glm::cross(get_GameObjectFront(), glm::vec3(0.f, 1.f, 0.f)));
+			set_GameObjectVelocity(-(normal *= MovementSpeed));
+		}
 	}
 	if (Input::key_HeldDown(GLFW_KEY_S))
 	{
-		glm::vec3 normal = glm::normalize(get_GameObjectFront());
-		set_GameObjectVelocity(-(normal *= MovementSpeed));
+		if (FreeFlying == true)
+		{
+			FreeCamera.move_CameraFront(false);
+		}
+		else
+		{
+			glm::vec3 normal = glm::normalize(get_GameObjectFront());
+			set_GameObjectVelocity(-(normal *= MovementSpeed));
+		}
 	}
 	if (Input::key_HeldDown(GLFW_KEY_W))
 	{
-		glm::vec3 normal = glm::normalize(get_GameObjectFront());
-		set_GameObjectVelocity(normal*= MovementSpeed);
+		if (FreeFlying == true)
+		{
+			FreeCamera.move_CameraFront(true);
+		}
+		else
+		{
+			glm::vec3 normal = glm::normalize(get_GameObjectFront());
+			set_GameObjectVelocity(normal *= MovementSpeed);
+		}
 	}
 	if (Input::key_Pressed(GLFW_KEY_SPACE))
 	{
-		if (Jumping == false)
+		if (Jumping == false && FreeFlying == false)
 		{
 			Jumping = true;
 		}
@@ -90,7 +121,7 @@ void Player::tick(float deltaTime)
 
 	if (Input::mouse_Pressed(GLFW_MOUSE_BUTTON_1))
 	{
-		if (CanMine == true)
+		if (CanMine == true && FreeFlying == false)
 		{
 			mine(-1.f);
 			CanMine = false;
@@ -98,23 +129,37 @@ void Player::tick(float deltaTime)
 	}
 	if (Input::mouse_HeldDown(GLFW_MOUSE_BUTTON_1))
 	{
-		if (CanMine == true)
+		if (CanMine == true && FreeFlying == false)
 		{
 			mine(-1.f);
 			CanMine = false;
 		}
 	}
-	if (Input::mouse_Pressed(GLFW_MOUSE_BUTTON_2))
-	{
-		if (CanMine == true)
-		{
-			CanMine = false;
-		}
-		//spawn_Item();
-	}
 	if (Input::mouse_HeldDown(GLFW_MOUSE_BUTTON_2))
 	{
-		flatten_Terrain(get_GameObjectPosition().y - 0.5f);
+		if (IsPlacing == false && FreeFlying == false)
+		{
+			flatten_Terrain(get_GameObjectPosition().y - 0.5f);
+		}
+	}
+	if (Input::mouse_Pressed(GLFW_MOUSE_BUTTON_2))
+	{
+		if (IsPlacing == true && FreeFlying == false)
+		{
+			spawn_Item();
+		}
+	}
+
+	if (Input::key_Pressed(GLFW_KEY_3))
+	{
+		if (IsPlacing == false)
+		{
+			IsPlacing = true;
+		}
+		else
+		{
+			IsPlacing = false;
+		}
 	}
 
 	if (MineTimer >= 1.f )

@@ -19,7 +19,7 @@ public:
 	Camera PlayerCamera;
 	Camera FreeCamera;
 	SphereCollision SphereCollider;
-	BoxCollision BoxCollider;
+	//BoxCollision BoxCollider;
 	Model PlayerModel;
 
 	void jump(float deltaTime);
@@ -27,6 +27,8 @@ private:
 	bool Jumping = false;
 	bool falling = false;
 	bool CanMine = true;
+	bool IsPlacing = false;
+	bool FreeFlying = false;
 	float MineTimer = 0.f;
 	float JumpSpeed = 100.f;
 	float MovementSpeed = 10.f;

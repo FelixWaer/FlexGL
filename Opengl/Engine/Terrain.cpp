@@ -4,6 +4,7 @@
 
 #include "../Rendering/Mesh.h"
 #include "../Rendering/ModelCreation.h"
+#include "../Rendering/Renderer.h"
 
 Terrain* Terrain::get_Terrain()
 {
@@ -39,6 +40,7 @@ void Terrain::generate_Chunk(glm::ivec2 chunkPosition)
 	//tempChunk.ChunkModel->init_Model();
 	tempChunk.ChunkModel->set_ModelPosition(glm::vec3(0.f));
 	tempChunk.ChunkModel->scale_Model(glm::vec3(1.f));
+	tempChunk.ChunkModel->set_ModelTexture(&Renderer::get()->TestTexture);
 
 	Chunks.emplace_back(tempChunk);
 	RenderedChunks.emplace_back(tempChunk.ChunkModel);

@@ -15,12 +15,6 @@ glm::vec2 calculate_RandomGradient(int xPos, int yPos)
 	uint32_t w = 8 * sizeof(uint32_t);
 	uint32_t s = w / 2;
 
-	//xPos *= 3284157443;
-	//yPos ^= xPos << s | xPos >> w - s;
-	//yPos *= 3284157443;
-	//xPos ^= yPos << s | yPos >> w - s;
-	//xPos *= 3284157443;
-
 	xPos *= EngineManager::get_Engine()->Seed;
 	yPos ^= xPos << s | xPos >> w - s;
 	yPos *= EngineManager::get_Engine()->Seed;
@@ -98,7 +92,11 @@ void create_ChunkTerrain(Chunk& chunk)
 			}
 
 			yHeight *= EngineManager::get_Engine()->TerrainHeight;
-			chunk.ChunkModel->ModelMesh->Vertices.emplace_back(glm::vec3(xPos, yHeight, zPos), glm::vec3(0.5f));
+			Vertex newVertex;
+			newVertex.Position = glm::vec3(xPos, yHeight, zPos);
+			newVertex.Color = glm::vec3(0.5f);
+			newVertex.Texture = glm::vec2(xPos, zPos);
+			chunk.ChunkModel->ModelMesh->Vertices.emplace_back(newVertex);
 
 			if (xPos == chunkXPos)
 			{

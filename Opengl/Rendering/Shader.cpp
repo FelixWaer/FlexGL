@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 FXGL::Shader::~Shader()
 {
@@ -60,6 +61,21 @@ void FXGL::Shader::set_ShaderPath(const std::string& vertexPath, const std::stri
 {
 	VertexShaderPath = vertexPath;
 	FragmentShaderPath = fragmentPath;
+}
+
+void FXGL::Shader::send_Matrix(const char* variableName, const glm::mat4& data) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, variableName), 1, GL_FALSE, glm::value_ptr(data));
+}
+
+void FXGL::Shader::send_Vec3(const char* variableName, const glm::vec3& data) const
+{
+    glUniform3fv(glGetUniformLocation(ShaderProgram, variableName), 1, glm::value_ptr(data));
+}
+
+void FXGL::Shader::send_Bool(const char* variableName, bool data) const
+{
+    glUniform1i(glGetUniformLocation(ShaderProgram, variableName), data);
 }
 
 void FXGL::Shader::cleanup_Shader()

@@ -7,6 +7,7 @@ in vec2 FragTexPos;
 uniform vec3 CameraPos;
 uniform vec3 LightPos;
 uniform vec3 LightColor;
+uniform bool HasTexture;
 
 uniform sampler2D Texture;
 
@@ -16,8 +17,8 @@ float AmbientStrength = 0.3;
 float SpecularStrength = 0.2;
 float Shininess = 32;
 
-vec3 calculate_PointLight(){
-
+vec3 calculate_PointLight()
+{
 	vec3 viewDirection = normalize(CameraPos - FragPos);
 		
 	vec3 normal = normalize(FragNormal);
@@ -33,8 +34,19 @@ vec3 calculate_PointLight(){
 	float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), Shininess);
 	vec3 specular = SpecularStrength * spec * LightColor;
 	
-	vec3 result = (ambient + diffuse + specular) * FragColor;
-	return result;
+	if(HasTexture == true && FragPos.y > -100.0) 
+	{
+		vec3 textureColor = texture(Texture, FragTexPos).rgb;
+		vec3 result = (ambient + diffuse + specular) * textureColor;
+
+		return result;
+	}
+	else
+	{
+		vec3 result = (ambient + diffuse + specular) * FragColor;
+
+		return result;
+	}
 }
 
 void main()

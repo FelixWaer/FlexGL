@@ -20,22 +20,13 @@ public:
 	static EngineManager* get_Engine();
 
 	FXGL::Shader TheShader;
-	FXGL::Shader TestShader;
+	FXGL::Shader SkyboxShader;
 
 	Camera* ActiveCamera;
 	GLFWwindow* TheWindow;
 
 	Model* TheTerrain = nullptr;
 	glm::vec3* CharacterPoint = nullptr;
-
-	int ModelLoc;
-	int PositionLoc;
-	int CameraPosLoc;
-	int lightPosLoc;
-	int lightColorLoc;
-
-	int TestModelLoc;
-	int TestPositionMatrix;
 
 	bool Scene_2 = false;
 	int Seed = 64363626;
@@ -56,6 +47,8 @@ public:
 	void add_ToCameraHandler(Camera* CameraPtr);
 	void set_ActiveCamera(Camera* cameraPtr);
 	Camera& get_ActiveCamera();
+	void set_Skybox(Model* skyboxModel);
+	Model* get_Skybox();
 
 	void turnOff_DebugMode(bool turnOff);
 	static bool calculate_PointOnTriangle(glm::vec3& x, const glm::vec3& P, const glm::vec3& Q, const glm::vec3& R, const glm::vec3& position);
@@ -64,6 +57,7 @@ private:
 
 	FlexGL TheGame;
 	Light TheLight;
+	Model* TheSkybox = nullptr;
 
 	std::vector<Model*> ModelHandler;
 	std::vector<GameObject*> GameObjectHandler;
@@ -79,12 +73,6 @@ private:
 	bool calculate_BoxCollision(glm::vec3 boxPos_1, glm::vec3 boxPos_2, float boxHeight_1, float boxWidth_1, float boxDepth_1, float boxHeight_2, float boxWidth_2, float boxDepth_2);
 	static void switch_YZ(glm::vec3& vector);
 
-	float Degrees = 0.f;
-	float DegreesColor = 0.f;
-	float Radius = 15.f;
-	float SmallerBigger = 1.f;
-	float SmallerBiggerColor = 1.f;
-	void move_Light(float deltaTime);
 	static float calculate_Normal(const glm::vec3& AB, const glm::vec3& AC);
 	static float calculate_Normal(const glm::vec3&& AB, const glm::vec3&& AC);
 };

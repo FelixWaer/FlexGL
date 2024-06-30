@@ -7,13 +7,15 @@
 #include "../Rendering/Renderer.h"
 #include "Input.h"
 
-const unsigned int SCR_WIDTH = 1800;
-const unsigned int SCR_HEIGHT = 900;
+const float SCR_WIDTH = 1920;
+const float SCR_HEIGHT = 1080;
 
 std::string FilePathVert = "Shader/Vertex_Shader.vert";
 std::string FilePathFrag = "Shader/Fragment_Shader.frag";
 std::string FilePathTestVert = "Shader/TestVert.vert";
 std::string FilePathTestFrag = "Shader/TestFrag.frag";
+std::string FilePathSkyboxShaderVert = "Shader/SkyBoxShader.vs";
+std::string FilePathSkyboxShaderFrag = "Shader/SkyBoxShader.fs";
 
 EngineManager* EngineManager::get_Engine()
 {
@@ -33,21 +35,13 @@ void EngineManager::init_Engine()
 {
 	TheShader.set_ShaderPath(FilePathVert, FilePathFrag);
 	TheShader.init_Shader();
-	TestShader.set_ShaderPath(FilePathTestVert, FilePathTestFrag);
-	TestShader.init_Shader();
+	SkyboxShader.set_ShaderPath(FilePathSkyboxShaderVert, FilePathSkyboxShaderFrag);
+	SkyboxShader.init_Shader();
 	Renderer::get()->init_Renderer();
 
-	ModelLoc = glGetUniformLocation(TheShader.ShaderProgram, "ModelMatrix");
-	PositionLoc = glGetUniformLocation(TheShader.ShaderProgram, "PositionMatrix");
-	CameraPosLoc = glGetUniformLocation(TheShader.ShaderProgram, "CameraPos");
-	lightPosLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightPos");
-	lightColorLoc = glGetUniformLocation(TheShader.ShaderProgram, "LightColor");
-
-	TestModelLoc = glGetUniformLocation(TestShader.ShaderProgram, "ModelMatrix");
-	TestPositionMatrix = glGetUniformLocation(TestShader.ShaderProgram, "PositionMatrix");
-
 	TheLight.set_LightColor(glm::vec3(1.f));
-	TheLight.set_LightPosition(glm::vec3(0.f, 30.f, 0.f));
+	TheLight.set_LightPosition(glm::vec3(0.f, 100.f, 0.f));
+	TheLight.init_Light();
 
 	TheGame.game_Start();
 
@@ -74,6 +68,7 @@ void EngineManager::tick_Engine()
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glFrontFace(GL_CW);
+
 	float currentFrame = static_cast<float>(glfwGetTime());
 	DeltaTime = currentFrame - LastFrame;
 	LastFrame = currentFrame;
@@ -90,13 +85,33 @@ void EngineManager::tick_Engine()
 	glClearColor(0.f, 0.f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glUseProgram(TheShader.ShaderProgram);
 	glLineWidth(10);
 	glPointSize(5);
 
-	glUniform3fv(CameraPosLoc, 1, glm::value_ptr(get_ActiveCamera().get_CameraPosition()));
-	glUniform3fv(lightPosLoc, 1, glm::value_ptr(TheLight.get_LightPosition()));
-	glUniform3fv(lightColorLoc, 1, glm::value_ptr(TheLight.get_LightColor()));
+	//start skybox shader part
+
+	if (get_Skybox() != nullptr)
+	{
+		glDepthMask(GL_FALSE);
+		glUseProgram(SkyboxShader.ShaderProgram);
+
+		glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), SCR_WIDTH / SCR_HEIGHT, 0.1f, 400.f);
+		glm::mat4 viewMatrix = glm::mat4(glm::mat3(get_ActiveCamera().get_CameraView()));
+		Renderer::get()->SkyboxTexture.use_CubeMapTexture();
+
+		SkyboxShader.send_Matrix("Projection", projectionMatrix);
+		SkyboxShader.send_Matrix("View", viewMatrix);
+		get_Skybox()->draw_Model();
+
+		glDepthMask(GL_TRUE);
+	}
+
+	//end skybox shader part
+
+	glUseProgram(TheShader.ShaderProgram);
+	TheShader.send_Vec3("CameraPos", get_ActiveCamera().get_CameraPosition());
+	TheShader.send_Vec3("LightPos", TheLight.get_LightPosition());
+	TheShader.send_Vec3("LightColor", TheLight.get_LightColor());
 
 	for (Model* chunkModel : Terrain::get_Terrain()->RenderedChunks)
 	{
@@ -104,32 +119,33 @@ void EngineManager::tick_Engine()
 		{
 			continue;
 		}
-		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(chunkModel->get_ModelMatrix()));
-		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f), 
-			static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * chunkModel->get_ModelMatrix()));
+		glm::mat4 modelMatrix = glm::perspective(glm::radians(45.0f),
+			SCR_WIDTH / SCR_HEIGHT, 0.1f, 400.f) * get_ActiveCamera().get_CameraView() * chunkModel->get_ModelMatrix();
+		TheShader.send_Matrix("PositionMatrix", chunkModel->get_ModelMatrix());
+		TheShader.send_Matrix("ModelMatrix", modelMatrix);
+		TheShader.send_Bool("HasTexture", chunkModel->has_Texture());
 
 		chunkModel->draw_Model();
 	}
 
-	//glUseProgram(TestShader.ShaderProgram);
-	//Renderer::get()->TestTexture.use_Texture();
-
 	for (auto model : ModelHandler)
 	{
-		if (model->ModelMesh == nullptr)
+		if (model->ModelMesh == nullptr || model->skybox == true)
 		{
 			continue;
 		}
-		glUniformMatrix4fv(PositionLoc, 1, GL_FALSE, glm::value_ptr(model->get_ModelMatrix()));
-		glUniformMatrix4fv(ModelLoc, 1, GL_FALSE, glm::value_ptr(glm::perspective(glm::radians(45.0f),
-			static_cast<float>(SCR_WIDTH / SCR_HEIGHT), 0.1f, 500.0f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix()));
+		glm::mat4 modelMatrix = glm::perspective(glm::radians(45.0f),
+			SCR_WIDTH / SCR_HEIGHT, 0.1f, 400.f) * get_ActiveCamera().get_CameraView() * model->get_ModelMatrix();
+		TheShader.send_Matrix("PositionMatrix", model->get_ModelMatrix());
+		TheShader.send_Matrix("ModelMatrix", modelMatrix);
+		TheShader.send_Bool("HasTexture", model->has_Texture());
+
 		model->draw_Model();
 	}
+
 	//std::cout << 1 / DeltaTime << std::endl;
-	TheLight.set_LightPosition(get_ActiveCamera().get_CameraPosition());
-	//move_Light(DeltaTime);
-	Input::reset_Keys();
-	Input::reset_Buttons();
+
+	Input::reset_Input();
 }
 
 void EngineManager::check_Collision()
@@ -207,6 +223,16 @@ Camera& EngineManager::get_ActiveCamera()
 	return *ActiveCamera;
 }
 
+void EngineManager::set_Skybox(Model* skyboxModel)
+{
+	TheSkybox = skyboxModel;
+}
+
+Model* EngineManager::get_Skybox()
+{
+	return TheSkybox;
+}
+
 void EngineManager::turnOff_DebugMode(bool turnOff)
 {
 	for (SphereCollision* sphere : SphereCollisionHandler)
@@ -271,34 +297,6 @@ void EngineManager::switch_YZ(glm::vec3& vector)
 	float tempValue = vector.z;
 	vector.z = vector.y;
 	vector.y = tempValue;
-}
-
-void EngineManager::move_Light(float deltaTime)
-{
-	TheLight.set_LightPosition(glm::vec3(Radius * sin(glm::radians(Degrees)), 0.f, Radius * cos(glm::radians(Degrees))));
-	//TheLight.set_LightColor(glm::vec3(sin(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor)), cos(glm::radians(DegreesColor))));
-	Degrees += 45.f * deltaTime;
-	DegreesColor += 45.f * deltaTime * SmallerBiggerColor;
-	Radius += 5.f * SmallerBigger * deltaTime;
-	if (Degrees >= 360.f)
-	{
-		Degrees = 0.f;
-	}
-
-	//if (DegreesColor >= 180.f)
-	//{
-	//	SmallerBiggerColor = -1;
-	//}
-	//else if(DegreesColor <= 0.f)
-	//{
-	//	SmallerBiggerColor = 1;
-	//}
-	
-
-	if (Radius >= 50.f || Radius <= 15.f)
-	{
-		SmallerBigger *= -1;
-	}
 }
 
 float EngineManager::calculate_Normal(const glm::vec3& AB, const glm::vec3& AC)

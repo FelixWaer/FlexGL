@@ -31,18 +31,11 @@ private:
 	NPC NPC_2;
 	NPC NPC_3;
 
+	Model SkyBox;
+
 	Terrain theTerrain;
 
 	std::vector<PickUpItem*> items;
-
-	//Model Floor_1;
-	//Model Wall_1;
-	//Model Wall_2;
-	//Model Wall_3;
-	//Model Wall_4;
-	//Model Wall_5;
-	//Model Roof_1;
-	//Door TheDoor;
 
 	Model TerrainLine;
 

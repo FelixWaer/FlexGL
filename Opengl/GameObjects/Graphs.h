@@ -11,6 +11,6 @@ public:
 	void on_Collision(GameObject* otherGameObject) override;
 
 private:
-	Model line;
+	Model PlacableModel;
 };
 

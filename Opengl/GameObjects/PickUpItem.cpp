@@ -11,8 +11,9 @@ void PickUpItem::game_Start()
     ItemModel->init_Model();
     ItemModel->set_ModelMesh(&Renderer::get()->TestLoadMesh);
     ItemModel->bind_ToGameObject(this);
+    ItemModel->scale_Model(glm::vec3(0.1f));
     Collider.attach_ToGameObject(this);
-    Collider.set_SphereRadius(3.f);
+    Collider.set_SphereRadius(7.f);
     Collider.enable_SphereVisible(true);
 }
 

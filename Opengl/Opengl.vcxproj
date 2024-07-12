@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\EngineManager.cpp" />
+    <ClCompile Include="Engine\FlexClient Code\FlexClient.cpp" />
     <ClCompile Include="Engine\FlexGL.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="GameObjects\Door.cpp" />
     <ClCompile Include="GameObjects\Graphs.cpp" />
     <ClCompile Include="GameObjects\NPC.cpp" />
+    <ClCompile Include="GameObjects\OtherPlayer.cpp" />
     <ClCompile Include="GameObjects\PickUpItem.cpp" />
     <ClCompile Include="GameObjects\Player.cpp" />
     <ClCompile Include="glad.c" />
@@ -160,6 +162,8 @@
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
     <ClInclude Include="Engine\EngineManager.h" />
+    <ClInclude Include="Engine\FlexClient Code\ErrorHandler.h" />
+    <ClInclude Include="Engine\FlexClient Code\FlexClient.h" />
     <ClInclude Include="Engine\FlexGL.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Input.h" />
@@ -170,6 +174,7 @@
     <ClInclude Include="GameObjects\Door.h" />
     <ClInclude Include="GameObjects\Graphs.h" />
     <ClInclude Include="GameObjects\NPC.h" />
+    <ClInclude Include="GameObjects\OtherPlayer.h" />
     <ClInclude Include="GameObjects\PickUpItem.h" />
     <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h" />

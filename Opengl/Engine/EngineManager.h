@@ -25,6 +25,8 @@ public:
 	Camera* ActiveCamera;
 	GLFWwindow* TheWindow;
 
+	FlexClient flexClient;
+
 	Model* TheTerrain = nullptr;
 	glm::vec3* CharacterPoint = nullptr;
 

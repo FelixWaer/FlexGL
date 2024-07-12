@@ -33,6 +33,9 @@ void EngineManager::init_Window()
 
 void EngineManager::init_Engine()
 {
+	flexClient.init_Client();
+	flexClient.Connect_ToServer("54.157.61.191");
+
 	TheShader.set_ShaderPath(FilePathVert, FilePathFrag);
 	TheShader.init_Shader();
 	SkyboxShader.set_ShaderPath(FilePathSkyboxShaderVert, FilePathSkyboxShaderFrag);

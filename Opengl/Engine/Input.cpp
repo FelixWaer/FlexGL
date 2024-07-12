@@ -123,34 +123,10 @@ void Input::mouse_Callback(GLFWwindow* window, int button, int action, int mods)
 	{
 		buttons[button] = true;
 		buttonsHeldDown[button] = true;
-		//switch (button)
-		//{
-		//	case GLFW_MOUSE_BUTTON_1:
-		//		buttons[GLFW_MOUSE_BUTTON_1] = true;
-		//		buttonsHeldDown[GLFW_MOUSE_BUTTON_1] = true;
-		//		break;
-		//	case GLFW_MOUSE_BUTTON_2:
-		//		buttons[GLFW_MOUSE_BUTTON_2] = true;
-		//		buttonsHeldDown[GLFW_MOUSE_BUTTON_2] = true;
-		//		break;
-		//	default:
-		//		break;
-		//}
 	}
 	if (action == GLFW_RELEASE)
 	{
 		buttonsHeldDown[button] = false;
-		//switch (button)
-		//{
-		//	case GLFW_MOUSE_BUTTON_1:
-		//		buttonsHeldDown[GLFW_MOUSE_BUTTON_1] = false;
-		//		break;
-		//	case GLFW_MOUSE_BUTTON_2:
-		//		buttonsHeldDown[GLFW_MOUSE_BUTTON_2] = false;
-		//		break;
-		//	default:
-		//		break;
-		//}
 	}
 }
 

@@ -34,6 +34,7 @@ void FlexGL::game_Start()
 
     graph_1.init_GameObject();
     ThePlayer.init_GameObject();
+    TheOtherPlayer.init_GameObject();
     TheNPC.init_GameObject();
     NPC_2.init_GameObject();
     NPC_2.enable_CircleDriving(true);

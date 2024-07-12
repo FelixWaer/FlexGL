@@ -8,6 +8,7 @@
 #include "../GameObjects/NPC.h"
 #include "../GameObjects/Box.h"
 #include "Terrain.h"
+#include "../GameObjects/OtherPlayer.h"
 
 
 class Terrain;
@@ -27,6 +28,7 @@ private:
 
 
 	Player ThePlayer;
+	OtherPlayer TheOtherPlayer;
 	NPC TheNPC;
 	NPC NPC_2;
 	NPC NPC_3;

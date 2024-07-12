@@ -31,6 +31,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{d6bea946-37b6-4db1-bb2b-88576892734f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\FlexNet">
+      <UniqueIdentifier>{076fdc14-34f4-4295-8cb0-2444fbd40feb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +104,12 @@
     </ClCompile>
     <ClCompile Include="Rendering\Texture.cpp">
       <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FlexClient Code\FlexClient.cpp">
+      <Filter>Engine\FlexNet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\OtherPlayer.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="Rendering\Texture.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FlexClient Code\ErrorHandler.h">
+      <Filter>Engine\FlexNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FlexClient Code\FlexClient.h">
+      <Filter>Engine\FlexNet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\OtherPlayer.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

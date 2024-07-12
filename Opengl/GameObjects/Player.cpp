@@ -45,6 +45,8 @@ void Player::tick(float deltaTime)
 {
 	GameObject::tick(deltaTime);
 
+	UpdateOnlinePositionCounter += deltaTime;
+
 	if (Input::key_Pressed(GLFW_KEY_1))
 	{
 		EngineManager::get_Engine()->set_ActiveCamera(&PlayerCamera);
@@ -200,6 +202,15 @@ void Player::tick(float deltaTime)
 
 	//calculate_Height();
 	find_Height();
+
+	if (UpdateOnlinePositionCounter > 0.016f)
+	{
+		UpdateOnlinePositionCounter = 0.f;
+		glm::vec3 playerPosition = PlayerModel.get_WorldPosition();
+		MessageBuffer msgBuffer = convert_ToMessageData(&playerPosition, "player");
+		EngineManager::get_Engine()->flexClient.send_MessageData(&msgBuffer);
+		EngineManager::get_Engine()->flexClient.send_MessageData(&msgBuffer);
+	}
 }
 
 

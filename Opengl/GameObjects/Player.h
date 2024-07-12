@@ -5,6 +5,7 @@
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObject Components/BoxCollision.h"
 #include "../Rendering/Model.h"
+#include "../Engine/FlexClient Code/FlexClient.h"
 
 class Terrain;
 
@@ -24,6 +25,7 @@ public:
 
 	void jump(float deltaTime);
 private:
+	float UpdateOnlinePositionCounter = 0;
 	bool Jumping = false;
 	bool falling = false;
 	bool CanMine = true;

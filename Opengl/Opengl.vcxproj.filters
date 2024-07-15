@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="GameObject">
       <UniqueIdentifier>{9ca6e590-4bcd-4b0b-9c89-75d4dd7cd79d}</UniqueIdentifier>
     </Filter>
@@ -31,8 +27,14 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{d6bea946-37b6-4db1-bb2b-88576892734f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\FlexNet">
-      <UniqueIdentifier>{076fdc14-34f4-4295-8cb0-2444fbd40feb}</UniqueIdentifier>
+    <Filter Include="FlexLibrary">
+      <UniqueIdentifier>{9042799a-1987-4f9d-8380-7c823f4e61b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlexLibrary\FlexMath">
+      <UniqueIdentifier>{e5b7c3d7-7c6d-4a1d-a766-e9ec5de07495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlexLibrary\FlexNet">
+      <UniqueIdentifier>{e6926f7f-d63a-4308-800a-18f8b9704dfa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,24 +43,6 @@
     </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\PickUpItem.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Player.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Graphs.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\NPC.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Door.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Box.cpp">
-      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="GameObject Components\BoxCollision.cpp">
       <Filter>GameObject Components\Collider Component</Filter>
@@ -84,13 +68,7 @@
     <ClCompile Include="Engine\EngineManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\FlexGL.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameObject.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Terrain.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Rendering\ModelCreation.cpp">
@@ -105,10 +83,19 @@
     <ClCompile Include="Rendering\Texture.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\FlexClient Code\FlexClient.cpp">
-      <Filter>Engine\FlexNet</Filter>
+    <ClCompile Include="Engine\SceneManager.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\OtherPlayer.cpp">
+    <ClCompile Include="FlexLibrary\FlexMath\FlexMath.cpp">
+      <Filter>FlexLibrary\FlexMath</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexLibrary\FlexNet Client\FlexClient.cpp">
+      <Filter>FlexLibrary\FlexNet</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WindowManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\EngineCamera.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -124,24 +111,6 @@
     </ClInclude>
     <ClInclude Include="ProjectDependencies\Includes\KHR\khrplatform.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\PickUpItem.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Player.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Graphs.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\NPC.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Door.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Box.h">
-      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="GameObject Components\BoxCollision.h">
       <Filter>GameObject Components\Collider Component</Filter>
@@ -173,13 +142,7 @@
     <ClInclude Include="Engine\EngineManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\FlexGL.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GameObject.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Terrain.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\ModelCreation.h">
@@ -194,13 +157,22 @@
     <ClInclude Include="Rendering\Texture.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\FlexClient Code\ErrorHandler.h">
-      <Filter>Engine\FlexNet</Filter>
+    <ClInclude Include="Engine\SceneManager.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\FlexClient Code\FlexClient.h">
-      <Filter>Engine\FlexNet</Filter>
+    <ClInclude Include="FlexLibrary\FlexMath\FlexMath.h">
+      <Filter>FlexLibrary\FlexMath</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\OtherPlayer.h">
+    <ClInclude Include="FlexLibrary\FlexNet Client\ErrorHandler.h">
+      <Filter>FlexLibrary\FlexNet</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexLibrary\FlexNet Client\FlexClient.h">
+      <Filter>FlexLibrary\FlexNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WindowManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\EngineCamera.h">
       <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>

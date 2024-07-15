@@ -8,90 +8,10 @@ void Input::key_Callback(GLFWwindow* window, int key, int scancode, int action, 
 	{
 		Keys[key] = true;
 		KeysHeldDown[key] = true;
-		//switch (key)
-		//{
-		//	case GLFW_KEY_W:
-		//		Keys[GLFW_KEY_W] = true;
-		//		KeysHeldDown[GLFW_KEY_W] = true;
-		//		break;
-		//	case GLFW_KEY_S:
-		//		Keys[GLFW_KEY_S] = true;
-		//		KeysHeldDown[GLFW_KEY_S] = true;
-		//		break;
-		//	case GLFW_KEY_A:
-		//		Keys[GLFW_KEY_A] = true;
-		//		KeysHeldDown[GLFW_KEY_A] = true;
-		//		break;
-		//	case GLFW_KEY_D:
-		//		Keys[GLFW_KEY_D] = true;
-		//		KeysHeldDown[GLFW_KEY_D] = true;
-		//		break;
-		//	case GLFW_KEY_F:
-		//		Keys[GLFW_KEY_F] = true;
-		//		KeysHeldDown[GLFW_KEY_F] = true;
-		//		break;
-		//	case GLFW_KEY_SPACE:
-		//		Keys[GLFW_KEY_SPACE] = true;
-		//		KeysHeldDown[GLFW_KEY_SPACE] = true;
-		//		break;
-		//	case GLFW_KEY_LEFT_SHIFT:
-		//		Keys[GLFW_KEY_LEFT_SHIFT] = true;
-		//		KeysHeldDown[GLFW_KEY_LEFT_SHIFT] = true;
-		//		break;
-		//	case GLFW_KEY_1:
-		//		Keys[GLFW_KEY_1] = true;
-		//		KeysHeldDown[GLFW_KEY_1] = true;
-		//		break;
-		//	case GLFW_KEY_2:
-		//		Keys[GLFW_KEY_2] = true;
-		//		KeysHeldDown[GLFW_KEY_2] = true;
-		//		break;
-		//	case GLFW_KEY_3:
-		//		Keys[GLFW_KEY_3] = true;
-		//		KeysHeldDown[GLFW_KEY_3] = true;
-		//		break;
-		//	default:
-		//		break;
-		//}
 	}
 	if (action == GLFW_RELEASE)
 	{
 		KeysHeldDown[key] = false;
-		//switch (key)
-		//{
-		//case GLFW_KEY_W:
-		//	KeysHeldDown[GLFW_KEY_W] = false;
-		//	break;
-		//case GLFW_KEY_S:
-		//	KeysHeldDown[GLFW_KEY_S] = false;
-		//	break;
-		//case GLFW_KEY_A:
-		//	KeysHeldDown[GLFW_KEY_A] = false;
-		//	break;
-		//case GLFW_KEY_D:
-		//	KeysHeldDown[GLFW_KEY_D] = false;
-		//	break;
-		//case GLFW_KEY_F:
-		//	KeysHeldDown[GLFW_KEY_F] = false;
-		//	break;
-		//case GLFW_KEY_SPACE:
-		//	KeysHeldDown[GLFW_KEY_SPACE] = false;
-		//	break;
-		//case GLFW_KEY_LEFT_SHIFT:
-		//	KeysHeldDown[GLFW_KEY_LEFT_SHIFT] = false;
-		//	break;
-		//case GLFW_KEY_1:
-		//	KeysHeldDown[GLFW_KEY_1] = false;
-		//	break;
-		//case GLFW_KEY_2:
-		//	KeysHeldDown[GLFW_KEY_2] = false;
-		//	break;
-		//case GLFW_KEY_3:
-		//	KeysHeldDown[GLFW_KEY_3] = false;
-		//	break;
-		//default:
-		//	break;
-		//}
 	}
 }
 

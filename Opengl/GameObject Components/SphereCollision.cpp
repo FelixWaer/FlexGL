@@ -9,7 +9,7 @@ void SphereCollision::attach_ToGameObject(GameObject* GO)
 {
 	AttachedGameObject = GO;
 	SpherePosition = GO->get_GameObjectPositionPtr();
-	EngineManager::get_Engine()->add_ToSphereCollisionHandler(this);
+	EngineManager::get()->get_ActiveScene()->add_SphereColliderToScene(this);
 }
 
 void SphereCollision::enable_Collider(bool isColliding)

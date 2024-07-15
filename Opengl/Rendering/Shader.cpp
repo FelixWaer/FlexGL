@@ -5,12 +5,12 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 
-FXGL::Shader::~Shader()
+Shader::~Shader()
 {
     cleanup_Shader();
 }
 
-void FXGL::Shader::init_Shader()
+void Shader::init_Shader()
 {
     std::string VertexText = load_Shader(VertexShaderPath);
     const char* VertextShaderText = VertexText.c_str();
@@ -57,33 +57,33 @@ void FXGL::Shader::init_Shader()
     glDeleteShader(fragmentShader);
 }
 
-void FXGL::Shader::set_ShaderPath(const std::string& vertexPath, const std::string& fragmentPath)
+void Shader::set_ShaderPath(const std::string& vertexPath, const std::string& fragmentPath)
 {
 	VertexShaderPath = vertexPath;
 	FragmentShaderPath = fragmentPath;
 }
 
-void FXGL::Shader::send_Matrix(const char* variableName, const glm::mat4& data) const
+void Shader::send_Matrix(const char* variableName, const glm::mat4& data) const
 {
     glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, variableName), 1, GL_FALSE, glm::value_ptr(data));
 }
 
-void FXGL::Shader::send_Vec3(const char* variableName, const glm::vec3& data) const
+void Shader::send_Vec3(const char* variableName, const glm::vec3& data) const
 {
     glUniform3fv(glGetUniformLocation(ShaderProgram, variableName), 1, glm::value_ptr(data));
 }
 
-void FXGL::Shader::send_Bool(const char* variableName, bool data) const
+void Shader::send_Bool(const char* variableName, bool data) const
 {
     glUniform1i(glGetUniformLocation(ShaderProgram, variableName), data);
 }
 
-void FXGL::Shader::cleanup_Shader()
+void Shader::cleanup_Shader()
 {
     glDeleteProgram(ShaderProgram);
 }
 
-std::string FXGL::Shader::load_Shader(const std::string& filePath)
+std::string Shader::load_Shader(const std::string& filePath)
 {
 	std::stringstream tempShader;
 	std::string returnShader;

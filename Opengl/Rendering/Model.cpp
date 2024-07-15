@@ -12,7 +12,7 @@
 
 void Model::init_Model()
 {
-	EngineManager::get_Engine()->add_ToModelHandler(this);
+	EngineManager::get()->get_ActiveScene()->add_ModelToScene(this);
 }
 
 void Model::set_ModelMesh(Mesh* modelMesh)
@@ -298,37 +298,6 @@ float line_Function(float x)
 	return x*x-x;
 }
 
-void create_LinesOnTerrain(Mesh& lineModel, float xStart, float xEnd, float deltaX)
-{
-	for (float x = xStart; x <= xEnd; x += deltaX)
-	{
-		glm::vec3 vertexPos(x, 0.f, line_Function(x));
-		glm::ivec2 lineChunkPosition;
-		lineChunkPosition.x = static_cast<int32_t>(floor(x / 30));
-		lineChunkPosition.y = static_cast<int32_t>(floor(line_Function(x) / 30));
-
-		for (Chunk& chunk : Terrain::get_Terrain()->Chunks)
-		{
-			if (lineChunkPosition == chunk.ChunkPosition)
-			{
-				for (const Triangle& triangle : chunk.ChunkModel->ModelMesh->Triangles)
-				{
-					if (EngineManager::calculate_PointOnTriangle(vertexPos, chunk.ChunkModel->ModelMesh->Vertices[triangle.FirstIndex].Position,
-						chunk.ChunkModel->ModelMesh->Vertices[triangle.SecondIndex].Position, 
-						chunk.ChunkModel->ModelMesh->Vertices[triangle.ThirdIndex].Position, chunk.ChunkModel->get_WorldPosition()))
-					{
-						vertexPos.y += 0.1f;
-						lineModel.Vertices.emplace_back(vertexPos, glm::vec3(0.f), glm::vec3(1.f, 0.f, 0.f), glm::vec2(0.0f));
-						break;
-					}
-				}
-				break;
-			}
-		}
-	}
-	lineModel.bind_Buffer(GL_STATIC_DRAW);
-}
-
 void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)
 {
 	glm::vec3 normal = glm::cross(vertexB.Position - vertexA.Position, vertexC.Position - vertexA.Position);
@@ -337,25 +306,3 @@ void calculate_TriangleNormal(Vertex& vertexA, Vertex& vertexB, Vertex& vertexC)
 	vertexB.Normal += glm::normalize(normal);
 	vertexC.Normal += glm::normalize(normal);
 }
-
-//int find_Interval(std::vector<float> tList, float value)
-//{
-//	int my = tList.size() - 1;
-//
-//	while (value < tList[my])
-//	{
-//		my--;
-//	}
-//	return my;
-//}
-//
-//void calculate_BSplineCurve(std::vector<float> tList, float value)
-//{
-//	int my = find_Interval(value);
-//
-//	std::vector<glm::vec3> vectors;
-//	for (int i = 0; i <= 2; i++)
-//	{
-//		vectors[2-i] = 
-//	}
-//}

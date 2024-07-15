@@ -8,7 +8,8 @@ class Camera
 public:
 	Camera() = default;
 
-	void init_Camera();
+	//Does Nothing for now
+	//void init_Camera();
 
 	glm::mat4 get_CameraView();
 	glm::mat4 get_CameraProjection();

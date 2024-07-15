@@ -6,11 +6,6 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/GameObject.h"
 
-void Camera::init_Camera()
-{
-	EngineManager::get_Engine()->add_ToCameraHandler(this);
-}
-
 glm::mat4 Camera::get_CameraView()
 {
 	if (AttachedGameObject != nullptr)
@@ -53,11 +48,11 @@ void Camera::move_CameraFront(bool moveFront)
 {
 	if (moveFront == true)
 	{
-		CameraPos += CameraTarget * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
+		CameraPos += CameraTarget * CameraSpeed * EngineManager::get()->get_DeltaTime();
 	}
 	else
 	{
-		CameraPos -= CameraTarget * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
+		CameraPos -= CameraTarget * CameraSpeed * EngineManager::get()->get_DeltaTime();
 	}
 }
 
@@ -65,11 +60,11 @@ void Camera::move_CameraSide(bool moveRight)
 {
 	if (moveRight == true)
 	{
-		CameraPos += glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
+		CameraPos += glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::get()->get_DeltaTime();
 	}
 	else
 	{
-		CameraPos -= glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::get_Engine()->get_DeltaTime();
+		CameraPos -= glm::normalize(glm::cross(CameraTarget, CameraUp)) * CameraSpeed * EngineManager::get()->get_DeltaTime();
 	}
 }
 

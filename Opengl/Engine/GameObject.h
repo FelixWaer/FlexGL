@@ -1,8 +1,9 @@
 #pragma once
-#include "glm/glm.hpp"
-#include <iostream>
+
 #include <string>
 #include <vector>
+
+#include "glm/glm.hpp"
 
 class EngineManager;
 
@@ -10,6 +11,7 @@ class GameObject
 {
 public:
 	GameObject() = default;
+
 	void init_GameObject();
 	virtual void tick(float deltaTime);
 	virtual void game_Start();

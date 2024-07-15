@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)/Opengl/ProjectDependencies/Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -134,20 +134,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\EngineManager.cpp" />
-    <ClCompile Include="Engine\FlexClient Code\FlexClient.cpp" />
-    <ClCompile Include="Engine\FlexGL.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
-    <ClCompile Include="Engine\Terrain.cpp" />
+    <ClCompile Include="Engine\SceneManager.cpp" />
+    <ClCompile Include="Engine\WindowManager.cpp" />
+    <ClCompile Include="FlexLibrary\FlexMath\FlexMath.cpp" />
+    <ClCompile Include="FlexLibrary\FlexNet Client\FlexClient.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
-    <ClCompile Include="GameObjects\Box.cpp" />
-    <ClCompile Include="GameObjects\Door.cpp" />
-    <ClCompile Include="GameObjects\Graphs.cpp" />
-    <ClCompile Include="GameObjects\NPC.cpp" />
-    <ClCompile Include="GameObjects\OtherPlayer.cpp" />
-    <ClCompile Include="GameObjects\PickUpItem.cpp" />
-    <ClCompile Include="GameObjects\Player.cpp" />
+    <ClCompile Include="GameObjects\EngineCamera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
@@ -162,21 +157,16 @@
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
     <ClInclude Include="Engine\EngineManager.h" />
-    <ClInclude Include="Engine\FlexClient Code\ErrorHandler.h" />
-    <ClInclude Include="Engine\FlexClient Code\FlexClient.h" />
-    <ClInclude Include="Engine\FlexGL.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Input.h" />
-    <ClInclude Include="Engine\Terrain.h" />
+    <ClInclude Include="Engine\SceneManager.h" />
+    <ClInclude Include="Engine\WindowManager.h" />
+    <ClInclude Include="FlexLibrary\FlexMath\FlexMath.h" />
+    <ClInclude Include="FlexLibrary\FlexNet Client\ErrorHandler.h" />
+    <ClInclude Include="FlexLibrary\FlexNet Client\FlexClient.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
-    <ClInclude Include="GameObjects\Box.h" />
-    <ClInclude Include="GameObjects\Door.h" />
-    <ClInclude Include="GameObjects\Graphs.h" />
-    <ClInclude Include="GameObjects\NPC.h" />
-    <ClInclude Include="GameObjects\OtherPlayer.h" />
-    <ClInclude Include="GameObjects\PickUpItem.h" />
-    <ClInclude Include="GameObjects\Player.h" />
+    <ClInclude Include="GameObjects\EngineCamera.h" />
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3native.h" />

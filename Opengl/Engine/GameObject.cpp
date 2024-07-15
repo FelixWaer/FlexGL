@@ -4,7 +4,7 @@
 
 void GameObject::init_GameObject()
 {
-	EngineManager::get_Engine()->add_ToGameObjectHandler(this);
+	EngineManager::get()->get_ActiveScene()->add_GameObjectToScene(this);
 }
 
 void GameObject::tick(float deltaTime)

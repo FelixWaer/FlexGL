@@ -17,10 +17,6 @@ void GameObject::game_Start()
 {
 }
 
-void GameObject::on_Collision(GameObject* otherGameObject)
-{
-}
-
 void GameObject::set_GameObjectPosition(glm::vec3 newPosition)
 {
 	GameObjectPosition = newPosition;

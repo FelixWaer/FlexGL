@@ -3,7 +3,6 @@
 #include <string>
 
 #include <glm/glm.hpp>
-#include "glad/glad.h"
 
 class GameObject;
 class Mesh;

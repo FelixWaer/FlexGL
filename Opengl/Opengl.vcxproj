@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\EngineManager.cpp" />
+    <ClCompile Include="Engine\EventCallback.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="FlexLibrary\FlexNet Client\FlexClient.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
+    <ClCompile Include="GameObjects\BasicCube.cpp" />
     <ClCompile Include="GameObjects\EngineCamera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
@@ -157,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
     <ClInclude Include="Engine\EngineManager.h" />
+    <ClInclude Include="Engine\EventCallback.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\SceneManager.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="FlexLibrary\FlexNet Client\FlexClient.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
+    <ClInclude Include="GameObjects\BasicCube.h" />
     <ClInclude Include="GameObjects\EngineCamera.h" />
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3.h" />

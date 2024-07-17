@@ -1,6 +1,7 @@
 #include "SphereCollision.h"
 
 #include "../Engine/EngineManager.h"
+#include "../Engine/EventCallback.h"
 #include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
 #include "../Rendering/Renderer.h"
@@ -10,6 +11,11 @@ void SphereCollision::attach_ToGameObject(GameObject* GO)
 	AttachedGameObject = GO;
 	SpherePosition = GO->get_GameObjectPositionPtr();
 	EngineManager::get()->get_ActiveScene()->add_SphereColliderToScene(this);
+}
+
+void SphereCollision::attach_Event(Event* eventPtr)
+{
+	CollisionEvent = eventPtr;
 }
 
 void SphereCollision::enable_Collider(bool isColliding)
@@ -60,7 +66,10 @@ GameObject* SphereCollision::get_AttachedGameObject()
 	return AttachedGameObject;
 }
 
-void SphereCollision::run_CollisionFunction(SphereCollision* otherSphereCollider)
+void SphereCollision::call_CollisionEvent(SphereCollision* otherSphereCollider) const
 {
-	AttachedGameObject->on_Collision(otherSphereCollider->get_AttachedGameObject());
+	if (CollisionEvent != nullptr)
+	{
+		CollisionEvent->Collision_Event(otherSphereCollider->get_AttachedGameObject());
+	}
 }

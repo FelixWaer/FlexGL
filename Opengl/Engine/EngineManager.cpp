@@ -1,5 +1,8 @@
 #include "EngineManager.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <iostream>
 
 std::string FilePathVert = "Shader/Vertex_Shader.vert";
@@ -117,6 +120,7 @@ void EngineManager::tick_Engine()
 	glPointSize(5);
 
 	/*-----End of Temporary Code-----*/
+	Input::call_KeyEvents();
 
 	ActiveScene->tick_Scene(DeltaTime);
 

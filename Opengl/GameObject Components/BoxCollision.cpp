@@ -1,6 +1,7 @@
 #include "BoxCollision.h"
 
 #include "../Engine/EngineManager.h"
+#include "../Engine/EventCallback.h"
 #include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
 #include "../Rendering/Renderer.h"
@@ -10,6 +11,11 @@ void BoxCollision::attach_ToGameObject(GameObject* GO)
 	AttachedGameObject = GO;
 	BoxPosition = GO->get_GameObjectPositionPtr();
 	EngineManager::get()->get_ActiveScene()->add_BoxColliderToScene(this);
+}
+
+void BoxCollision::attach_Event(Event* eventPtr)
+{
+	CollisionEvent = eventPtr;
 }
 
 void BoxCollision::enable_Collider(bool isColliding)
@@ -61,8 +67,11 @@ void BoxCollision::set_BoxDepth(float depth)
 	BoxDepth = depth;
 }
 
-void BoxCollision::run_CollisionFunction(BoxCollision* otherBoxCollider)
+void BoxCollision::call_CollisionEvent(BoxCollision* otherBoxCollider) const
 {
-	AttachedGameObject->on_Collision(otherBoxCollider->get_AttachedGameObject());
+	if (CollisionEvent != nullptr)
+	{
+		CollisionEvent->Collision_Event(otherBoxCollider->get_AttachedGameObject());
+	}
 }
 

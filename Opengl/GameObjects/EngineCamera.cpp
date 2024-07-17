@@ -1,5 +1,9 @@
 #include "EngineCamera.h"
 
+#include <iostream>
+
+#include "GLFW/glfw3.h"
+
 #include "../Engine/EngineManager.h"
 #include "../Engine/Input.h"
 
@@ -15,29 +19,73 @@ void EngineCamera::game_Start()
 	//Initialize Camera by adding it to the Camera Handler.
 	//Camera Handler does nothing right now
 	//testCamera.init_Camera();
+
+	//InputEvent = new EventCallback(this, &EngineCamera::test_Function);
+	W_InputEvent = make_Event(this, &EngineCamera::input_WFunction);
+	A_InputEvent = make_Event(this, &EngineCamera::input_AFunction);
+	S_InputEvent = make_Event(this, &EngineCamera::input_SFunction);
+	D_InputEvent = make_Event(this, &EngineCamera::input_DFunction);
+	LM_InputEvent = make_Event(this, &EngineCamera::input_LMouseFunction);
+	ESC_InputEvent = make_Event(this, &EngineCamera::input_ESCFunction);
+	CollisionEvent = make_Event(this, &EngineCamera::collision_Function);
+
+	Input::bind_EventToKey(W_InputEvent, Key::W, KeyPress::WhileHeldDown);
+	Input::bind_EventToKey(A_InputEvent, Key::A, KeyPress::WhileHeldDown);
+	Input::bind_EventToKey(S_InputEvent, Key::S, KeyPress::WhileHeldDown);
+	Input::bind_EventToKey(D_InputEvent, Key::D, KeyPress::WhileHeldDown);
+	Input::bind_EventToKey(LM_InputEvent, Key::LMouse, KeyPress::WhileReleased);
+	Input::bind_EventToKey(ESC_InputEvent, Key::ESCAPE, KeyPress::OnPress);
+
+	CameraCollider.attach_ToGameObject(this);
+	CameraCollider.attach_Event(CollisionEvent);
+	CameraCollider.set_SphereRadius(1.f);
+	CameraCollider.enable_SphereVisible(true);
 }
 
 void EngineCamera::tick(float deltaTime)
 {
-	if (Input::key_HeldDown(GLFW_KEY_W))
+	set_GameObjectPosition(ActiveCamera.get_CameraPosition());
+}
+
+void EngineCamera::input_WFunction()
+{
+	ActiveCamera.move_CameraFront(true);
+}
+
+void EngineCamera::input_AFunction()
+{
+	ActiveCamera.move_CameraSide(false);
+}
+
+void EngineCamera::input_SFunction()
+{
+	ActiveCamera.move_CameraFront(false);
+}
+
+void EngineCamera::input_DFunction()
+{
+	ActiveCamera.move_CameraSide(true);
+}
+
+void EngineCamera::input_LMouseFunction()
+{
+	std::cout << "Mouse pressed" << std::endl;
+}
+
+void EngineCamera::input_ESCFunction()
+{
+	EngineManager::get()->get_ActiveWindow().close_Window();
+}
+
+void EngineCamera::collision_Function(GameObject* otherGameObject)
+{
+	if (otherGameObject == nullptr)
 	{
-		ActiveCamera.move_CameraFront(true);
-	}
-	if (Input::key_HeldDown(GLFW_KEY_A))
-	{
-		ActiveCamera.move_CameraSide(false);
-	}
-	if (Input::key_HeldDown(GLFW_KEY_S))
-	{
-		ActiveCamera.move_CameraFront(false);
-	}
-	if (Input::key_HeldDown(GLFW_KEY_D))
-	{
-		ActiveCamera.move_CameraSide(true);
+		return;
 	}
 
-	if (Input::key_Pressed(GLFW_KEY_ESCAPE))
+	if (otherGameObject->has_Tag("BasicCube") == true)
 	{
-		EngineManager::get()->get_ActiveWindow().close_Window();
+		std::cout << "BasicCube" << std::endl;
 	}
 }

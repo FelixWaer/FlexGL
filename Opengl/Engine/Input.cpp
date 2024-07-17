@@ -1,62 +1,138 @@
 #include "Input.h"
 
-#include <iostream>
+#include <ranges>
+#include <GLFW/glfw3.h>
+
+#include "EventCallback.h"
 
 void Input::key_Callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	Key keyType = static_cast<Key>(key);
+
 	if (action == GLFW_PRESS)
 	{
-		Keys[key] = true;
-		KeysHeldDown[key] = true;
-	}
-	if (action == GLFW_RELEASE)
-	{
-		KeysHeldDown[key] = false;
-	}
-}
+		if (EventPressedInputMap.contains(keyType) == true)
+		{
+			KeyPressedMap[keyType] = true;
+			for (Event* event : EventPressedInputMap[keyType])
+			{
+				event->Input_Event();
+			}
+		}
 
-bool Input::key_Pressed(int key)
-{
-	return Keys[key];
-}
-
-bool Input::key_HeldDown(int key)
-{
-	return KeysHeldDown[key];
-}
-
-void Input::reset_Input()
-{
-	for (int i = 0; i < 349; i++)
-	{
-		Keys[i] = false;
+		if (KeyHeldDownMap.contains(keyType) == true)
+		{
+			KeyHeldDownMap[keyType] = true;
+		}
 	}
-	for (int i = 0; i < 8; i++)
+	else if (action == GLFW_RELEASE)
 	{
-		buttons[i] = false;
+		if (EventReleasedInputMap.contains(keyType) == true)
+		{
+			for (Event* event : EventReleasedInputMap[keyType])
+			{
+				event->Input_Event();
+			}
+		}
+
+		if (KeyHeldDownMap.contains(keyType) == true)
+		{
+			KeyHeldDownMap[keyType] = false;
+		}
 	}
 }
 
 void Input::mouse_Callback(GLFWwindow* window, int button, int action, int mods)
 {
+	Key keyType = static_cast<Key>(button);
+
 	if (action == GLFW_PRESS)
 	{
-		buttons[button] = true;
-		buttonsHeldDown[button] = true;
+		if (EventPressedInputMap.contains(keyType) == true)
+		{
+			KeyPressedMap[keyType] = true;
+			for (Event* event : EventPressedInputMap[keyType])
+			{
+				event->Input_Event();
+			}
+		}
+
+		if (KeyHeldDownMap.contains(keyType) == true)
+		{
+			KeyHeldDownMap[keyType] = true;
+		}
 	}
-	if (action == GLFW_RELEASE)
+	else if (action == GLFW_RELEASE)
 	{
-		buttonsHeldDown[button] = false;
+		if (EventReleasedInputMap.contains(keyType) == true)
+		{
+			for (Event* event : EventReleasedInputMap[keyType])
+			{
+				event->Input_Event();
+			}
+		}
+
+		if (KeyHeldDownMap.contains(keyType) == true)
+		{
+			KeyHeldDownMap[keyType] = false;
+		}
 	}
 }
 
-bool Input::mouse_Pressed(int button)
+void Input::bind_EventToKey(Event* eventPtr, Key keyType, KeyPress keyPressType)
 {
-	return buttons[button];
+	switch (keyPressType)
+	{
+	case KeyPress::OnPress:
+		EventPressedInputMap[keyType].emplace_back(eventPtr);
+		KeyPressedMap[keyType] = false;
+		break;
+
+	case KeyPress::WhileHeldDown:
+		EventHeldDownInputMap[keyType].emplace_back(eventPtr);
+		KeyHeldDownMap[keyType] = false;
+		break;
+
+	case KeyPress::OnRelease:
+		EventReleasedInputMap[keyType].emplace_back(eventPtr);
+		break;
+
+	case KeyPress::WhileReleased:
+		EventWhileReleasedInputMap[keyType].emplace_back(eventPtr);
+		break;
+	}
 }
 
-bool Input::mouse_HeldDown(int button)
+void Input::call_KeyEvents()
 {
-	return buttonsHeldDown[button];
+	for (auto& KeyEvents : EventHeldDownInputMap)
+	{
+		if (KeyHeldDownMap[KeyEvents.first] == true)
+		{
+			for (Event* event : KeyEvents.second)
+			{
+				event->Input_Event();
+			}
+		}
+	}
+
+	for (auto& KeyEvents : EventWhileReleasedInputMap)
+	{
+		if (KeyHeldDownMap[KeyEvents.first] == false)
+		{
+			for (Event* event : KeyEvents.second)
+			{
+				event->Input_Event();
+			}
+		}
+	}
+}
+
+void Input::reset_Input()
+{
+	for (auto& key : KeyPressedMap)
+	{
+		key.second = false;
+	}
 }
 

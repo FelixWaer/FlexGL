@@ -5,8 +5,6 @@
 
 #include "glm/glm.hpp"
 
-class EngineManager;
-
 class GameObject
 {
 public:
@@ -15,7 +13,7 @@ public:
 	void init_GameObject();
 	virtual void tick(float deltaTime);
 	virtual void game_Start();
-	virtual void on_Collision(GameObject* otherGameObject);
+	
 	void set_GameObjectPosition(glm::vec3 newPosition);
 	glm::vec3& get_GameObjectPosition();
 	glm::vec3* get_GameObjectPositionPtr();

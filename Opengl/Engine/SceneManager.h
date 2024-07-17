@@ -6,6 +6,7 @@
 #include "../GameObject Components/BoxCollision.h"
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObjects/EngineCamera.h"
+#include "../GameObjects/BasicCube.h"
 #include "../Rendering/Model.h"
 #include "../Rendering/Camera.h"
 #include "../Rendering/Light.h"
@@ -29,9 +30,9 @@ public:
 	void turnOff_DebugMode(bool turnOff);
 private:
 	//Start of Temporary Code
-	Model TestModel;
 	Light TestLight;
 	EngineCamera ActiveEngineCamera;
+	BasicCube CubeObject;
 	//End of Temporary Code
 	Camera* SceneCamera = nullptr;
 

@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 
+#include "glad/glad.h"
+
 #include "glm/glm.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
 
@@ -11,19 +13,8 @@ const float SCR_HEIGHT = 1080;
 
 void SceneManager::begin_Scene()
 {
-	//Initialize the Model -MUST BE DONE
-	TestModel.init_Model();
-
-	//Set the mesh of the Model
-	TestModel.set_ModelMesh(&Renderer::get()->Cube);
-
-	/*Bind the model to a GameObject, so it will move with the GameObject*/
-	//testModel.bind_ToGameObject(this);
-
-	//Set position of the Model
-	TestModel.set_ModelPosition(glm::vec3(0.f));
-
 	ActiveEngineCamera.init_GameObject();
+	CubeObject.init_GameObject();
 
 	TestLight.init_Light();
 	TestLight.set_LightPosition(glm::vec3(0.f, 100.f, 0.f));
@@ -109,8 +100,8 @@ void SceneManager::check_Collision()
 					SceneBoxColliders[i]->BoxHeight, SceneBoxColliders[i]->BoxWidth, SceneBoxColliders[i]->BoxDepth,
 					SceneBoxColliders[j]->BoxHeight, SceneBoxColliders[j]->BoxWidth, SceneBoxColliders[j]->BoxDepth))
 				{
-					SceneBoxColliders[i]->run_CollisionFunction(SceneBoxColliders[j]);
-					SceneBoxColliders[j]->run_CollisionFunction(SceneBoxColliders[i]);
+					SceneBoxColliders[i]->call_CollisionEvent(SceneBoxColliders[j]);
+					SceneBoxColliders[j]->call_CollisionEvent(SceneBoxColliders[i]);
 				}
 			}
 		}
@@ -125,8 +116,8 @@ void SceneManager::check_Collision()
 				if (calculate_SphereCollision(SceneSphereColliders[i]->get_SpherePosition(), SceneSphereColliders[j]->get_SpherePosition(),
 					SceneSphereColliders[i]->get_SphereRadius(), SceneSphereColliders[j]->get_SphereRadius()))
 				{
-					SceneSphereColliders[i]->run_CollisionFunction(SceneSphereColliders[j]);
-					SceneSphereColliders[j]->run_CollisionFunction(SceneSphereColliders[i]);
+					SceneSphereColliders[i]->call_CollisionEvent(SceneSphereColliders[j]);
+					SceneSphereColliders[j]->call_CollisionEvent(SceneSphereColliders[i]);
 				}
 			}
 		}

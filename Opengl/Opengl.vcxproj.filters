@@ -98,6 +98,12 @@
     <ClCompile Include="GameObjects\EngineCamera.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EventCallback.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\BasicCube.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -173,6 +179,12 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\EngineCamera.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EventCallback.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\BasicCube.h">
       <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>

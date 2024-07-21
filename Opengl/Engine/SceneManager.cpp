@@ -6,15 +6,13 @@
 #include <glm/ext/matrix_clip_space.hpp>
 
 #include "EngineManager.h"
-#include"../Rendering/Renderer.h"
-
-const float SCR_WIDTH = 1920;
-const float SCR_HEIGHT = 1080;
 
 void SceneManager::begin_Scene()
 {
 	ActiveEngineCamera.init_GameObject();
 	CubeObject.init_GameObject();
+	CubeObject2.init_GameObject();
+	CubeObject2.set_GameObjectPosition(glm::vec3(5.f, 0.f, 0.f));
 
 	TestLight.init_Light();
 	TestLight.set_LightPosition(glm::vec3(0.f, 100.f, 0.f));
@@ -35,7 +33,6 @@ void SceneManager::tick_Scene(float deltaTime)
 {
 	check_Collision();
 	tick_GameObjects(deltaTime);
-	render_Models();
 }
 
 void SceneManager::set_SceneCamera(Camera* newSceneCamera)
@@ -46,6 +43,16 @@ void SceneManager::set_SceneCamera(Camera* newSceneCamera)
 Camera* SceneManager::get_SceneCamera()
 {
 	return SceneCamera;
+}
+
+std::vector<Model*>& SceneManager::get_SceneModels()
+{
+	return SceneModels;
+}
+
+std::vector<Light*>& SceneManager::get_SceneLights()
+{
+	return SceneLights;
 }
 
 void SceneManager::add_GameObjectToScene(GameObject* gObject)
@@ -66,6 +73,11 @@ void SceneManager::add_SphereColliderToScene(SphereCollision* sphereCollider)
 void SceneManager::add_ModelToScene(Model* model)
 {
 	SceneModels.emplace_back(model);
+}
+
+void SceneManager::add_LightToScene(Light* light)
+{
+	SceneLights.emplace_back(light);
 }
 
 void SceneManager::turnOff_DebugMode(bool turnOff)
@@ -145,27 +157,5 @@ bool SceneManager::calculate_SphereCollision(glm::vec3 spherePos_1, glm::vec3 sp
 	else
 	{
 		return false;
-	}
-}
-
-void SceneManager::render_Models()
-{
-	glUseProgram(EngineManager::get()->get_Shader().ShaderProgram);
-	EngineManager::get()->get_Shader().send_Vec3("CameraPos", get_SceneCamera()->get_CameraPosition());
-	EngineManager::get()->get_Shader().send_Vec3("LightPos", TestLight.get_LightPosition());
-	EngineManager::get()->get_Shader().send_Vec3("LightColor", TestLight.get_LightColor());
-	for (auto model : SceneModels)
-	{
-		if (model->ModelMesh == nullptr || model->skybox == true)
-		{
-			continue;
-		}
-		glm::mat4 modelMatrix = glm::perspective(glm::radians(45.0f),
-			EngineManager::get()->get_AspectRatio(), 0.1f, 400.f) * get_SceneCamera()->get_CameraView() * model->get_ModelMatrix();
-		EngineManager::get()->get_Shader().send_Matrix("PositionMatrix", model->get_ModelMatrix());
-		EngineManager::get()->get_Shader().send_Matrix("ModelMatrix", modelMatrix);
-		EngineManager::get()->get_Shader().send_Bool("HasTexture", model->has_Texture());
-
-		model->draw_Model();
 	}
 }

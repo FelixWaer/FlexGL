@@ -1,13 +1,8 @@
 #pragma once
 
-#include <glm/gtc/type_ptr.hpp>
-
+#include "../Rendering/RenderManager.h"
 #include "SceneManager.h"
 #include "WindowManager.h"
-#include "Input.h"
-#include "../Rendering/Renderer.h"
-#include "../Rendering/Shader.h"
-#include "../GameObjects/EngineCamera.h"
 
 class EngineManager
 {
@@ -23,7 +18,6 @@ public:
 	void set_ActiveScene(SceneManager* newActiveScene);
 	SceneManager* get_ActiveScene();
 	WindowManager& get_ActiveWindow();
-	Shader& get_Shader();
 
 	float get_DeltaTime();
 	int get_WindowWidth();
@@ -36,7 +30,7 @@ private:
 
 	SceneManager* ActiveScene = nullptr;
 	WindowManager ActiveWindow;
-	Shader TheShader;
+	RenderManager RenderManager;
 
 	float DeltaTime = 0.f;
 	float LastFrame = 0.f;

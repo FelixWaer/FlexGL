@@ -2,15 +2,13 @@
 
 #include <iostream>
 
-#include "GLFW/glfw3.h"
-
 #include "../Engine/EngineManager.h"
 #include "../Engine/Input.h"
 
 void EngineCamera::game_Start()
 {
 	//Set the Camera position
-	ActiveCamera.update_CameraPosition(glm::vec3(0.f));
+	ActiveCamera.update_CameraPosition(glm::vec3(0.f, 0.f, 5.f));
 
 	//Set the Camera speed
 	ActiveCamera.set_CameraSpeed(50.f);
@@ -33,13 +31,8 @@ void EngineCamera::game_Start()
 	Input::bind_EventToKey(A_InputEvent, Key::A, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(S_InputEvent, Key::S, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(D_InputEvent, Key::D, KeyPress::WhileHeldDown);
-	Input::bind_EventToKey(LM_InputEvent, Key::LMouse, KeyPress::WhileReleased);
+	Input::bind_EventToKey(LM_InputEvent, Key::LMouse, KeyPress::OnPress);
 	Input::bind_EventToKey(ESC_InputEvent, Key::ESCAPE, KeyPress::OnPress);
-
-	CameraCollider.attach_ToGameObject(this);
-	CameraCollider.attach_Event(CollisionEvent);
-	CameraCollider.set_SphereRadius(1.f);
-	CameraCollider.enable_SphereVisible(true);
 }
 
 void EngineCamera::tick(float deltaTime)

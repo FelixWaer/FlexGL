@@ -74,9 +74,6 @@
     <ClCompile Include="Rendering\ModelCreation.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Rendering\Renderer.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Input.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -103,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="GameObjects\BasicCube.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\RenderManager.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Material.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +142,7 @@
     <ClInclude Include="Rendering\Mesh.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\Vertex.h">
+    <ClInclude Include="Rendering\MeshData.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\Light.h">
@@ -152,9 +155,6 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\ModelCreation.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Renderer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input.h">
@@ -186,6 +186,12 @@
     </ClInclude>
     <ClInclude Include="GameObjects\BasicCube.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\RenderManager.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Material.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

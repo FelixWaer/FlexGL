@@ -2,11 +2,11 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 
-std::string FilePathVert = "Shader/Vertex_Shader.vert";
-std::string FilePathFrag = "Shader/Fragment_Shader.frag";
+#include "Input.h"
 
 EngineManager::~EngineManager()
 {
@@ -41,10 +41,8 @@ void EngineManager::init_Engine()
 
 	glEnable(GL_DEPTH_TEST);
 
-	//Setting up the shader
-	TheShader.set_ShaderPath(FilePathVert, FilePathFrag);
-	TheShader.init_Shader();
-	Renderer::get()->init_Renderer();
+
+	RenderManager.init_RenderManager();
 
 	SceneManager* basicScene = new SceneManager;
 	set_ActiveScene(basicScene);
@@ -77,11 +75,6 @@ SceneManager* EngineManager::get_ActiveScene()
 WindowManager& EngineManager::get_ActiveWindow()
 {
 	return ActiveWindow;
-}
-
-Shader& EngineManager::get_Shader()
-{
-	return TheShader;
 }
 
 float EngineManager::get_DeltaTime()
@@ -123,6 +116,8 @@ void EngineManager::tick_Engine()
 	Input::call_KeyEvents();
 
 	ActiveScene->tick_Scene(DeltaTime);
+
+	RenderManager.render_Scene(ActiveScene);
 
 	Input::reset_Input();
 }

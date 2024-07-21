@@ -7,20 +7,17 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 
-Shader::~Shader()
-{
-    cleanup_Shader();
-}
-
 void Shader::init_Shader()
 {
+    //Vertex Shade
     std::string VertexText = load_Shader(VertexShaderPath);
     const char* VertextShaderText = VertexText.c_str();
 
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &VertextShaderText, NULL);
     glCompileShader(vertexShader);
-    // check for shader compile errors
+
+    //Check for Vertex shader compile errors
     int success;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
@@ -29,14 +26,16 @@ void Shader::init_Shader()
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    // fragment shader
+
+    //Fragment shader
     std::string FragText = load_Shader(FragmentShaderPath);
     const char* FragmentShaderText = FragText.c_str();
 
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &FragmentShaderText, NULL);
     glCompileShader(fragmentShader);
-    // check for shader compile errors
+
+    //Check for Fragment shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
@@ -44,11 +43,13 @@ void Shader::init_Shader()
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
+    //Create Shader Program
     ShaderProgram = glCreateProgram();
     glAttachShader(ShaderProgram, vertexShader);
     glAttachShader(ShaderProgram, fragmentShader);
     glLinkProgram(ShaderProgram);
-    // check for linking errors
+
+    //Check for linking errors
     glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(ShaderProgram, 512, NULL, infoLog);
@@ -59,10 +60,30 @@ void Shader::init_Shader()
     glDeleteShader(fragmentShader);
 }
 
+void Shader::delete_Shader()
+{
+    glDeleteProgram(ShaderProgram);
+}
+
+void Shader::use_Shader()
+{
+    glUseProgram(ShaderProgram);
+}
+
 void Shader::set_ShaderPath(const std::string& vertexPath, const std::string& fragmentPath)
 {
 	VertexShaderPath = vertexPath;
 	FragmentShaderPath = fragmentPath;
+}
+
+void Shader::set_VertexShaderPath(const std::string& filePath)
+{
+    VertexShaderPath = filePath;
+}
+
+void Shader::set_FragmentShaderPath(const std::string& filePath)
+{
+    FragmentShaderPath = filePath;
 }
 
 void Shader::send_Matrix(const char* variableName, const glm::mat4& data) const
@@ -80,9 +101,9 @@ void Shader::send_Bool(const char* variableName, bool data) const
     glUniform1i(glGetUniformLocation(ShaderProgram, variableName), data);
 }
 
-void Shader::cleanup_Shader()
+void Shader::send_Float(const char* variabelName, float data) const
 {
-    glDeleteProgram(ShaderProgram);
+    glUniform1f(glGetUniformLocation(ShaderProgram, variabelName), data);
 }
 
 std::string Shader::load_Shader(const std::string& filePath)

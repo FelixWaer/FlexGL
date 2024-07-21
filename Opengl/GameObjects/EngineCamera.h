@@ -27,7 +27,6 @@ private:
 	Event* ESC_InputEvent = nullptr;
 	Event* CollisionEvent = nullptr;
 
-	SphereCollision CameraCollider;
 	Camera ActiveCamera;
 };
 

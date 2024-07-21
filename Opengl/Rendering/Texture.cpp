@@ -1,12 +1,17 @@
 #include "Texture.h"
 
-#include <iostream>
-
-#include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "STB_Image/stb_image.h"
+#include "glad/glad.h"
 
-void Texture::load_Texture(const char* texturePath)
+#include <iostream>
+
+void Texture::delete_Texture()
+{
+	glDeleteTextures(1, &TextureID);
+}
+
+void Texture::load_Texture(const std::string& filePath)
 {
 	glGenTextures(1, &TextureID);
 	glBindTexture(GL_TEXTURE_2D, TextureID);
@@ -19,8 +24,8 @@ void Texture::load_Texture(const char* texturePath)
 	int width;
 	int height;
 	int nrChannels;
-
-	unsigned char *data = stbi_load(texturePath, &width, &height, &nrChannels, 3);
+	//req_comp 3
+	unsigned char *data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 3);
 
 	if (data)
 	{

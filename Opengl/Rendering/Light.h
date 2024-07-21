@@ -16,6 +16,5 @@ public:
 private:
 	glm::vec3 Position = glm::vec3(0.f);
 	glm::vec3 color = glm::vec3(0.5f);
-	Model LightModel;
 };
 

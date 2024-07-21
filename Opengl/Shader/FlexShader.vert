@@ -15,7 +15,7 @@ out vec2 FragTexPos;
 
 void main()
 {
-    FragPos = vec3(PositionMatrix * vec4(aPos, 1.0));
+	FragPos = vec3(PositionMatrix * vec4(aPos, 1.0));
 	FragNormal = aNormal;
 	FragColor = aColor;	
 	FragTexPos = aTexPos;

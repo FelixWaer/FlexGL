@@ -8,7 +8,9 @@ class Texture
 public:
 	Texture() = default;
 
-	void load_Texture(const char* texturePath);
+	void delete_Texture();
+
+	void load_Texture(const std::string& filePath);
 	void use_Texture();
 
 	void load_CubeMapTexture(const std::vector<std::string>& texturePaths);

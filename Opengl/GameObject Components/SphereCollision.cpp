@@ -4,7 +4,6 @@
 #include "../Engine/EventCallback.h"
 #include "../Engine/GameObject.h"
 #include "../Rendering/Model.h"
-#include "../Rendering/Renderer.h"
 
 void SphereCollision::attach_ToGameObject(GameObject* GO)
 {
@@ -30,8 +29,7 @@ void SphereCollision::enable_SphereVisible(bool isVisible)
 		SphereModel = new Model;
 		SphereModel->init_Model();
 		SphereModel->attach_ToPosition(SpherePosition);
-		SphereModel->turn_OnLine();
-		SphereModel->set_ModelMesh(&Renderer::get()->DebugSphere);
+		//SphereModel->turn_OnLine();
 		SphereModel->scale_Model(glm::vec3(SphereRadius, SphereRadius, SphereRadius));
 
 		return;

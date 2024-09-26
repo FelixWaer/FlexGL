@@ -29,5 +29,6 @@ protected:
 	glm::vec3 GameObjectFront = glm::vec3(0.f);
 
 private:
+	uint32_t ObjectID = 0;
 	std::vector<std::string> tags;
 };

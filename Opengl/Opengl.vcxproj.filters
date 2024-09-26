@@ -107,6 +107,9 @@
     <ClCompile Include="Rendering\Material.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\ObjectHandler.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -192,6 +195,9 @@
     </ClInclude>
     <ClInclude Include="Rendering\Material.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ObjectHandler.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

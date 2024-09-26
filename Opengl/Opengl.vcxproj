@@ -139,6 +139,7 @@
     <ClCompile Include="Engine\EventCallback.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
+    <ClCompile Include="Engine\ObjectHandler.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
     <ClCompile Include="Engine\WindowManager.cpp" />
     <ClCompile Include="FlexLibrary\FlexMath\FlexMath.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Engine\EventCallback.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Input.h" />
+    <ClInclude Include="Engine\ObjectHandler.h" />
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\WindowManager.h" />
     <ClInclude Include="FlexLibrary\FlexMath\FlexMath.h" />

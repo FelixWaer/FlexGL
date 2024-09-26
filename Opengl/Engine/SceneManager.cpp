@@ -15,7 +15,7 @@ void SceneManager::begin_Scene()
 	CubeObject2.set_GameObjectPosition(glm::vec3(5.f, 0.f, 0.f));
 
 	TestLight.init_Light();
-	TestLight.set_LightPosition(glm::vec3(0.f, 100.f, 0.f));
+	TestLight.set_LightPosition(glm::vec3(0.f, 10.f, 0.f));
 	TestLight.set_LightColor(glm::vec3(1.f));
 
 	while (GameObjectsToBeAdded.empty() == false)

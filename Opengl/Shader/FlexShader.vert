@@ -16,7 +16,7 @@ out vec2 FragTexPos;
 void main()
 {
 	FragPos = vec3(PositionMatrix * vec4(aPos, 1.0));
-	FragNormal = aNormal;
+	FragNormal = normalize(mat3(transpose(inverse(PositionMatrix))) * aNormal);
 	FragColor = aColor;	
 	FragTexPos = aTexPos;
    	gl_Position = ModelMatrix * vec4(aPos, 1.0);

@@ -4,7 +4,7 @@ void ObjectHandler::update_Positions()
 {
 	for (size_t i = 0; i < ObjectPositions.size(); i++)
 	{
-		ObjectPositions[i] += ObjectVelocity;
+		ObjectPositions[i] += ObjectVelocity[i];
 	}
 }
 

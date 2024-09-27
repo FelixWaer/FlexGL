@@ -24,4 +24,7 @@ void BasicCube::game_Start()
 
 void BasicCube::tick(float deltaTime)
 {
+	GameObject::tick(deltaTime);
+
+	//set_GameObjectPosition(glm::vec3(0.f));
 }

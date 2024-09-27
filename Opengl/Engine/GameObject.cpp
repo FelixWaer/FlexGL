@@ -1,45 +1,51 @@
 #include "GameObject.h"
 
 #include "EngineManager.h"
+#include "SceneManager.h"
+#include "../FlexLibrary/FlexTimer/Flextimer.h"
 
 void GameObject::init_GameObject()
 {
-	EngineManager::get()->get_ActiveScene()->add_GameObjectToScene(this);
+	ParentScene = EngineManager::get()->get_ActiveScene();
+	ObjectID = ParentScene->add_GameObjectToScene(this);
 }
 
 void GameObject::tick(float deltaTime)
 {
-	GameObjectPosition += GameObjectVelocity * deltaTime;
-	GameObjectVelocity = glm::vec3(0.f);
 }
 
 void GameObject::game_Start()
 {
 }
 
+uint32_t GameObject::get_GameObjectID()
+{
+	return ObjectID;
+}
+
 void GameObject::set_GameObjectPosition(glm::vec3 newPosition)
 {
-	GameObjectPosition = newPosition;
+	ParentScene->get_ObjectHandler().set_ObjectPosition(ObjectID, newPosition);
 }
 
 glm::vec3& GameObject::get_GameObjectPosition()
 {
-	return GameObjectPosition;
+	return ParentScene->get_ObjectHandler().get_ObjectPosition(ObjectID);
 }
 
 glm::vec3* GameObject::get_GameObjectPositionPtr()
 {
-	return &GameObjectPosition;
+	return &TempPosition;
 }
 
 void GameObject::set_GameObjectVelocity(const glm::vec3& newVelocity)
 {
-	GameObjectVelocity += newVelocity;
+	ParentScene->get_ObjectHandler().set_ObjectVelocity(ObjectID, newVelocity);
 }
 
 glm::vec3& GameObject::get_GameObjectVelocity()
 {
-	return GameObjectVelocity;
+	return ParentScene->get_ObjectHandler().get_ObjectVelocity(ObjectID);
 }
 
 void GameObject::set_GameObjectFront(const glm::vec3& newFront)

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "GameObject.h"
+#include "ObjectHandler.h"
 #include "../GameObject Components/BoxCollision.h"
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObjects/EngineCamera.h"
@@ -21,16 +22,19 @@ public:
 
 	void set_SceneCamera(Camera* newSceneCamera);
 	Camera* get_SceneCamera();
+	ObjectHandler& get_ObjectHandler();
 	std::vector<Model*>& get_SceneModels();
 	std::vector<Light*>& get_SceneLights();
 
-	void add_GameObjectToScene(GameObject* gObject);
+	uint32_t add_GameObjectToScene(GameObject* gObject);
 	void add_BoxColliderToScene(BoxCollision* boxCollider);
 	void add_SphereColliderToScene(SphereCollision* sphereCollider);
 	void add_ModelToScene(Model* model);
 	void add_LightToScene(Light* light);
 
 	void turnOff_DebugMode(bool turnOff);
+
+
 private:
 	//Start of Temporary Code
 	Light TestLight;
@@ -48,6 +52,8 @@ private:
 
 	std::vector<Model*> SceneModels;
 	std::vector<Light*> SceneLights;
+
+	ObjectHandler GameObjectHandler;
 
 	void tick_GameObjects(float deltaTime);
 

@@ -36,6 +36,9 @@
     <Filter Include="FlexLibrary\FlexNet">
       <UniqueIdentifier>{e6926f7f-d63a-4308-800a-18f8b9704dfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FlexLibrary\FlexTImer">
+      <UniqueIdentifier>{af3b176f-47a1-49f4-ba0c-1ba289e176d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="Engine\ObjectHandler.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexLibrary\FlexTimer\FlexTimer.cpp">
+      <Filter>FlexLibrary\FlexTImer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="Engine\ObjectHandler.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexLibrary\FlexTimer\Flextimer.h">
+      <Filter>FlexLibrary\FlexTImer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

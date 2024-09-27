@@ -44,6 +44,7 @@ public:
 private:
 	std::string ModelMeshName = "Cube";
 	std::string ModelMaterial = "BasicMaterial";
+	uint32_t AttachedObjectID = 0;
 
 	bool HidingModel = false;
 

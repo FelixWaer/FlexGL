@@ -144,6 +144,7 @@
     <ClCompile Include="Engine\WindowManager.cpp" />
     <ClCompile Include="FlexLibrary\FlexMath\FlexMath.cpp" />
     <ClCompile Include="FlexLibrary\FlexNet Client\FlexClient.cpp" />
+    <ClCompile Include="FlexLibrary\FlexTimer\FlexTimer.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
     <ClCompile Include="GameObjects\BasicCube.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="FlexLibrary\FlexMath\FlexMath.h" />
     <ClInclude Include="FlexLibrary\FlexNet Client\ErrorHandler.h" />
     <ClInclude Include="FlexLibrary\FlexNet Client\FlexClient.h" />
+    <ClInclude Include="FlexLibrary\FlexTimer\Flextimer.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
     <ClInclude Include="GameObjects\BasicCube.h" />

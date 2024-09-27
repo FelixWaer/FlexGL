@@ -15,10 +15,9 @@ void EngineCamera::game_Start()
 	EngineManager::get()->get_ActiveScene()->set_SceneCamera(&ActiveCamera);
 
 	//Initialize Camera by adding it to the Camera Handler.
-	//Camera Handler does nothing right now
+	//TODO: Make Camera Handler do something
 	//testCamera.init_Camera();
 
-	//InputEvent = new EventCallback(this, &EngineCamera::test_Function);
 	W_InputEvent = make_Event(this, &EngineCamera::input_WFunction);
 	A_InputEvent = make_Event(this, &EngineCamera::input_AFunction);
 	S_InputEvent = make_Event(this, &EngineCamera::input_SFunction);

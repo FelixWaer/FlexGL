@@ -45,6 +45,11 @@ Camera* SceneManager::get_SceneCamera()
 	return SceneCamera;
 }
 
+ObjectHandler& SceneManager::get_ObjectHandler()
+{
+	return GameObjectHandler;
+}
+
 std::vector<Model*>& SceneManager::get_SceneModels()
 {
 	return SceneModels;
@@ -55,9 +60,10 @@ std::vector<Light*>& SceneManager::get_SceneLights()
 	return SceneLights;
 }
 
-void SceneManager::add_GameObjectToScene(GameObject* gObject)
+uint32_t SceneManager::add_GameObjectToScene(GameObject* gObject)
 {
 	GameObjectsToBeAdded.emplace(gObject);
+	return GameObjectHandler.add_ObjectToHandler(gObject);
 }
 
 void SceneManager::add_BoxColliderToScene(BoxCollision* boxCollider)

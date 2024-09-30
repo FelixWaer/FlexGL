@@ -3,9 +3,13 @@
 #include <iostream>
 #include <fstream>
 
+#include "FlexTimerHandler.h"
+
 FlexTimer::FlexTimer(std::string timerName)
 {
 	TimerName = timerName;
+	FlexTimerHandler::get()->add_TimerToHandle(timerName);
+
 	start_Timer();
 }
 
@@ -31,6 +35,7 @@ void FlexTimer::end_Timer()
 {
 	end = std::chrono::high_resolution_clock::now();
 	duration = end - start;
+	FlexTimerHandler::get()->add_DataToHandler(TimerName, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
 	write_Time();
 }
 

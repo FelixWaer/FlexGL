@@ -7,6 +7,8 @@
 #include <iostream>
 
 #include "Input.h"
+#include "../FlexLibrary/FlexTimer/Flextimer.h"
+#include "../FlexLibrary/FlexTimer/FlexTimerHandler.h"
 
 EngineManager::~EngineManager()
 {
@@ -113,11 +115,16 @@ void EngineManager::tick_Engine()
 	glPointSize(5);
 
 	/*-----End of Temporary Code-----*/
-	Input::call_KeyEvents();
+	{
+		FlexTimer timer("Tick time");
+		Input::call_KeyEvents();
 
-	ActiveScene->tick_Scene(DeltaTime);
+		ActiveScene->tick_Scene(DeltaTime);
 
-	RenderManager.render_Scene(ActiveScene);
+		RenderManager.render_Scene(ActiveScene);
 
-	Input::reset_Input();
+		Input::reset_Input();
+	}
+
+	FlexTimerHandler::get()->tick();
 }

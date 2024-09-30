@@ -36,7 +36,7 @@
     <Filter Include="FlexLibrary\FlexNet">
       <UniqueIdentifier>{e6926f7f-d63a-4308-800a-18f8b9704dfa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FlexLibrary\FlexTImer">
+    <Filter Include="FlexLibrary\FlexTimer">
       <UniqueIdentifier>{af3b176f-47a1-49f4-ba0c-1ba289e176d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -114,7 +114,13 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="FlexLibrary\FlexTimer\FlexTimer.cpp">
-      <Filter>FlexLibrary\FlexTImer</Filter>
+      <Filter>FlexLibrary\FlexTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\ModelHandler.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexLibrary\FlexTimer\FlexTimerHandler.cpp">
+      <Filter>FlexLibrary\FlexTimer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,7 +212,13 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="FlexLibrary\FlexTimer\Flextimer.h">
-      <Filter>FlexLibrary\FlexTImer</Filter>
+      <Filter>FlexLibrary\FlexTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\ModelHandler.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexLibrary\FlexTimer\FlexTimerHandler.h">
+      <Filter>FlexLibrary\FlexTimer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,13 +228,5 @@
     <Library Include="ProjectDependencies\Libraries\glfw3.lib" />
     <Library Include="ProjectDependencies\Libraries\glfw3_mt.lib" />
     <Library Include="ProjectDependencies\Libraries\glfw3dll.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Shader\Fragment_Shader.frag">
-      <Filter>Shader</Filter>
-    </Text>
-    <Text Include="Shader\Vertex_Shader.vert">
-      <Filter>Shader</Filter>
-    </Text>
   </ItemGroup>
 </Project>

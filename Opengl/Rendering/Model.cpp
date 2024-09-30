@@ -8,20 +8,23 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/GameObject.h"
 
+#include "../FlexLibrary/FlexTimer/Flextimer.h"
+
 void Model::init_Model()
 {
-	EngineManager::get()->get_ActiveScene()->add_ModelToScene(this);
+	ParentScene = EngineManager::get()->get_ActiveScene();
+	ModelID = ParentScene->add_ModelToScene(this);
 }
 
 void Model::attach_ToGameObject(GameObject* GO)
 {
-	AttachedModelPosition = GO->get_GameObjectPositionPtr();
-	AttachedObjectID = GO->get_GameObjectID();
+	ParentObject = GO;
 }
+
 
 void Model::attach_ToPosition(glm::vec3* attachedPosition)
 {
-	AttachedModelPosition = attachedPosition;
+	AttachedPosition = attachedPosition;
 }
 
 bool Model::is_ModelHidden() const
@@ -54,13 +57,13 @@ void Model::rotate_Model(glm::vec3 newRotation)
 	ModelRotation = newRotation;
 }
 
-glm::vec3 Model::get_ModelPosition() const
+glm::vec3& Model::get_ModelPosition()
 {
-	if (AttachedModelPosition == nullptr)
+	if (ParentObject == nullptr)
 	{
 		return ModelPosition;
 	}
-	return *AttachedModelPosition;
+	return ParentObject->get_GameObjectPosition();
 }
 
 void Model::set_ModelPosition(glm::vec3 newPosition)
@@ -68,14 +71,30 @@ void Model::set_ModelPosition(glm::vec3 newPosition)
 	ModelPosition = newPosition;
 }
 
-glm::mat4 Model::get_ModelMatrix() const
+glm::mat4& Model::get_ModelMatrix()
 {
-	glm::mat4 test(1.f);
-	test = glm::translate(glm::mat4(1.f), );
-	test *= glm::rotate(glm::mat4(1.f), glm::radians(ModelRotation.x), glm::vec3(1.f, 0.f, 0.f));
-	test *= glm::rotate(glm::mat4(1.f), glm::radians(ModelRotation.y), glm::vec3(0.f, 1.f, 0.f));
-	test *= glm::rotate(glm::mat4(1.f), glm::radians(ModelRotation.z), glm::vec3(0.f, 0.f, 1.f));
-	return glm::scale(test, ModelScale);
+	return ParentScene->get_ModelHandler().get_ModelMatrix(ModelID);
+}
+
+void Model::calculate_ModelMatrix()
+{
+	if (ParentObject == nullptr)
+	{
+		ModelMatrix = glm::translate(glm::mat4(1.f), ModelPosition);
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.x), glm::vec3(1.f, 0.f, 0.f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.y), glm::vec3(0.f, 1.f, 0.f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.z), glm::vec3(0.f, 0.f, 1.f));
+		ModelMatrix = glm::scale(ModelMatrix, ModelScale);
+
+		return;
+	}
+
+	//might be the faster method for calculating
+	ModelMatrix = glm::translate(glm::mat4(1.f), ParentObject->get_GameObjectPosition());
+	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.x), glm::vec3(1.f, 0.f, 0.f));
+	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.y), glm::vec3(0.f, 1.f, 0.f));
+	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.z), glm::vec3(0.f, 0.f, 1.f));
+	ModelMatrix = glm::scale(ModelMatrix, ModelScale);
 }
 
 std::string& Model::get_ModelMeshName()

@@ -8,6 +8,7 @@
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObjects/EngineCamera.h"
 #include "../GameObjects/BasicCube.h"
+#include "../Rendering/ModelHandler.h"
 #include "../Rendering/Model.h"
 #include "../Rendering/Camera.h"
 #include "../Rendering/Light.h"
@@ -23,13 +24,14 @@ public:
 	void set_SceneCamera(Camera* newSceneCamera);
 	Camera* get_SceneCamera();
 	ObjectHandler& get_ObjectHandler();
+	ModelHandler& get_ModelHandler();
 	std::vector<Model*>& get_SceneModels();
 	std::vector<Light*>& get_SceneLights();
 
 	uint32_t add_GameObjectToScene(GameObject* gObject);
 	void add_BoxColliderToScene(BoxCollision* boxCollider);
 	void add_SphereColliderToScene(SphereCollision* sphereCollider);
-	void add_ModelToScene(Model* model);
+	uint32_t add_ModelToScene(Model* model);
 	void add_LightToScene(Light* light);
 
 	void turnOff_DebugMode(bool turnOff);
@@ -41,6 +43,8 @@ private:
 	EngineCamera ActiveEngineCamera;
 	BasicCube CubeObject;
 	BasicCube CubeObject2;
+	std::vector<BasicCube*> Cubes;
+
 	//End of Temporary Code
 	Camera* SceneCamera = nullptr;
 
@@ -53,9 +57,11 @@ private:
 	std::vector<Model*> SceneModels;
 	std::vector<Light*> SceneLights;
 
-	ObjectHandler GameObjectHandler;
+	ObjectHandler SceneObjectHandler;
+	ModelHandler SceneModelHandler;
 
 	void tick_GameObjects(float deltaTime);
+	void calculate_AllModelMatrices();
 
 	void check_Collision();
 	bool calculate_BoxCollision(glm::vec3 boxPos_1, glm::vec3 boxPos_2, float boxHeight_1, float boxWidth_1, float boxDepth_1, float boxHeight_2, float boxWidth_2, float boxDepth_2);

@@ -8,7 +8,7 @@ class ObjectHandler
 {
 public:
 	void tick_Objects(float deltaTime);
-	void update_Positions();
+	void update_Positions(float deltaTime);
 
 	uint32_t add_ObjectToHandler(GameObject* gameObject);
 	void remove_ObjectFromHandler(uint32_t objectID);
@@ -23,11 +23,8 @@ private:
 	std::vector<GameObject*> GameObjects;
 	std::vector<glm::vec3> ObjectPositions;
 	std::vector<glm::vec3> ObjectVelocity;
-	std::vector<glm::mat4> ObjectMatrix;
-	std::queue<uint32_t> AvailableIDs;
+	std::queue<uint32_t> AvailableObjectIDs;
 
 	uint32_t NumberOfGameObjects = 0;
-
-	void calculate_ObjectMatrix();
 };
 

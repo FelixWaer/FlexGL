@@ -145,6 +145,7 @@
     <ClCompile Include="FlexLibrary\FlexMath\FlexMath.cpp" />
     <ClCompile Include="FlexLibrary\FlexNet Client\FlexClient.cpp" />
     <ClCompile Include="FlexLibrary\FlexTimer\FlexTimer.cpp" />
+    <ClCompile Include="FlexLibrary\FlexTimer\FlexTimerHandler.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
     <ClCompile Include="GameObjects\BasicCube.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Model.cpp" />
     <ClCompile Include="Rendering\ModelCreation.cpp" />
+    <ClCompile Include="Rendering\ModelHandler.cpp" />
     <ClCompile Include="Rendering\RenderManager.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
     <ClCompile Include="Rendering\Texture.cpp" />
@@ -174,6 +176,7 @@
     <ClInclude Include="FlexLibrary\FlexNet Client\ErrorHandler.h" />
     <ClInclude Include="FlexLibrary\FlexNet Client\FlexClient.h" />
     <ClInclude Include="FlexLibrary\FlexTimer\Flextimer.h" />
+    <ClInclude Include="FlexLibrary\FlexTimer\FlexTimerHandler.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
     <ClInclude Include="GameObjects\BasicCube.h" />
@@ -188,6 +191,7 @@
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\Model.h" />
     <ClInclude Include="Rendering\ModelCreation.h" />
+    <ClInclude Include="Rendering\ModelHandler.h" />
     <ClInclude Include="Rendering\RenderManager.h" />
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Rendering\Texture.h" />
@@ -200,10 +204,6 @@
     <Library Include="ProjectDependencies\Libraries\glfw3.lib" />
     <Library Include="ProjectDependencies\Libraries\glfw3dll.lib" />
     <Library Include="ProjectDependencies\Libraries\glfw3_mt.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Shader\Fragment_Shader.frag" />
-    <Text Include="Shader\Vertex_Shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

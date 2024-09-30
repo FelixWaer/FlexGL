@@ -91,10 +91,10 @@ void Mesh::load_MeshObj(const std::string& filePath)
 		}
 	}
 
-  //  for (const Triangle& triangle : Triangles)
-  //  {
-		//FLXMath::calculate_TriangleNormal(Vertices[triangle.FirstIndex], Vertices[triangle.SecondIndex], Vertices[triangle.ThirdIndex]);
-  //  }
+    for (const Triangle& triangle : Triangles)
+    {
+		FLXMath::calculate_TriangleNormal(Vertices[triangle.FirstIndex], Vertices[triangle.SecondIndex], Vertices[triangle.ThirdIndex]);
+    }
 
     bind_Buffer(GL_STATIC_DRAW);
 }

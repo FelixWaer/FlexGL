@@ -4,6 +4,7 @@
 
 #include <glm/glm.hpp>
 
+class SceneManager;
 class GameObject;
 
 class Model
@@ -27,11 +28,12 @@ public:
 	void rotate_Model(glm::vec3 newRotation);
 
 	//Model Position
-	glm::vec3 get_ModelPosition() const;
+	glm::vec3& get_ModelPosition();
 	void set_ModelPosition(glm::vec3 newPosition);
 
 	//Model Matrix
-	glm::mat4 get_ModelMatrix() const;
+	glm::mat4& get_ModelMatrix();
+	void calculate_ModelMatrix();
 
 	//Model Mesh
 	std::string& get_ModelMeshName();
@@ -41,14 +43,19 @@ public:
 	std::string& get_ModelMaterialName();
 	void set_ModelMaterial(const std::string& newMaterialName);
 
+	GameObject* ParentObject = nullptr;
+
 private:
 	std::string ModelMeshName = "Cube";
 	std::string ModelMaterial = "BasicMaterial";
-	uint32_t AttachedObjectID = 0;
 
 	bool HidingModel = false;
+	uint32_t ModelID = 0;
+	SceneManager* ParentScene = nullptr;
 
-	glm::vec3* AttachedModelPosition = nullptr;
+	glm::vec3* AttachedPosition = nullptr;
+
+	glm::mat4 ModelMatrix = glm::mat4(1.f);
 	glm::vec3 ModelPosition = glm::vec3(0.f);
 	glm::vec3 ModelScale = glm::vec3(1.f);
 	glm::vec3 ModelRotation = glm::vec3(0.f);

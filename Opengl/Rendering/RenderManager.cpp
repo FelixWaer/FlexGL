@@ -9,6 +9,7 @@
 
 #include "Model.h"
 #include "../Engine/EngineManager.h"
+#include "../FlexLibrary/FlexTimer/Flextimer.h"
 
 void RenderManager::init_RenderManager()
 {
@@ -16,7 +17,7 @@ void RenderManager::init_RenderManager()
 	load_MeshesFromFolder();
 	load_TexturesFromFolder();
 
-	MaterialMap[tempBasicMaterial].HasTexture = true;
+	MaterialMap[tempBasicMaterial].HasTexture = false;
 	MaterialMap[tempBasicMaterial].Shininess = 64.f;
 	MaterialMap[tempBasicMaterial].SpecularStrength = 0.5f;
 }
@@ -39,6 +40,8 @@ void RenderManager::cleanup_RenderManager()
 
 void RenderManager::render_Scene(SceneManager* sceneToRender)
 {
+	FlexTimer timer("Render Time");
+
 	Shader& shaderUsed = ShaderMap[tempShaderName];
 	shaderUsed.use_Shader();
 

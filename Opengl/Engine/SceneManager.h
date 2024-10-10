@@ -4,6 +4,7 @@
 
 #include "GameObject.h"
 #include "ObjectHandler.h"
+#include "ComponentManager.h"
 #include "../GameObject Components/BoxCollision.h"
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObjects/EngineCamera.h"
@@ -25,6 +26,7 @@ public:
 	Camera* get_SceneCamera();
 	ObjectHandler& get_ObjectHandler();
 	ModelHandler& get_ModelHandler();
+	ComponentManager& get_ComponentManager();
 	std::vector<Model*>& get_SceneModels();
 	std::vector<Light*>& get_SceneLights();
 
@@ -59,6 +61,7 @@ private:
 
 	ObjectHandler SceneObjectHandler;
 	ModelHandler SceneModelHandler;
+	ComponentManager SceneComponentManager;
 
 	void tick_GameObjects(float deltaTime);
 	void calculate_AllModelMatrices();

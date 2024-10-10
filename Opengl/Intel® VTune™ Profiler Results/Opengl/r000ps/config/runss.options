@@ -1,0 +1,17 @@
+-r
+C:\Coding\3D programmering\FlexGL\Opengl\Intel® VTune™ Profiler Results\Opengl\r000ps
+--stack-stitching
+--data-limit-mb=1000
+--disk-space-limit=0
+--mrte-type=java,dotnet
+--stack-unwind-limit=8388608
+--itt-config=frame
+--stackwalk=offline
+--mrte-mode=auto
+--type=cpu:counters:nostack
+--type=cpu:nostack
+--interval=100
+--platform-type=142
+--app-working-dir=C:\Coding\3D programmering\FlexGL\Opengl\
+--
+C:\Coding\3D programmering\FlexGL\x64\Debug\Opengl.exe

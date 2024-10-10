@@ -66,6 +66,11 @@ ModelHandler& SceneManager::get_ModelHandler()
 	return SceneModelHandler;
 }
 
+ComponentManager& SceneManager::get_ComponentManager()
+{
+	return SceneComponentManager;
+}
+
 std::vector<Model*>& SceneManager::get_SceneModels()
 {
 	return SceneModels;

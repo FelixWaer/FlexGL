@@ -135,6 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\ComponentHandler.cpp" />
+    <ClCompile Include="Engine\ComponentManager.cpp" />
     <ClCompile Include="Engine\EngineManager.cpp" />
     <ClCompile Include="Engine\EventCallback.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
@@ -162,9 +164,15 @@
     <ClCompile Include="Rendering\RenderManager.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
     <ClCompile Include="Rendering\Texture.cpp" />
+    <ClCompile Include="Systems\MovementSystem.cpp" />
+    <ClCompile Include="Systems\System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
+    <ClInclude Include="Components\ComponentHandler.h" />
+    <ClInclude Include="Components\MovementComponent.h" />
+    <ClInclude Include="Components\PositionComponent.h" />
+    <ClInclude Include="Engine\ComponentManager.h" />
     <ClInclude Include="Engine\EngineManager.h" />
     <ClInclude Include="Engine\EventCallback.h" />
     <ClInclude Include="Engine\GameObject.h" />
@@ -196,6 +204,8 @@
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Rendering\Texture.h" />
     <ClInclude Include="Rendering\MeshData.h" />
+    <ClInclude Include="Systems\MovementSystem.h" />
+    <ClInclude Include="Systems\System.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ProjectDependencies\Libraries\glfw3.dll" />

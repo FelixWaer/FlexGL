@@ -65,6 +65,51 @@ namespace FLXModel
 		mesh.bind_Buffer(GL_STATIC_DRAW);
 	}
 
+	void create_Square(Mesh& mesh, const glm::vec3& color)
+	{
+		mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.f), color);
+		mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.f), color);
+		mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, 0.f), color);
+		mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, 0.f), color);
+
+		mesh.Triangles.emplace_back(0, 1, 2);
+		mesh.Triangles.emplace_back(2, 3, 0);
+
+		mesh.bind_Buffer(GL_STATIC_DRAW);
+	}
+
+	void create_Grid(Mesh& mesh, int size)
+	{
+		int squareSize = 64;
+		glm::vec3 color = glm::vec3(1.f);
+		for (int i = 0; i < size; i++)
+		{
+			for (int j = 0; j < size; j++)
+			{
+				int id0 = mesh.Vertices.size();
+				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, j * squareSize, 0.f), color);
+				mesh.Vertices[id0].Texture = glm::vec2(0.0f, 1.0f);
+
+				int id1 = id0 + 1;
+				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, (j * squareSize) - squareSize, 0.f), color);
+				mesh.Vertices[id1].Texture = glm::vec2(0.0f, 0.0f);
+
+				int id2 = id0 + 2;
+				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, (j * squareSize) - squareSize, 0.f), color);
+				mesh.Vertices[id2].Texture = glm::vec2(1.0f, 0.0f);
+
+				int id3 = id0 + 3;
+				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, j * squareSize, 0.f), color);
+				mesh.Vertices[id3].Texture = glm::vec2(1.0f, 1.0f);
+
+				mesh.Triangles.emplace_back(id0, id1, id2);
+				mesh.Triangles.emplace_back(id2, id3, id0);
+			}
+		}
+
+		mesh.bind_Buffer(GL_STATIC_DRAW);
+	}	
+
 	void create_SphereLines(Mesh& lineModel, float radius, const glm::vec3& color)
 	{
 		float degrees = 22.5f;

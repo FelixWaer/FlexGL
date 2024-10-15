@@ -29,6 +29,11 @@ glm::vec3& Camera::get_CameraPosition()
 	return CameraPos;
 }
 
+glm::vec3& Camera::get_2DCameraPosition()
+{
+	return Camera2DPos;
+}
+
 glm::vec3 Camera::get_CameraRotation()
 {
 	return glm::vec3(Yaw, Pitch, 0.f);
@@ -71,6 +76,11 @@ void Camera::move_CameraSide(bool moveRight)
 void Camera::move_CameraUp(float yPos)
 {
 	CameraPos.y += yPos;
+}
+
+void Camera::move_2DCamera(glm::vec3 direction)
+{
+	Camera2DPos += direction * Camera2DSpeed * EngineManager::get()->get_DeltaTime();
 }
 
 void Camera::update_CameraRotation(float xRotation, float yRotation)

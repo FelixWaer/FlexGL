@@ -43,9 +43,12 @@ void EngineManager::init_Engine()
 
 	glEnable(GL_DEPTH_TEST);
 
-
 	RenderManager.init_RenderManager();
-
+	RenderManager.Render2D = true;
+	if (RenderManager.Render2D == true)
+	{
+		ActiveWindow.enable_Cursor(true);
+	}
 	SceneManager* basicScene = new SceneManager;
 	set_ActiveScene(basicScene);
 }
@@ -77,6 +80,11 @@ SceneManager* EngineManager::get_ActiveScene()
 WindowManager& EngineManager::get_ActiveWindow()
 {
 	return ActiveWindow;
+}
+
+RenderManager& EngineManager::get_RenderManager()
+{
+	return RenderManager;
 }
 
 float EngineManager::get_DeltaTime()

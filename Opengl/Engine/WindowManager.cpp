@@ -66,6 +66,28 @@ float WindowManager::get_AspectRatio()
     return static_cast<float>(WindowWidth) / static_cast<float>(WindowHeight);
 }
 
+double WindowManager::get_MousePositionX()
+{
+    return WindowManager::MousePositionX;
+}
+
+double WindowManager::get_MousePositionY()
+{
+    return WindowManager::MousePositionY;
+}
+
+void WindowManager::enable_Cursor(bool enable)
+{
+	if (enable == true)
+	{
+        glfwSetInputMode(WindowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+        glfwSetInputMode(WindowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+}
+
 void WindowManager::resize_Window(GLFWwindow* window, int newWidth, int newHeight)
 {
     glViewport(0, 0, newWidth, newHeight);
@@ -87,6 +109,8 @@ void WindowManager::mouse_Button_Callback(GLFWwindow* window, double xPos, doubl
     float yOffset = YPosMouse - yPos;
     XPosMouse = xPos;
     YPosMouse = yPos;
+    WindowManager::MousePositionX = xPos;
+    WindowManager::MousePositionY = yPos;
 
     EngineManager::get()->get_ActiveScene()->get_SceneCamera()->update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
 }

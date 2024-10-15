@@ -107,3 +107,20 @@ void ModelHandler::calculate_Matrices()
 		Matrices[id] = glm::scale(Matrices[id], Scales[id]);
 	}
 }
+
+void ModelHandler::calculate2DMatrices()
+{
+	FlexTimer timer("Data Driven 2D Matrix calculation");
+
+	for (size_t id = 0; id < Matrices.size(); id++)
+	{
+		if (Models[id] == nullptr)
+		{
+			Matrices[id] = glm::mat4(1.f);
+			return;
+		}
+
+		Matrices[id] = glm::translate(glm::mat4(1.f), Positions[id]);
+		Matrices[id] = glm::scale(Matrices[id], glm::vec3(Models[id]->get_ModelScale().x, Models[id]->get_ModelScale().y, 1.0f));
+	}
+}

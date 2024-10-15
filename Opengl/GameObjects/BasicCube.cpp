@@ -11,17 +11,19 @@ void BasicCube::game_Start()
 	//testModel.bind_ToGameObject(this);
 
 	//Set position of the Model
-	Cube.set_ModelPosition(glm::vec3(0.f));
+	Cube.set_ModelPosition(get_GameObjectPosition());
+	Cube.scale_Model(glm::vec3(64.f, 64.f, 1.f));
 
-	Cube.scale_Model(glm::vec3(1.f, 10.f, 10.f));
-	Cube.rotate_Model(glm::vec3(0.f, 0.f, 45.f));
+	//Cube.scale_Model(glm::vec3(10.f, 10.f, 0.f));
+	//Cube.rotate_Model(glm::vec3(0.f, 0.f, 0.f));
 
 	//collider.attach_ToGameObject(this);
 	//collider.set_SphereRadius(1.f);
 	//collider.enable_SphereVisible(true);
-	Cube.set_ModelMesh("Cube");
+	Cube.set_ModelMesh("Square");
+	Cube.set_ModelMaterial("ObjectMaterial");
 	add_Tag("BasicCube");
-	set_GameObjectVelocity(glm::vec3(1.f, 0.f, 0.f));
+	//set_GameObjectVelocity(glm::vec3(1.f, 0.f, 0.f));
 }
 
 void BasicCube::tick(float deltaTime)

@@ -68,6 +68,7 @@ glm::vec3& Model::get_ModelPosition()
 
 void Model::set_ModelPosition(glm::vec3 newPosition)
 {
+	ParentScene->get_ModelHandler().set_ModelPosition(ModelID, newPosition);
 	ModelPosition = newPosition;
 }
 
@@ -95,6 +96,11 @@ void Model::calculate_ModelMatrix()
 	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.y), glm::vec3(0.f, 1.f, 0.f));
 	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.z), glm::vec3(0.f, 0.f, 1.f));
 	ModelMatrix = glm::scale(ModelMatrix, ModelScale);
+}
+
+glm::mat4& Model::get_2DModelMatrix()
+{
+	return ParentScene->get_ModelHandler().get_ModelMatrix(ModelID);
 }
 
 std::string& Model::get_ModelMeshName()

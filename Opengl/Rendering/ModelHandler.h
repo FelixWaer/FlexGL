@@ -22,6 +22,7 @@ public:
 	void set_ModelScale(uint32_t modelID, glm::vec3&& newScale);
 	glm::mat4& get_ModelMatrix(uint32_t modelID);
 	void calculate_Matrices();
+	void calculate2DMatrices();
 
 private:
 	std::vector<Model*> Models;

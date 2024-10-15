@@ -152,6 +152,7 @@
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
     <ClCompile Include="GameObjects\BasicCube.cpp" />
     <ClCompile Include="GameObjects\EngineCamera.cpp" />
+    <ClCompile Include="GameObjects\Grid.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="GameObject Components\SphereCollision.h" />
     <ClInclude Include="GameObjects\BasicCube.h" />
     <ClInclude Include="GameObjects\EngineCamera.h" />
+    <ClInclude Include="GameObjects\Grid.h" />
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3native.h" />

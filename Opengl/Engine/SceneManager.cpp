@@ -10,22 +10,14 @@
 void SceneManager::begin_Scene()
 {
 	ActiveEngineCamera.init_GameObject();
-	CubeObject.init_GameObject();
-	CubeObject.set_GameObjectPosition(glm::vec3(-10.f, 0.f, 0.f));
-	CubeObject2.init_GameObject();
-	CubeObject2.set_GameObjectPosition(glm::vec3(10.f, 0.f, 0.f));
+
+	MapGrid.init_GameObject();
+
+	ActiveEngineCamera.set_GridMesh(&MapGrid);
 
 	TestLight.init_Light();
 	TestLight.set_LightPosition(glm::vec3(0.f, 0.f, 0.f));
 	TestLight.set_LightColor(glm::vec3(1.f));
-
-	for (int i = 0; i < 1000; i++)
-	{
-		BasicCube* tempCube = new BasicCube;
-		Cubes.emplace_back(tempCube);
-		tempCube->init_GameObject();
-		tempCube->set_GameObjectPosition(glm::vec3(0.f));
-	}
 
 	while (GameObjectsToBeAdded.empty() == false)
 	{
@@ -39,8 +31,18 @@ void SceneManager::begin_Scene()
 
 void SceneManager::tick_Scene(float deltaTime)
 {
+	while (GameObjectsToBeAdded.empty() == false)
+	{
+		GameObject* addedGameObject = GameObjectsToBeAdded.front();
+		GameObjectsToBeAdded.pop(),
+
+			addedGameObject->game_Start();
+		SceneGameObjects.emplace_back(addedGameObject);
+	}
+
 	SceneObjectHandler.update_Positions(deltaTime);
 	SceneModelHandler.calculate_Matrices();
+	SceneModelHandler.calculate2DMatrices();
 	calculate_AllModelMatrices();
 	check_Collision();
 	tick_GameObjects(deltaTime);

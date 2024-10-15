@@ -140,6 +140,9 @@
     <ClCompile Include="Systems\System.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Grid.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -255,6 +258,9 @@
     </ClInclude>
     <ClInclude Include="Systems\System.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Grid.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

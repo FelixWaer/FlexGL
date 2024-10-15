@@ -18,6 +18,7 @@ public:
 	void set_ActiveScene(SceneManager* newActiveScene);
 	SceneManager* get_ActiveScene();
 	WindowManager& get_ActiveWindow();
+	RenderManager& get_RenderManager();
 
 	float get_DeltaTime();
 	int get_WindowWidth();

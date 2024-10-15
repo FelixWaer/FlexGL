@@ -15,8 +15,10 @@ public:
 	void init_RenderManager();
 	void cleanup_RenderManager();
 	void render_Scene(SceneManager* sceneToRender);
-
+	Mesh& get_Mesh(std::string meshName);
+	bool Render2D = false;
 private:
+
 	std::unordered_map<std::string, Shader> ShaderMap;
 	std::unordered_map<std::string, Mesh> MeshMap;
 	std::unordered_map<std::string, Texture> TextureMap;
@@ -24,6 +26,7 @@ private:
 
 	std::string tempShaderName = " ";
 	std::string tempBasicMaterial = "BasicMaterial";
+	std::string tempObjectMaterial = "ObjectMaterial";
 
 	void load_ShadersFromFolder();
 	void load_MeshesFromFolder();

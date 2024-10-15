@@ -6,8 +6,10 @@
 #include <iostream>
 #include <fstream>
 #include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 #include "Model.h"
+#include "ModelCreation.h"
 #include "../Engine/EngineManager.h"
 #include "../FlexLibrary/FlexTimer/Flextimer.h"
 
@@ -20,6 +22,8 @@ void RenderManager::init_RenderManager()
 	MaterialMap[tempBasicMaterial].HasTexture = false;
 	MaterialMap[tempBasicMaterial].Shininess = 64.f;
 	MaterialMap[tempBasicMaterial].SpecularStrength = 0.5f;
+
+	MaterialMap[tempObjectMaterial].HasTexture = false;
 }
 
 void RenderManager::cleanup_RenderManager()
@@ -42,7 +46,79 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 {
 	FlexTimer timer("Render Time");
 
-	Shader& shaderUsed = ShaderMap[tempShaderName];
+	if (Render2D == true)
+	{
+		//std::cout << sceneToRender->get_SceneModels().size() << std::endl;;
+		Shader& shaderUsed = ShaderMap["Flex2DShader"];
+		shaderUsed.use_Shader();
+		std::vector<Model*>& sceneModels = sceneToRender->get_SceneModels();
+
+		for (int modelID = sceneModels.size() - 1; modelID >= 0; modelID--)
+		{
+			if (sceneModels[modelID]->is_ModelHidden() == true)
+			{
+				continue;
+			}
+
+			Material& modelMaterial = MaterialMap[sceneModels[modelID]->get_ModelMaterialName()];
+
+			if (MeshMap.contains(sceneModels[modelID]->get_ModelMeshName()) == false)
+			{
+				continue;
+			}
+
+			if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
+			{
+				TextureMap[modelMaterial.TextureName].use_Texture();
+			}
+
+			glm::mat4 modelMatrix2 = glm::ortho(0.f, static_cast<float>(EngineManager::get()->get_WindowWidth()),
+				static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
+
+			glm::mat4 testMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
+
+			shaderUsed.send_Matrix("ProjectionMatrix", modelMatrix2 * testMatrix);
+			shaderUsed.send_Matrix("ModelMatrix", sceneModels[modelID]->get_2DModelMatrix());
+
+			shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
+
+			render_Model(MeshMap[sceneModels[modelID]->get_ModelMeshName()]);
+		}
+		//for (Model* model : sceneToRender->get_SceneModels())
+		//{
+		//	if (model->is_ModelHidden() == true)
+		//	{
+		//		continue;
+		//	}
+
+		//	Material& modelMaterial = MaterialMap[model->get_ModelMaterialName()];
+
+		//	if (MeshMap.contains(model->get_ModelMeshName()) == false)
+		//	{
+		//		continue;
+		//	}
+
+		//	if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
+		//	{
+		//		TextureMap[modelMaterial.TextureName].use_Texture();
+		//	}
+
+		//	glm::mat4 modelMatrix2 = glm::ortho(0.f, static_cast<float>(EngineManager::get()->get_WindowWidth()),
+		//		static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
+
+		//	glm::mat4 testMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
+		//	shaderUsed.send_Matrix("ProjectionMatrix", modelMatrix2 * testMatrix);
+		//	shaderUsed.send_Matrix("ModelMatrix", model->get_2DModelMatrix());
+
+		//	shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
+
+		//	render_Model(MeshMap[model->get_ModelMeshName()]);
+		//}
+
+		return;
+	}
+
+	Shader& shaderUsed = ShaderMap["FlexShader"];
 	shaderUsed.use_Shader();
 
 	shaderUsed.send_Vec3("CameraPos", sceneToRender->get_SceneCamera()->get_CameraPosition());
@@ -78,6 +154,18 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 
 		render_Model(MeshMap[model->get_ModelMeshName()]);
 	}
+}
+
+Mesh& RenderManager::get_Mesh(std::string meshName)
+{
+	if (MeshMap.contains(meshName) == true)
+	{
+		return MeshMap[meshName];
+	}
+
+	Mesh tempMesh;
+
+	return tempMesh;
 }
 
 void RenderManager::load_ShadersFromFolder()
@@ -140,6 +228,14 @@ void RenderManager::load_MeshesFromFolder()
 	if (MeshMap.contains("Cube") == false)
 	{
 		MeshMap["Cube"].create_CubeMesh();
+	}
+	if (MeshMap.contains("Square") == false)
+	{
+		FLXModel::create_Square(MeshMap["Square"], glm::vec3(0.5f, 0.1f, 0.6f));
+	}
+	if (MeshMap.contains("Grid") == false)
+	{
+		FLXModel::create_Grid(MeshMap["Grid"], 100);
 	}
 }
 

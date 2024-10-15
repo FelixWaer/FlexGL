@@ -3,12 +3,17 @@
 #include "../Rendering/Camera.h"
 #include "../Engine/EventCallback.h"
 #include "../GameObject Components/SphereCollision.h"
+#include "../Components/Camera2D.h"
+
+class BasicCube;
+class Grid;
 
 class EngineCamera : public GameObject
 {
 public:
 	void game_Start() override;
 	void tick(float deltaTime) override;
+	void set_GridMesh(Grid* grid);
 
 private:
 	void input_WFunction();
@@ -16,6 +21,7 @@ private:
 	void input_SFunction();
 	void input_DFunction();
 	void input_LMouseFunction();
+	void input_RMouseFunction();
 	void input_ESCFunction();
 	void collision_Function(GameObject* otherGameObject);
 
@@ -24,9 +30,13 @@ private:
 	Event* S_InputEvent = nullptr;
 	Event* D_InputEvent = nullptr;
 	Event* LM_InputEvent = nullptr;
+	Event* RM_InputEvent = nullptr;
 	Event* ESC_InputEvent = nullptr;
 	Event* CollisionEvent = nullptr;
 
 	Camera ActiveCamera;
+
+	std::vector<BasicCube*> Cubes;
+	Grid* MapGrid = nullptr;
 };
 

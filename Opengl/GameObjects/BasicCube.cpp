@@ -12,7 +12,7 @@ void BasicCube::game_Start()
 
 	//Set position of the Model
 	Cube.set_ModelPosition(get_GameObjectPosition());
-	Cube.scale_Model(glm::vec3(64.f, 64.f, 1.f));
+	Cube.scale_Model(glm::vec3(64.f, 64.f, 0.f));
 
 	//Cube.scale_Model(glm::vec3(10.f, 10.f, 0.f));
 	//Cube.rotate_Model(glm::vec3(0.f, 0.f, 0.f));

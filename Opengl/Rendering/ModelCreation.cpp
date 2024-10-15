@@ -67,13 +67,24 @@ namespace FLXModel
 
 	void create_Square(Mesh& mesh, const glm::vec3& color)
 	{
+		int index0 = mesh.Vertices.size();
 		mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.f), color);
-		mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.f), color);
-		mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, 0.f), color);
-		mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, 0.f), color);
+		mesh.Vertices[index0].Texture = glm::vec2(0.f, 1.f);
 
-		mesh.Triangles.emplace_back(0, 1, 2);
-		mesh.Triangles.emplace_back(2, 3, 0);
+		int index1 = index0 + 1;
+		mesh.Vertices.emplace_back(glm::vec3(-0.5f, -0.5f, 0.f), color);
+		mesh.Vertices[index1].Texture = glm::vec2(0.f, 0.f);
+
+		int index2 = index0 + 2;
+		mesh.Vertices.emplace_back(glm::vec3(0.5f, -0.5f, 0.f), color);
+		mesh.Vertices[index2].Texture = glm::vec2(1.f, 0.f);
+
+		int index3 = index0 + 3;
+		mesh.Vertices.emplace_back(glm::vec3(0.5f, 0.5f, 0.f), color);
+		mesh.Vertices[index3].Texture = glm::vec2(1.f, 1.f);
+
+		mesh.Triangles.emplace_back(index0, index1, index2);
+		mesh.Triangles.emplace_back(index2, index3, index0);
 
 		mesh.bind_Buffer(GL_STATIC_DRAW);
 	}
@@ -88,11 +99,11 @@ namespace FLXModel
 			{
 				int id0 = mesh.Vertices.size();
 				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, j * squareSize, 0.f), color);
-				mesh.Vertices[id0].Texture = glm::vec2(0.0f, 1.0f);
+				mesh.Vertices[id0].Texture = glm::vec2(0.5f, 1.0f);
 
 				int id1 = id0 + 1;
 				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, (j * squareSize) - squareSize, 0.f), color);
-				mesh.Vertices[id1].Texture = glm::vec2(0.0f, 0.0f);
+				mesh.Vertices[id1].Texture = glm::vec2(0.5f, 0.0f);
 
 				int id2 = id0 + 2;
 				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, (j * squareSize) - squareSize, 0.f), color);

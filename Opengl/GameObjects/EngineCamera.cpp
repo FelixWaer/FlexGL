@@ -78,7 +78,17 @@ void EngineCamera::input_LMouseFunction()
 	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
 		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
 	tempPos -= ActiveCamera.get_2DCameraPosition();
-	newCube->set_GameObjectPosition(tempPos);
+
+	int x = tempPos.x;
+	x = x >> 6;
+	x = x << 6;
+	x += 32;
+	int y = tempPos.y;
+	y = y >> 6;
+	y = y << 6;
+	y += 32;
+
+	newCube->set_GameObjectPosition(glm::vec3(x, y, 0.0f));
 
 	Cubes.emplace_back(newCube);
 	std::cout << "Mouse pressed" << std::endl;

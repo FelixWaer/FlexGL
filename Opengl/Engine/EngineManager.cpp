@@ -41,7 +41,9 @@ void EngineManager::init_Engine()
 		return;
 	}
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	RenderManager.init_RenderManager();
 	RenderManager.Render2D = true;

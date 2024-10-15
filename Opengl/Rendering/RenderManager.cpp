@@ -19,11 +19,13 @@ void RenderManager::init_RenderManager()
 	load_MeshesFromFolder();
 	load_TexturesFromFolder();
 
-	MaterialMap[tempBasicMaterial].HasTexture = false;
+	MaterialMap[tempBasicMaterial].HasTexture = true;
+	MaterialMap[tempBasicMaterial].TextureName = "Atlas";
 	MaterialMap[tempBasicMaterial].Shininess = 64.f;
 	MaterialMap[tempBasicMaterial].SpecularStrength = 0.5f;
 
-	MaterialMap[tempObjectMaterial].HasTexture = false;
+	MaterialMap[tempObjectMaterial].HasTexture = true;
+	MaterialMap[tempObjectMaterial].TextureName = "Storage";
 }
 
 void RenderManager::cleanup_RenderManager()
@@ -53,16 +55,16 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 		shaderUsed.use_Shader();
 		std::vector<Model*>& sceneModels = sceneToRender->get_SceneModels();
 
-		for (int modelID = sceneModels.size() - 1; modelID >= 0; modelID--)
+		for (Model* model : sceneToRender->get_SceneModels())
 		{
-			if (sceneModels[modelID]->is_ModelHidden() == true)
+			if (model->is_ModelHidden() == true)
 			{
 				continue;
 			}
 
-			Material& modelMaterial = MaterialMap[sceneModels[modelID]->get_ModelMaterialName()];
+			Material& modelMaterial = MaterialMap[model->get_ModelMaterialName()];
 
-			if (MeshMap.contains(sceneModels[modelID]->get_ModelMeshName()) == false)
+			if (MeshMap.contains(model->get_ModelMeshName()) == false)
 			{
 				continue;
 			}
@@ -76,44 +78,13 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 				static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
 
 			glm::mat4 testMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
-
 			shaderUsed.send_Matrix("ProjectionMatrix", modelMatrix2 * testMatrix);
-			shaderUsed.send_Matrix("ModelMatrix", sceneModels[modelID]->get_2DModelMatrix());
+			shaderUsed.send_Matrix("ModelMatrix", model->get_2DModelMatrix());
 
 			shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
 
-			render_Model(MeshMap[sceneModels[modelID]->get_ModelMeshName()]);
+			render_Model(MeshMap[model->get_ModelMeshName()]);
 		}
-		//for (Model* model : sceneToRender->get_SceneModels())
-		//{
-		//	if (model->is_ModelHidden() == true)
-		//	{
-		//		continue;
-		//	}
-
-		//	Material& modelMaterial = MaterialMap[model->get_ModelMaterialName()];
-
-		//	if (MeshMap.contains(model->get_ModelMeshName()) == false)
-		//	{
-		//		continue;
-		//	}
-
-		//	if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
-		//	{
-		//		TextureMap[modelMaterial.TextureName].use_Texture();
-		//	}
-
-		//	glm::mat4 modelMatrix2 = glm::ortho(0.f, static_cast<float>(EngineManager::get()->get_WindowWidth()),
-		//		static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
-
-		//	glm::mat4 testMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
-		//	shaderUsed.send_Matrix("ProjectionMatrix", modelMatrix2 * testMatrix);
-		//	shaderUsed.send_Matrix("ModelMatrix", model->get_2DModelMatrix());
-
-		//	shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
-
-		//	render_Model(MeshMap[model->get_ModelMeshName()]);
-		//}
 
 		return;
 	}

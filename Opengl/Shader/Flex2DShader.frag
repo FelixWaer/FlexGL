@@ -11,7 +11,7 @@ out vec4 OutColor;
 void main()
 {   
 	if(HasTexture == true) {
-		OutColor = vec4(texture(Texture, FragTexPos).rgb, 0.0);
+		OutColor = texture(Texture, FragTexPos);
 	}
 	else{
 		OutColor = vec4(FragColor, 1.0f);

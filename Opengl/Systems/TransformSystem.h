@@ -1,12 +1,11 @@
 #pragma once
 #include "System.h"
 
-class MovementSystem : public System
+class TransformSystem : public System
 {
 public:
 	void update(float deltaTime) override;
 
 private:
-	
 };
 

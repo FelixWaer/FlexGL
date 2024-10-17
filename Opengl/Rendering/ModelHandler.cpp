@@ -14,7 +14,7 @@ uint32_t ModelHandler::add_ModelToHandler(Model* model)
 		Positions.emplace_back(0.f);
 		Rotations.emplace_back(0.f);
 		Scales.emplace_back(1.f);
-		Matrices.emplace_back(glm::mat4(1.f));
+		Matrices.emplace_back(1.f);
 		NumberOfModels++;
 		return NumberOfModels - 1;
 	}

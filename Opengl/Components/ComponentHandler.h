@@ -8,11 +8,11 @@ using EntityID = uint32_t;
 class IComponentHandler
 {
 public:
-	virtual void add_Component(EntityID id);
+	virtual void add_Component(EntityID id) = 0;
 };
 
 template <typename T>
-class ComponentHandler : IComponentHandler
+class ComponentHandler : public IComponentHandler
 {
 public:
 	void add_Component(EntityID id) override
@@ -24,6 +24,18 @@ public:
 		}
 		Components.emplace_back();
 		IndexMap[id] = Components.size() - 1;
+
+	}
+
+	T& get_Component(EntityID id)
+	{
+		if (IndexMap.contains(id) == true)
+		{
+			return Components[IndexMap[id]];
+		}
+
+		T temp;
+		return temp;
 	}
 
 	std::vector<T> Components;

@@ -7,12 +7,17 @@
 
 void MovementSystem::update(float deltaTime)
 {
-	ComponentHandler<PositionComponent>* posComponent = get_ComponentHandler<PositionComponent>();
-	ComponentHandler<MovementComponent>* moveComponent = get_ComponentHandler<MovementComponent>();
-
-	for (const std::pair<EntityID, uint32_t> index : moveComponent->IndexMap)
+	if (get_ComponentManager().check_IfHandlerExists<PositionComponent>() == false ||
+		get_ComponentManager().check_IfHandlerExists<MovementComponent>() == false)
 	{
-		posComponent->Components[posComponent->IndexMap[index.first]].Position += moveComponent->Components[index.second].Direction
-		* (moveComponent->Components[index.second].Direction * deltaTime);
+		return;
+	}
+
+	std::vector<PositionComponent>& posComponent = get_ComponentHandler<PositionComponent>()->Components;
+	std::vector<MovementComponent>& moveComponent = get_ComponentHandler<MovementComponent>()->Components;
+
+	for (int i = 0; i < moveComponent.size(); i++)
+	{
+		posComponent[i].Position += moveComponent[i].Direction * moveComponent[i].Speed * deltaTime;
 	}
 }

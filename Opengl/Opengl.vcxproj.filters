@@ -143,6 +143,12 @@
     <ClCompile Include="GameObjects\Grid.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\SystemManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\TransformSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -261,6 +267,18 @@
     </ClInclude>
     <ClInclude Include="GameObjects\Grid.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SpriteComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SystemManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TransformComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\TransformSystem.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

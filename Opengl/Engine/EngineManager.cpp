@@ -51,6 +51,8 @@ void EngineManager::init_Engine()
 	{
 		ActiveWindow.enable_Cursor(true);
 	}
+	SystemManagerTest.init_Systems();
+
 	SceneManager* basicScene = new SceneManager;
 	set_ActiveScene(basicScene);
 }
@@ -128,6 +130,8 @@ void EngineManager::tick_Engine()
 	{
 		FlexTimer timer("Tick time");
 		Input::call_KeyEvents();
+
+		SystemManagerTest.update_Systems(DeltaTime);
 
 		ActiveScene->tick_Scene(DeltaTime);
 

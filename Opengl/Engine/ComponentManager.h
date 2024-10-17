@@ -25,9 +25,10 @@ public:
 		if (ComponentHandlers.contains(typeid(T).name()) == false)
 		{
 			std::cout << "Failed at: " << __func__ << " ComponentHandler does not contain this Component Type" << std::endl;
-			return T();
+			T temp;
+			return temp;
 		}
-		ComponentHandler<T>* CH = ComponentHandlers[typeid(T).name()];
+		ComponentHandler<T>* CH = dynamic_cast<ComponentHandler<T>*>(ComponentHandlers[typeid(T).name()]);
 		return CH->Components[CH->IndexMap[id]];
 	}
 
@@ -42,12 +43,18 @@ public:
 		return dynamic_cast<ComponentHandler<T>*>(ComponentHandlers[typeid(T).name()]);
 	}
 
+	template <typename T>
+	bool check_IfHandlerExists()
+	{
+		return ComponentHandlers.contains(typeid(T).name());
+	}
+
 private:
 	std::unordered_map<std::string, IComponentHandler*> ComponentHandlers;
 
 	template <typename T>
 	void add_ComponentHandler()
 	{
-		ComponentHandlers[typeid(T).name()] = new ComponentHandler<T>;
+		ComponentHandlers[typeid(T).name()] = new ComponentHandler<T>();
 	}
 };

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "../Components/ComponentHandler.h"
 #include "glm/glm.hpp"
 
 class SceneManager;
@@ -32,8 +33,9 @@ protected:
 	glm::vec3 GameObjectFront = glm::vec3(0.f);
 	glm::vec3 TempPosition = glm::vec3(0.f);
 
+	SceneManager* ParentScene = nullptr;
+
 private:
 	uint32_t ObjectID = 0;
-	SceneManager* ParentScene = nullptr;
 	std::vector<std::string> tags;
 };

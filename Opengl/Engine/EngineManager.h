@@ -3,6 +3,7 @@
 #include "../Rendering/RenderManager.h"
 #include "SceneManager.h"
 #include "WindowManager.h"
+#include "SystemManager.h"
 
 class EngineManager
 {
@@ -32,6 +33,7 @@ private:
 	SceneManager* ActiveScene = nullptr;
 	WindowManager ActiveWindow;
 	RenderManager RenderManager;
+	SystemManager SystemManagerTest;
 
 	float DeltaTime = 0.f;
 	float LastFrame = 0.f;

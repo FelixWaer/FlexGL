@@ -24,6 +24,8 @@ void Grid::game_Start()
 	//collider.set_SphereRadius(1.f);
 	//collider.enable_SphereVisible(true);
 	GridModel.set_ModelMesh("Grid");
+
+	GridLayout.resize(100 * 100);
 }
 
 void Grid::tick(float deltaTime)
@@ -47,4 +49,34 @@ void Grid::test(glm::ivec2 tileCord)
 	gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.5f, 1.f);
 
 	gridMesh.rebind_Buffer(GL_STATIC_DRAW);
+
+	int gridIndex = tileCord.x + (100 * tileCord.y);
+
+	GridLayout[gridIndex] = 1;
+}
+
+void Grid::set_TileAsTaken(glm::ivec2 tileCord)
+{
+	int gridIndex = tileCord.x + (100 * tileCord.y);
+
+	GridLayout[gridIndex] = 1;
+}
+
+bool Grid::check_IfTileTaken(glm::ivec2 tileCord)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	{
+		return true;
+	}
+
+	int gridIndex = tileCord.x + (100 * tileCord.y);
+
+	if (GridLayout[gridIndex] == 1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

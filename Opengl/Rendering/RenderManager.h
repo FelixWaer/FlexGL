@@ -16,6 +16,7 @@ public:
 	void cleanup_RenderManager();
 	void render_Scene(SceneManager* sceneToRender);
 	Mesh& get_Mesh(std::string meshName);
+	Material& get_Material(std::string materialName);
 	bool Render2D = false;
 private:
 
@@ -27,6 +28,7 @@ private:
 	std::string tempShaderName = " ";
 	std::string tempBasicMaterial = "BasicMaterial";
 	std::string tempObjectMaterial = "ObjectMaterial";
+	std::string tempPlacementMaterial = "PlacementMaterial";
 
 	void load_ShadersFromFolder();
 	void load_MeshesFromFolder();

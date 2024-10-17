@@ -10,9 +10,11 @@ public:
 	void tick(float deltaTime) override;
 
 	void test(glm::ivec2 tileCord);
+	void set_TileAsTaken(glm::ivec2 tileCord);
+	bool check_IfTileTaken(glm::ivec2 tileCord);
 
 private:
 	Model GridModel;
-	//SphereCollision collider;
+	std::vector<int> GridLayout;
 };
 

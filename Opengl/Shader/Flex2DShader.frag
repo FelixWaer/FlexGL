@@ -19,6 +19,6 @@ void main()
 		OutColor = textureVec;
 	}
 	else{
-		OutColor = vec4(FragColor, 1.0f);
+		OutColor = vec4(FragColor + ColorHue, 1.0f);
 	}
 }

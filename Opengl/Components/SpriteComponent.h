@@ -4,6 +4,6 @@
 
 struct SpriteComponent
 {
-	std::string SpriteName;
+	std::string SpriteName = "Square";
 	std::string MaterialName = "ObjectMaterial";
 };

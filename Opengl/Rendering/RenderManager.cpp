@@ -33,6 +33,9 @@ void RenderManager::init_RenderManager()
 	MaterialMap[tempPlacementMaterial].HasTexture = true;
 	MaterialMap[tempPlacementMaterial].Transparency = 0.5f;
 	MaterialMap[tempPlacementMaterial].TextureName = "Barrel";
+
+	MaterialMap[tempEnemyMaterial].HasTexture = false;
+	MaterialMap[tempEnemyMaterial].ColorHue = glm::vec3(1.f, 0.f, 0.f);
 }
 
 void RenderManager::cleanup_RenderManager()
@@ -97,35 +100,36 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 			render_Model(MeshMap[model->get_ModelMeshName()]);
 		}
 
+		if (EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<SpriteComponent>() == false ||
+			EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<TransformComponent>() == false)
+		{
+			return;
+		}
 		ComponentHandler<SpriteComponent>* spriteComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<SpriteComponent>();
 		ComponentHandler<TransformComponent>* transComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<TransformComponent>();
 
-		if (spriteComponents != nullptr || transComponents != nullptr)
+		for (auto& element : spriteComponents->IndexMap)
 		{
-			for (auto& element : spriteComponents->IndexMap)
+			Material& modelMaterial = MaterialMap[spriteComponents->Components[element.second].MaterialName];
+
+			if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
 			{
-				Material& modelMaterial = MaterialMap[spriteComponents->Components[element.second].MaterialName];
-
-				if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
-				{
-					TextureMap[modelMaterial.TextureName].use_Texture();
-				}
-
-				glm::mat4 ProjectionMatrix = glm::ortho(0.f, static_cast<float>(EngineManager::get()->get_WindowWidth()),
-					static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
-
-				glm::mat4 CameraMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
-				shaderUsed.send_Matrix("ProjectionMatrix", ProjectionMatrix * CameraMatrix);
-				shaderUsed.send_Matrix("ModelMatrix", transComponents->get_Component(element.first).Matrix);
-
-				shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
-				shaderUsed.send_Float("Transparency", modelMaterial.Transparency);
-				shaderUsed.send_Vec3("ColorHue", modelMaterial.ColorHue);
-
-				render_Model(MeshMap["Square"]);
+				TextureMap[modelMaterial.TextureName].use_Texture();
 			}
-		}
 
+			glm::mat4 ProjectionMatrix = glm::ortho(0.f, static_cast<float>(EngineManager::get()->get_WindowWidth()),
+				static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
+
+			glm::mat4 CameraMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
+			shaderUsed.send_Matrix("ProjectionMatrix", ProjectionMatrix * CameraMatrix);
+			shaderUsed.send_Matrix("ModelMatrix", transComponents->get_Component(element.first).Matrix);
+
+			shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
+			shaderUsed.send_Float("Transparency", modelMaterial.Transparency);
+			shaderUsed.send_Vec3("ColorHue", modelMaterial.ColorHue);
+
+			render_Model(MeshMap[spriteComponents->Components[element.second].SpriteName]);
+		}
 
 		return;
 	}

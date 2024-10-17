@@ -28,7 +28,7 @@ void FlexTimerHandler::tick()
 				averageTime += number;
 			}
 			averageTime *= 0.001f;
-			//std::cout << "Timer: " << timer.first << " Average Time Used: " << averageTime << "ms" << std::endl;
+			//std::cout << "Timer: " << timer.first << " Average Time Used: " << averageTime << "micro" << std::endl;
 			timer.second.clear();
 		}
 	}

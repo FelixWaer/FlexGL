@@ -41,16 +41,16 @@ void FlexTimer::end_Timer()
 
 void FlexTimer::write_Time() const
 {
-	std::fstream file;
-	file.open("timers", std::ios::app);
+	//std::fstream file;
+	//file.open("timers", std::ios::app);
 
-	if (!file)
-	{
-		return;
-	}
-	file << TimerName << ": " << duration.count() * 1000.f << "ms" << std::endl;
+	//if (!file)
+	//{
+	//	return;
+	//}
+	//file << TimerName << ": " << duration.count() * 1000.f << "micro" << std::endl;
 
-	file.close();
+	//file.close();
 }
 
 

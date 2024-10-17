@@ -11,9 +11,9 @@ void SceneManager::begin_Scene()
 {
 	ActiveEngineCamera.init_GameObject();
 
-	MapGrid.init_GameObject();
+	//MapGrid.init_GameObject();
 
-	ActiveEngineCamera.set_GridMesh(&MapGrid);
+	//ActiveEngineCamera.set_GridMesh(&MapGrid);
 
 	TestLight.init_Light();
 	TestLight.set_LightPosition(glm::vec3(0.f, 0.f, 0.f));
@@ -71,6 +71,11 @@ ModelHandler& SceneManager::get_ModelHandler()
 ComponentManager& SceneManager::get_ComponentManager()
 {
 	return SceneComponentManager;
+}
+
+EntityManager& SceneManager::get_EntityManager()
+{
+	return SceneEntityManager;
 }
 
 std::vector<Model*>& SceneManager::get_SceneModels()

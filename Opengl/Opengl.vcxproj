@@ -138,6 +138,7 @@
     <ClCompile Include="Components\ComponentHandler.cpp" />
     <ClCompile Include="Engine\ComponentManager.cpp" />
     <ClCompile Include="Engine\EngineManager.cpp" />
+    <ClCompile Include="Engine\EntityManager.cpp" />
     <ClCompile Include="Engine\EventCallback.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
@@ -151,8 +152,12 @@
     <ClCompile Include="FlexLibrary\FlexTimer\FlexTimerHandler.cpp" />
     <ClCompile Include="GameObject Components\BoxCollision.cpp" />
     <ClCompile Include="GameObject Components\SphereCollision.cpp" />
+    <ClCompile Include="GameObjects\Barrel.cpp" />
     <ClCompile Include="GameObjects\BasicCube.cpp" />
+    <ClCompile Include="GameObjects\Enemy.cpp" />
     <ClCompile Include="GameObjects\EngineCamera.cpp" />
+    <ClCompile Include="GameObjects\Entities.cpp" />
+    <ClCompile Include="GameObjects\GameMap.cpp" />
     <ClCompile Include="GameObjects\Grid.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
@@ -166,19 +171,26 @@
     <ClCompile Include="Rendering\RenderManager.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
     <ClCompile Include="Rendering\Texture.cpp" />
+    <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Systems\CombatSystem.cpp" />
     <ClCompile Include="Systems\MovementSystem.cpp" />
     <ClCompile Include="Systems\System.cpp" />
     <ClCompile Include="Systems\TransformSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColliderInfo.h" />
+    <ClInclude Include="Components\CollisionComponent.h" />
     <ClInclude Include="Components\ComponentHandler.h" />
+    <ClInclude Include="Components\DamageComponent.h" />
+    <ClInclude Include="Components\HealthComponent.h" />
     <ClInclude Include="Components\MovementComponent.h" />
     <ClInclude Include="Components\PositionComponent.h" />
     <ClInclude Include="Components\SpriteComponent.h" />
+    <ClInclude Include="Components\TagComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Engine\ComponentManager.h" />
     <ClInclude Include="Engine\EngineManager.h" />
+    <ClInclude Include="Engine\EntityManager.h" />
     <ClInclude Include="Engine\EventCallback.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Input.h" />
@@ -193,8 +205,12 @@
     <ClInclude Include="FlexLibrary\FlexTimer\FlexTimerHandler.h" />
     <ClInclude Include="GameObject Components\BoxCollision.h" />
     <ClInclude Include="GameObject Components\SphereCollision.h" />
+    <ClInclude Include="GameObjects\Barrel.h" />
     <ClInclude Include="GameObjects\BasicCube.h" />
+    <ClInclude Include="GameObjects\Enemy.h" />
     <ClInclude Include="GameObjects\EngineCamera.h" />
+    <ClInclude Include="GameObjects\Entity.h" />
+    <ClInclude Include="GameObjects\GameMap.h" />
     <ClInclude Include="GameObjects\Grid.h" />
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h" />
     <ClInclude Include="ProjectDependencies\Includes\GLFW\glfw3.h" />
@@ -211,6 +227,8 @@
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Rendering\Texture.h" />
     <ClInclude Include="Rendering\MeshData.h" />
+    <ClInclude Include="Systems\CollisionSystem.h" />
+    <ClInclude Include="Systems\CombatSystem.h" />
     <ClInclude Include="Systems\MovementSystem.h" />
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Systems\TransformSystem.h" />

@@ -13,6 +13,8 @@ enum class Key
 	D = 68,
 	Zero = 48,
 	One = 49,
+	Two = 50,
+	Three = 51,
 	ESCAPE = 256,
 	LMouse = 0,
 	RMouse = 1,

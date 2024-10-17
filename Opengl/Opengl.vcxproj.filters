@@ -24,9 +24,6 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{9b85f562-d787-49db-8d85-803fa7d8a7c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{d6bea946-37b6-4db1-bb2b-88576892734f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FlexLibrary">
       <UniqueIdentifier>{9042799a-1987-4f9d-8380-7c823f4e61b5}</UniqueIdentifier>
     </Filter>
@@ -44,6 +41,9 @@
     </Filter>
     <Filter Include="Systems">
       <UniqueIdentifier>{3a341d35-0de9-485e-a415-5984b78159cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{b583087a-eb85-4ac2-b3e2-3a417921a5b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +147,27 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Systems\TransformSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Entities.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EntityManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Barrel.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\GameMap.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Enemy.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\CombatSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -278,6 +299,39 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Systems\TransformSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Entity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EntityManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Barrel.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GameMap.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Enemy.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TagComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\HealthComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CombatSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\DamageComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CollisionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollisionSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>

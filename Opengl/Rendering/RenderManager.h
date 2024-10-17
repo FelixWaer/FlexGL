@@ -29,6 +29,7 @@ private:
 	std::string tempBasicMaterial = "BasicMaterial";
 	std::string tempObjectMaterial = "ObjectMaterial";
 	std::string tempPlacementMaterial = "PlacementMaterial";
+	std::string tempEnemyMaterial = "EnemyMaterial";
 
 	void load_ShadersFromFolder();
 	void load_MeshesFromFolder();

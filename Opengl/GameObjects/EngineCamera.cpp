@@ -5,8 +5,23 @@
 #include "../Engine/EngineManager.h"
 #include "../Engine/Input.h"
 #include "../GameObjects/BasicCube.h"
+#include "Barrel.h"
+#include "Enemy.h"
+#include "GameMap.h"
+#include "../Components/MovementComponent.h"
+#include "../Components/PositionComponent.h"
+#include "../Components/SpriteComponent.h"
+#include "../Components/TagComponent.h"
+
 void EngineCamera::game_Start()
 {
+	GridMap = new GameMap;
+	GridMap->create_Enity();
+
+	Player = new Enemy;
+	Player->create_Enity();
+	Player->get_Component<MovementComponent>().Speed = 150.f;
+
 	//Set the Camera position
 	ActiveCamera.update_CameraPosition(glm::vec3(0.f, 0.f, 5.f));
 
@@ -23,6 +38,8 @@ void EngineCamera::game_Start()
 	S_InputEvent = make_Event(this, &EngineCamera::input_SFunction);
 	D_InputEvent = make_Event(this, &EngineCamera::input_DFunction);
 	One_InputEvent = make_Event(this, &EngineCamera::input_OneFunction);
+	Two_InputEvent = make_Event(this, &EngineCamera::input_TwoFunction);
+	Three_InputEvent = make_Event(this, &EngineCamera::input_ThreeFunction);
 	LM_InputEvent = make_Event(this, &EngineCamera::input_LMouseFunction);
 	RM_InputEvent = make_Event(this, &EngineCamera::input_RMouseFunction);
 	ESC_InputEvent = make_Event(this, &EngineCamera::input_ESCFunction);
@@ -33,6 +50,8 @@ void EngineCamera::game_Start()
 	Input::bind_EventToKey(S_InputEvent, Key::S, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(D_InputEvent, Key::D, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(One_InputEvent, Key::One, KeyPress::OnPress);
+	Input::bind_EventToKey(Two_InputEvent, Key::Two, KeyPress::OnPress);
+	Input::bind_EventToKey(Three_InputEvent, Key::Three, KeyPress::OnPress);
 	Input::bind_EventToKey(LM_InputEvent, Key::LMouse, KeyPress::OnPress);
 	Input::bind_EventToKey(RM_InputEvent, Key::RMouse, KeyPress::OnPress);
 	Input::bind_EventToKey(ESC_InputEvent, Key::ESCAPE, KeyPress::OnPress);
@@ -42,11 +61,29 @@ void EngineCamera::tick(float deltaTime)
 {
 	set_GameObjectPosition(ActiveCamera.get_CameraPosition());
 
-	if (IsPlacing == true && PlaceCube != nullptr)
+	if (glm::distance(Player->get_Component<PositionComponent>().Position, PlaceToMove) < 10.f)
 	{
-		glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
-			EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
-		tempPos -= ActiveCamera.get_2DCameraPosition();
+		Player->get_Component<MovementComponent>().Direction = glm::vec3(0.f);
+	}
+
+	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
+		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
+	tempPos -= ActiveCamera.get_2DCameraPosition();
+
+	for (Enemy* enemy : Enemies)
+	{
+		if (glm::distance(tempPos, enemy->get_Component<PositionComponent>().Position) < 10.f)
+		{
+			continue;
+		}
+		glm::vec3 tempVec = glm::normalize(tempPos - enemy->get_Component<PositionComponent>().Position);
+		tempVec.z = 0.f;
+
+		enemy->get_Component<MovementComponent>().Direction = tempVec;
+	}
+
+	if (IsPlacing == true && Placeable != nullptr)
+	{
 
 		glm::ivec2 gridCord;
 
@@ -63,9 +100,9 @@ void EngineCamera::tick(float deltaTime)
 
 		gridCord.y += 1;
 
-		PlaceCube->update_Position(glm::vec3(x, y, 0.0f));
+		Placeable->get_Component<PositionComponent>().Position = glm::vec3(x, y, 0.0f);
 
-		if (MapGrid->check_IfTileTaken(gridCord) == true)
+		if (GridMap->check_IfTileTaken(gridCord) == true)
 		{
 			EngineManager::get()->get_RenderManager().get_Material("PlacementMaterial").ColorHue = glm::vec3(1.f, 0.f, 0.f);
 		}
@@ -76,9 +113,9 @@ void EngineCamera::tick(float deltaTime)
 	}
 }
 
-void EngineCamera::set_GridMesh(Grid* grid)
+void EngineCamera::set_GridMesh(GameMap* grid)
 {
-	MapGrid = grid;
+	GridMap = grid;
 }
 
 void EngineCamera::input_WFunction()
@@ -107,11 +144,10 @@ void EngineCamera::input_DFunction()
 
 void EngineCamera::input_OneFunction()
 {
-	if (IsPlacing == false)
+	if (IsPlacing == false && ControllerMode == false)
 	{
-		PlaceCube = new BasicCube;
-		PlaceCube->init_GameObject();
-		PlaceCube->init_Entity();
+		Placeable = new Barrel;
+		Placeable->create_Enity();
 
 		glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
 			EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
@@ -126,9 +162,9 @@ void EngineCamera::input_OneFunction()
 		y = y << 6;
 		y += 32;
 
-		PlaceCube->set_GameObjectPosition(glm::vec3(x, y, 0.0f));
-		PlaceCube->update_Position(glm::vec3(x, y, 0.0f));
-		PlaceCube->set_Material("PlacementMaterial");
+		Placeable->get_Component<PositionComponent>().Position = glm::vec3(x, y, 0.0f);
+		Placeable->get_Component<SpriteComponent>().MaterialName = "PlacementMaterial";
+
 		IsPlacing = true;
 	}
 	else
@@ -139,8 +175,59 @@ void EngineCamera::input_OneFunction()
 	}
 }
 
+void EngineCamera::input_TwoFunction()
+{
+	if (IsPlacing == false && ControllerMode == false)
+	{
+		Placeable = new Enemy;
+		Placeable->create_Enity();
+
+		glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
+			EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
+		tempPos -= ActiveCamera.get_2DCameraPosition();
+
+		int x = tempPos.x;
+		x = x >> 6;
+		x = x << 6;
+		x += 32;
+		int y = tempPos.y;
+		y = y >> 6;
+		y = y << 6;
+		y += 32;
+
+		Placeable->get_Component<PositionComponent>().Position = glm::vec3(x, y, 0.0f);
+		Placeable->get_Component<SpriteComponent>().MaterialName = "EnemyMaterial";
+
+		IsPlacing = true;
+	}
+	else
+	{
+		//delete PlaceCube;
+		//PlaceCube = nullptr;
+		//IsPlacing = false;
+	}
+}
+
+void EngineCamera::input_ThreeFunction()
+{
+	if (IsPlacing == false && ControllerMode == false)
+	{
+		ControllerMode = true;
+	}
+	else
+	{
+		ControllerMode = false;
+	}
+}
+
 void EngineCamera::input_LMouseFunction()
 {
+	if (ControllerMode == true)
+	{
+		move_Player();
+		return;
+	}
+
 	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
 		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
 	tempPos -= ActiveCamera.get_2DCameraPosition();
@@ -161,21 +248,26 @@ void EngineCamera::input_LMouseFunction()
 	gridCord.y += 1;
 
 
-	if (MapGrid->check_IfTileTaken(gridCord) == false)
+	if (GridMap->check_IfTileTaken(gridCord) == false && Placeable != nullptr)
 	{
-		BasicCube* newCube = new BasicCube;
-		newCube->init_GameObject();
-		newCube->init_Entity();
+		//Barrel* barrel = new Barrel;
+		//barrel->create_Enity();
+		Placeable->get_Component<PositionComponent>().Position = glm::vec3(x, y, 0.0f);
+		if (Placeable->get_Component<SpriteComponent>().MaterialName == "PlacementMaterial")
+		{
+			Placeable->get_Component<SpriteComponent>().MaterialName = "ObjectMaterial";
+		}
 
-		newCube->update_Position(glm::vec3(x, y, 0.0f));
-		newCube->set_Material("ObjectMaterial");
+		if (Placeable->get_Component<TagComponent>().Tag == "Enemy")
+		{
+			Enemies.emplace_back(static_cast<Enemy*>(Placeable));
+		}
 
-		Cubes.emplace_back(newCube);
+		Placeable = nullptr;
 
-		std::cout << "Mouse pressed" << std::endl;
-		std::cout << "new XPos: " << tempPos.x << " new YPos: " << tempPos.y << std::endl;
+		IsPlacing = false;
 
-		MapGrid->set_TileAsTaken(gridCord);
+		GridMap->set_TileAsTaken(gridCord);
 	}
 }
 
@@ -192,9 +284,9 @@ void EngineCamera::input_RMouseFunction()
 	gridCord.y = gridCord.y >> 6;
 	gridCord.y += 1;
 
-	if (MapGrid->check_IfTileTaken(gridCord) == false)
+	if (GridMap->check_IfTileTaken(gridCord) == false)
 	{
-		MapGrid->test(gridCord);
+		GridMap->test(gridCord);
 	}
 }
 
@@ -214,4 +306,23 @@ void EngineCamera::collision_Function(GameObject* otherGameObject)
 	{
 		std::cout << "BasicCube" << std::endl;
 	}
+}
+
+void EngineCamera::move_Player()
+{
+	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
+	EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
+	tempPos -= ActiveCamera.get_2DCameraPosition();
+
+	glm::vec3 tempPlayerVec = glm::normalize(tempPos - Player->get_Component<PositionComponent>().Position);
+
+	Player->get_Component<MovementComponent>().Direction = tempPlayerVec;
+	PlaceToMove = tempPos;
+
+	//for (Enemy* enemy : Enemies)
+	//{
+	//	glm::vec3 tempVec = glm::normalize(tempPos - enemy->get_Component<PositionComponent>().Position);
+
+	//	enemy->get_Component<MovementComponent>().Direction = tempVec;
+	//}
 }

@@ -36,6 +36,9 @@ void RenderManager::init_RenderManager()
 
 	MaterialMap[tempEnemyMaterial].HasTexture = false;
 	MaterialMap[tempEnemyMaterial].ColorHue = glm::vec3(1.f, 0.f, 0.f);
+
+	MaterialMap[tempPlayerMaterial].HasTexture = false;
+	MaterialMap[tempPlayerMaterial].ColorHue = glm::vec3(0.f, 0.f, 1.f);
 }
 
 void RenderManager::cleanup_RenderManager()
@@ -63,43 +66,6 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 		Shader& shaderUsed = ShaderMap["Flex2DShader"];
 		shaderUsed.use_Shader();
 
-		//std::cout << sceneToRender->get_SceneModels().size() << std::endl;
-
-		std::vector<Model*>& sceneModels = sceneToRender->get_SceneModels();
-
-		for (Model* model : sceneToRender->get_SceneModels())
-		{
-			if (model->is_ModelHidden() == true)
-			{
-				continue;
-			}
-
-			Material& modelMaterial = MaterialMap[model->get_ModelMaterialName()];
-
-			if (MeshMap.contains(model->get_ModelMeshName()) == false)
-			{
-				continue;
-			}
-
-			if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
-			{
-				TextureMap[modelMaterial.TextureName].use_Texture();
-			}
-
-			glm::mat4 modelMatrix2 = glm::ortho(0.f, static_cast<float>(EngineManager::get()->get_WindowWidth()),
-				static_cast<float>(EngineManager::get()->get_WindowHeight()), 0.0f, -1.f, 1.f);
-
-			glm::mat4 testMatrix = glm::translate(glm::mat4(1.f), sceneToRender->get_SceneCamera()->get_2DCameraPosition());
-			shaderUsed.send_Matrix("ProjectionMatrix", modelMatrix2 * testMatrix);
-			shaderUsed.send_Matrix("ModelMatrix", model->get_2DModelMatrix());
-
-			shaderUsed.send_Bool("HasTexture", modelMaterial.HasTexture);
-			shaderUsed.send_Float("Transparency", modelMaterial.Transparency);
-			shaderUsed.send_Vec3("ColorHue", modelMaterial.ColorHue);
-
-			render_Model(MeshMap[model->get_ModelMeshName()]);
-		}
-
 		if (EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<SpriteComponent>() == false ||
 			EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<TransformComponent>() == false)
 		{
@@ -110,6 +76,11 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 
 		for (auto& element : spriteComponents->IndexMap)
 		{
+			if (spriteComponents->Components[element.second].Render == false)
+			{
+				continue;
+			}
+
 			Material& modelMaterial = MaterialMap[spriteComponents->Components[element.second].MaterialName];
 
 			if (modelMaterial.HasTexture == true && TextureMap.contains(modelMaterial.TextureName) == true)
@@ -259,7 +230,7 @@ void RenderManager::load_MeshesFromFolder()
 	}
 	if (MeshMap.contains("Square") == false)
 	{
-		FLXModel::create_Square(MeshMap["Square"], glm::vec3(0.5f, 0.1f, 0.6f));
+		FLXModel::create_Square(MeshMap["Square"]);
 	}
 	if (MeshMap.contains("Grid") == false)
 	{

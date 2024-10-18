@@ -6,6 +6,7 @@
 #include "../Components/CollisionComponent.h"
 #include "../Components/HealthComponent.h"
 #include "../Components/DamageComponent.h"
+#include "../Components/TagComponent.h"
 
 void CollisionSystem::update(float deltaTime)
 {
@@ -14,6 +15,8 @@ void CollisionSystem::update(float deltaTime)
 	{
 		return;
 	}
+
+	ComponentHandler<TagComponent>* tagHandler = get_ComponentHandler<TagComponent>();
 
 	std::vector<PositionComponent>& posComponents = get_ComponentHandler<PositionComponent>()->Components;
 	std::unordered_map<EntityID, uint32_t>& indexMapPos = get_ComponentHandler<PositionComponent>()->IndexMap;
@@ -24,6 +27,7 @@ void CollisionSystem::update(float deltaTime)
 	std::vector<HealthComponent>& healthComponents = get_ComponentHandler<HealthComponent>()->Components;
 	std::unordered_map<EntityID, uint32_t>& indexMapHealth = get_ComponentHandler<HealthComponent>()->IndexMap;
 
+	ComponentHandler<DamageComponent>* damageHandler = get_ComponentHandler<DamageComponent>();
 	std::vector<DamageComponent>& damageComponents = get_ComponentHandler<DamageComponent>()->Components;
 	std::unordered_map<EntityID, uint32_t>& indexMapDamage = get_ComponentHandler<DamageComponent>()->IndexMap;
 
@@ -36,11 +40,17 @@ void CollisionSystem::update(float deltaTime)
 				continue;
 			}
 
-			float distance = glm::distance(posComponents[indexMapPos[i.first]].Position, posComponents[indexMapPos[j.first]].Position);
-
-			if (distance <= collisionComponents[indexMapCollision[i.first]].Radius + collisionComponents[indexMapCollision[j.first]].Radius)
+			if (tagHandler->get_Component(i.first).Tag == "Player" && tagHandler->get_Component(j.first).Tag == "Enemy"
+				|| tagHandler->get_Component(i.first).Tag == "Enemy" && tagHandler->get_Component(j.first).Tag == "Player")
 			{
-				healthComponents[indexMapHealth[j.first]].DamageTaken += damageComponents[indexMapDamage[i.first]].Damage;
+				float distance = glm::distance(posComponents[indexMapPos[i.first]].Position, posComponents[indexMapPos[j.first]].Position);
+
+				if (distance <= collisionComponents[indexMapCollision[i.first]].Radius &&
+					damageHandler->get_Component(i.first).CurrentTime >= damageHandler->get_Component(i.first).CooldownTimer)
+				{
+					healthComponents[indexMapHealth[j.first]].DamageTaken += damageComponents[indexMapDamage[i.first]].Damage;
+					damageHandler->get_Component(i.first).CurrentTime = 0.f;
+				}
 			}
 		}
 	}

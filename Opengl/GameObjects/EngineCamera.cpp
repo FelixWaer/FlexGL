@@ -8,6 +8,9 @@
 #include "Barrel.h"
 #include "Enemy.h"
 #include "GameMap.h"
+#include "../Components/CollisionComponent.h"
+#include "../Components/DamageComponent.h"
+#include "../Components/HealthComponent.h"
 #include "../Components/MovementComponent.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/SpriteComponent.h"
@@ -20,7 +23,12 @@ void EngineCamera::game_Start()
 
 	Player = new Enemy;
 	Player->create_Enity();
+	Player->get_Component<PositionComponent>().Position += glm::vec3(0.f, 400.f, 0.f);
 	Player->get_Component<MovementComponent>().Speed = 150.f;
+	Player->get_Component<SpriteComponent>().MaterialName = "PlayerMaterial";
+	Player->get_Component<CollisionComponent>().Radius = 100.f;
+	Player->get_Component<TagComponent>().Tag = "Player";
+	Player->get_Component<DamageComponent>().Damage = 100.f;
 
 	//Set the Camera position
 	ActiveCamera.update_CameraPosition(glm::vec3(0.f, 0.f, 5.f));
@@ -61,26 +69,30 @@ void EngineCamera::tick(float deltaTime)
 {
 	set_GameObjectPosition(ActiveCamera.get_CameraPosition());
 
+	glm::vec3 newLifeColor(0.f, 0.f, 1.f);
+	newLifeColor *= (Player->get_Component<HealthComponent>().Health / 100.f);
+	EngineManager::get()->get_RenderManager().get_Material("PlayerMaterial").ColorHue = newLifeColor;
+
 	if (glm::distance(Player->get_Component<PositionComponent>().Position, PlaceToMove) < 10.f)
 	{
 		Player->get_Component<MovementComponent>().Direction = glm::vec3(0.f);
 	}
 
-	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
-		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
-	tempPos -= ActiveCamera.get_2DCameraPosition();
-
 	for (Enemy* enemy : Enemies)
 	{
-		if (glm::distance(tempPos, enemy->get_Component<PositionComponent>().Position) < 10.f)
+		if (glm::distance(Player->get_Component<PositionComponent>().Position, enemy->get_Component<PositionComponent>().Position) < 10.f)
 		{
 			continue;
 		}
-		glm::vec3 tempVec = glm::normalize(tempPos - enemy->get_Component<PositionComponent>().Position);
+		glm::vec3 tempVec = glm::normalize(Player->get_Component<PositionComponent>().Position - enemy->get_Component<PositionComponent>().Position);
 		tempVec.z = 0.f;
 
 		enemy->get_Component<MovementComponent>().Direction = tempVec;
 	}
+
+	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
+		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
+	tempPos -= ActiveCamera.get_2DCameraPosition();
 
 	if (IsPlacing == true && Placeable != nullptr)
 	{

@@ -2,7 +2,6 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
-
 struct TransformComponent
 {
 	glm::vec3 Rotation = glm::vec3(0.f);

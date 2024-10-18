@@ -65,8 +65,10 @@ namespace FLXModel
 		mesh.bind_Buffer(GL_STATIC_DRAW);
 	}
 
-	void create_Square(Mesh& mesh, const glm::vec3& color)
+	void create_Square(Mesh& mesh)
 	{
+		const glm::vec3 color(0.f);
+
 		int index0 = mesh.Vertices.size();
 		mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.f), color);
 		mesh.Vertices[index0].Texture = glm::vec2(0.f, 1.f);

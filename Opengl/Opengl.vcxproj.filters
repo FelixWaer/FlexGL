@@ -170,6 +170,9 @@
     <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Bullet.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -333,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="Systems\CollisionSystem.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Bullet.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

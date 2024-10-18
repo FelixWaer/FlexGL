@@ -24,9 +24,10 @@ void Enemy::init_Entity()
 	get_Component<TagComponent>().Tag = "Enemy";
 	get_Component<HealthComponent>().Health = 100.f;
 	get_Component<DamageComponent>().Damage = 20.f;
+	get_Component<DamageComponent>().CooldownTimer = 2.f;
 	get_Component<CollisionComponent>().Radius = 64.f;
 	get_Component<SpriteComponent>().MaterialName = "EnemyMaterial";
 	TransformComponent& transComp = get_Component<TransformComponent>();
 	transComp.Rotation = glm::vec3(0.f);
-	transComp.Scale = glm::vec3(64.f, 64.f, 0.f);
+	transComp.Scale = glm::vec3(32.f, 32.f, 0.f);
 }

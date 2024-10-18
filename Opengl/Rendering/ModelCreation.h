@@ -9,7 +9,7 @@ namespace FLXModel
 {
 	void create_Cube(Mesh& model, const glm::vec3& color, bool reverseNormals = false);
 
-	void create_Square(Mesh& mesh, const glm::vec3& color);
+	void create_Square(Mesh& mesh);
 
 	void create_Grid(Mesh& mesh, int size);
 

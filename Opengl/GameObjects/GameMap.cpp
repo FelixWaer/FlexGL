@@ -144,17 +144,17 @@ void GameMap::change_WallState(glm::ivec2 tileCord)
 	switch (WallState)
 	{
 	case SingleWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.4f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.4f, 1.0f);
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.60f, 1.0f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.60f, 0.50f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.80f, 0.50f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.80f, 1.0f);
 		break;
 
 	case ReverseCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.0f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.0f, 0.5f);
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 1.0f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.0f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.0f, 1.0f);
 		break;
 
 	case VerticalWall:
@@ -172,17 +172,17 @@ void GameMap::change_WallState(glm::ivec2 tileCord)
 		break;
 
 	case Corner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.0f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.0f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.20f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.20f, 0.5f);
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.0f, 1.0f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.0f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.20f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.20f, 1.0f);
 		break;
 
 	case HorizontalWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.40f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.40f, 0.5f);
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 1.0f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.40f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.40f, 1.0f);
 		break;
 
 	case InsideCorner:
@@ -193,10 +193,10 @@ void GameMap::change_WallState(glm::ivec2 tileCord)
 		break;
 
 	case MiddleWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.60f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.60f, 0.50f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.80f, 0.50f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.80f, 1.0f);
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.60f, 0.5f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.60f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.80f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.80f, 0.5f);
 		break;
 
 	default:

@@ -4,6 +4,15 @@
 #include "../Rendering/RenderManager.h"
 #include "glad/glad.h"
 
+enum BlockState
+{
+	No_State = 0,
+	Ground = 1 << 0,
+	Floor = 1 << 1,
+	Wall = 1 << 2,
+
+};
+
 void Grid::game_Start()
 {
 	GridModel.init_Model();
@@ -43,10 +52,10 @@ void Grid::test(glm::ivec2 tileCord)
 
 	unsigned int vertexIndex = 100 * 4 * tileCord.x;
 	vertexIndex += 4 * tileCord.y;
-	gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.0f, 1.f);
-	gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.0f, 0.f);
-	gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.5f, 0.f);
-	gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.5f, 1.f);
+	gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.f, 1.f);
+	gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.f, 0.f);
+	gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(1.f, 0.f);
+	gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(1.f, 1.f);
 
 	gridMesh.rebind_Buffer(GL_STATIC_DRAW);
 

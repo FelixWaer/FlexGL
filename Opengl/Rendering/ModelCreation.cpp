@@ -101,11 +101,11 @@ namespace FLXModel
 			{
 				int id0 = mesh.Vertices.size();
 				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, j * squareSize, 0.f), color);
-				mesh.Vertices[id0].Texture = glm::vec2(0.5f, 1.0f);
+				mesh.Vertices[id0].Texture = glm::vec2(0.8f, 0.5f);
 
 				int id1 = id0 + 1;
 				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, (j * squareSize) - squareSize, 0.f), color);
-				mesh.Vertices[id1].Texture = glm::vec2(0.5f, 0.0f);
+				mesh.Vertices[id1].Texture = glm::vec2(0.8f, 0.f);
 
 				int id2 = id0 + 2;
 				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, (j * squareSize) - squareSize, 0.f), color);
@@ -113,7 +113,7 @@ namespace FLXModel
 
 				int id3 = id0 + 3;
 				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, j * squareSize, 0.f), color);
-				mesh.Vertices[id3].Texture = glm::vec2(1.0f, 1.0f);
+				mesh.Vertices[id3].Texture = glm::vec2(1.0f, 0.5f);
 
 				mesh.Triangles.emplace_back(id0, id1, id2);
 				mesh.Triangles.emplace_back(id2, id3, id0);

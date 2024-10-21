@@ -4,7 +4,6 @@
 
 #include "../Engine/EngineManager.h"
 #include "../Engine/Input.h"
-#include "../GameObjects/BasicCube.h"
 #include "Barrel.h"
 #include "Enemy.h"
 #include "GameMap.h"
@@ -69,7 +68,7 @@ void EngineCamera::tick(float deltaTime)
 {
 	set_GameObjectPosition(ActiveCamera.get_CameraPosition());
 
-	glm::vec3 newLifeColor(0.f, 0.f, 1.f);
+	glm::vec3 newLifeColor(1.f);
 	newLifeColor *= (Player->get_Component<HealthComponent>().Health / 100.f);
 	EngineManager::get()->get_RenderManager().get_Material("PlayerMaterial").ColorHue = newLifeColor;
 

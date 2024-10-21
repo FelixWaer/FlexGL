@@ -15,6 +15,6 @@ public:
 
 private:
 	Model GridModel;
-	std::vector<int> GridLayout;
+	std::vector<uint32_t> GridLayout;
 };
 

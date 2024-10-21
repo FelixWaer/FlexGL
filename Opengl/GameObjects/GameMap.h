@@ -12,6 +12,9 @@ protected:
 	void init_Entity() override;
 
 private:
-	std::vector<int> GridLayout;
+	std::vector<uint32_t> GridLayout = std::vector<uint32_t>(100*100, 1);
+
+	uint32_t check_NeighbourTiles(uint32_t tileIndex);
+	void change_WallState(glm::ivec2 tileCord);
 };
 

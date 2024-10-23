@@ -84,7 +84,7 @@ glm::mat4& ModelHandler::get_ModelMatrix(uint32_t modelID)
 
 void ModelHandler::calculate_Matrices()
 {
-	FlexTimer timer("Data Driven Matrix calculation");
+	//FlexTimer timer("Data Driven Matrix calculation");
 
 	for (size_t id = 0; id < Matrices.size(); id++)
 	{

@@ -234,7 +234,7 @@ void RenderManager::load_MeshesFromFolder()
 	}
 	if (MeshMap.contains("Grid") == false)
 	{
-		FLXModel::create_Grid(MeshMap["Grid"], 100);
+		FLXModel::create_Grid(MeshMap["Grid"], 1000);
 	}
 }
 

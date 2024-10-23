@@ -19,7 +19,7 @@ void ObjectHandler::tick_Objects(float deltaTime)
 
 void ObjectHandler::update_Positions(float deltaTime)
 {
-	FlexTimer timer("Position Updating");
+	//FlexTimer timer("Position Updating");
 
 	for (size_t i = 0; i < ObjectPositions.size(); i++)
 	{

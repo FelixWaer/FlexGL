@@ -31,18 +31,18 @@ enum WallState
 
 void GameMap::test(glm::ivec2 tileCord)
 {
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return;
 	}
 
 	change_WallState(tileCord);
 
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	GridLayout[gridIndex] |= Wall;
 
-	if ((GridLayout[gridIndex - 100] & Wall) == Wall)
+	if ((GridLayout[gridIndex - GridSize] & Wall) == Wall)
 	{
 		change_WallState(glm::ivec2(tileCord.x, tileCord.y - 1));
 	}
@@ -50,7 +50,7 @@ void GameMap::test(glm::ivec2 tileCord)
 	{
 		change_WallState(glm::ivec2(tileCord.x + 1, tileCord.y));
 	}
-	if ((GridLayout[gridIndex + 100] & Wall) == Wall)
+	if ((GridLayout[gridIndex + GridSize] & Wall) == Wall)
 	{
 		change_WallState(glm::ivec2(tileCord.x, tileCord.y + 1));
 	}
@@ -62,19 +62,19 @@ void GameMap::test(glm::ivec2 tileCord)
 
 void GameMap::set_TileAsTaken(glm::ivec2 tileCord)
 {
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	GridLayout[gridIndex] |= Item;
 }
 
 bool GameMap::check_IfTileTaken(glm::ivec2 tileCord)
 {
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return true;
 	}
 
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	if (GridLayout[gridIndex] > 1)
 	{
@@ -100,7 +100,7 @@ void GameMap::init_Entity()
 uint32_t GameMap::check_NeighbourTiles(uint32_t tileIndex)
 {
 	uint32_t result = 0;
-	if (GridLayout[tileIndex - 100] & Wall)
+	if (GridLayout[tileIndex - GridSize] & Wall)
 	{
 		result |= 1;
 	}
@@ -110,7 +110,7 @@ uint32_t GameMap::check_NeighbourTiles(uint32_t tileIndex)
 		result |= 1;
 	}
 	result <<= 1;
-	if (GridLayout[tileIndex + 100] & Wall)
+	if (GridLayout[tileIndex + GridSize] & Wall)
 	{
 		result |= 1;
 	}
@@ -125,16 +125,16 @@ uint32_t GameMap::check_NeighbourTiles(uint32_t tileIndex)
 
 void GameMap::change_WallState(glm::ivec2 tileCord)
 {
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return;
 	}
 
 	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh("Grid");
 
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
-	unsigned int vertexIndex = 100 * 4 * tileCord.x;
+	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
 	vertexIndex += 4 * tileCord.y;
 
 

@@ -134,7 +134,7 @@ void SceneManager::tick_GameObjects(float deltaTime)
 
 void SceneManager::calculate_AllModelMatrices()
 {
-	FlexTimer timer("Model Matrix Calculations");
+	//FlexTimer timer("Model Matrix Calculations");
 	for (Model* model : SceneModels)
 	{
 		model->calculate_ModelMatrix();

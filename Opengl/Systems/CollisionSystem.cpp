@@ -1,11 +1,14 @@
 #include "CollisionSystem.h"
 
+#include "MovementSystem.h"
 #include "../Engine/EngineManager.h"
+#include "../GameObjects/Bullet.h"
 #include "../Components/ComponentHandler.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/CollisionComponent.h"
 #include "../Components/HealthComponent.h"
 #include "../Components/DamageComponent.h"
+#include "../Components/MovementComponent.h"
 #include "../Components/TagComponent.h"
 
 void CollisionSystem::update(float deltaTime)
@@ -40,8 +43,21 @@ void CollisionSystem::update(float deltaTime)
 				continue;
 			}
 
-			if (tagHandler->get_Component(i.first).Tag == "Player" && tagHandler->get_Component(j.first).Tag == "Enemy"
-				|| tagHandler->get_Component(i.first).Tag == "Enemy" && tagHandler->get_Component(j.first).Tag == "Player")
+			//if (tagHandler->get_Component(i.first).Tag == "Player" && tagHandler->get_Component(j.first).Tag == "Enemy"
+			//	|| tagHandler->get_Component(i.first).Tag == "Enemy" && tagHandler->get_Component(j.first).Tag == "Player")
+			//{
+			//	float distance = glm::distance(posComponents[indexMapPos[i.first]].Position, posComponents[indexMapPos[j.first]].Position);
+
+			//	if (distance <= collisionComponents[indexMapCollision[i.first]].Radius &&
+			//		damageHandler->get_Component(i.first).CurrentTime >= damageHandler->get_Component(i.first).CooldownTimer)
+			//	{
+			//		healthComponents[indexMapHealth[j.first]].DamageTaken += damageComponents[indexMapDamage[i.first]].Damage;
+			//		damageHandler->get_Component(i.first).CurrentTime = 0.f;
+			//	}
+			//}
+
+			if (tagHandler->get_Component(i.first).Tag == "Bullet" && tagHandler->get_Component(j.first).Tag == "Enemy"
+				|| tagHandler->get_Component(i.first).Tag == "Bullet" && tagHandler->get_Component(j.first).Tag == "Player")
 			{
 				float distance = glm::distance(posComponents[indexMapPos[i.first]].Position, posComponents[indexMapPos[j.first]].Position);
 
@@ -50,6 +66,29 @@ void CollisionSystem::update(float deltaTime)
 				{
 					healthComponents[indexMapHealth[j.first]].DamageTaken += damageComponents[indexMapDamage[i.first]].Damage;
 					damageHandler->get_Component(i.first).CurrentTime = 0.f;
+				}
+			}
+
+			if (tagHandler->get_Component(i.first).Tag == "Player" && tagHandler->get_Component(j.first).Tag == "Enemy"
+				|| tagHandler->get_Component(i.first).Tag == "Enemy" && tagHandler->get_Component(j.first).Tag == "Player")
+			{
+				float distance = glm::distance(posComponents[indexMapPos[i.first]].Position, posComponents[indexMapPos[j.first]].Position);
+
+				if (distance <= collisionComponents[indexMapCollision[i.first]].Radius)
+				{
+					if (damageHandler->get_Component(i.first).CurrentTime >= damageHandler->get_Component(i.first).CooldownTimer)
+					{
+						glm::vec3 direction = glm::normalize(posComponents[indexMapPos[j.first]].Position - posComponents[indexMapPos[i.first]].Position);
+
+						Bullet* newBullet = new Bullet;
+						newBullet->create_Enity();
+
+						newBullet->get_Component<PositionComponent>().Position = posComponents[indexMapPos[i.first]].Position + direction;
+						newBullet->get_Component<MovementComponent>().Direction = direction;
+						newBullet->get_Component<MovementComponent>().Speed = 200.f;
+
+						damageHandler->get_Component(i.first).CurrentTime = 0.f;
+					}
 				}
 			}
 		}

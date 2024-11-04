@@ -33,6 +33,7 @@ private:
 	void collision_Function(GameObject* otherGameObject);
 
 	void move_Player();
+	GameMap* get_Chunk(glm::ivec2& chunkCord);
 
 	Event* W_InputEvent = nullptr;
 	Event* A_InputEvent = nullptr;
@@ -48,7 +49,13 @@ private:
 
 	Camera ActiveCamera;
 
-	GameMap* GridMap = nullptr;
+	glm::ivec2 ChunkPosition = glm::ivec2(0.f);
+
+	GameMap* activeChunk = nullptr;
+
+	//std::unordered_map<glm::ivec2, GameMap*> Chunks;
+	std::vector<GameMap*> Chunks;
+
 	Entity* Placeable = nullptr;
 	std::vector<Enemy*> Enemies;
 	Enemy* Player = nullptr;

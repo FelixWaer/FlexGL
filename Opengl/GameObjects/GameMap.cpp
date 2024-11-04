@@ -63,9 +63,37 @@ void GameMap::change_Tile(glm::ivec2& tileCord)
 	}
 }
 
-void GameMap::change_TileEdges(glm::ivec2& tileCord, GameMap* neighborChunk)
+void GameMap::change_TileEdges(glm::ivec2& tileCord, glm::ivec2& neighborTileCord, GameMap* neighborChunk)
 {
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
 
+	change_WallState(tileCord);
+
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
+
+	GridLayout[gridIndex] |= Wall;
+
+	if ((GridLayout[gridIndex - GridSize] & Wall) == Wall)
+	{
+		change_WallState(glm::ivec2(tileCord.x, tileCord.y - 1));
+	}
+	if ((GridLayout[gridIndex + 1] & Wall) == Wall)
+	{
+		change_WallState(glm::ivec2(tileCord.x + 1, tileCord.y));
+	}
+	if ((GridLayout[gridIndex + GridSize] & Wall) == Wall)
+	{
+		change_WallState(glm::ivec2(tileCord.x, tileCord.y + 1));
+	}
+	if ((GridLayout[gridIndex - 1] & Wall) == Wall)
+	{
+		change_WallState(glm::ivec2(tileCord.x - 1, tileCord.y));
+	}
+	neighborTileCord -= neighborChunk->get_ChunkCord() * 32;
+	neighborChunk->change_WallState(neighborTileCord);
 }
 
 void GameMap::set_TileAsTaken(glm::ivec2 tileCord)
@@ -92,6 +120,91 @@ bool GameMap::check_IfTileTaken(glm::ivec2 tileCord)
 	{
 		return false;
 	}
+}
+
+void GameMap::change_WallState(glm::ivec2 tileCord)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
+
+	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh(ChunkName);
+
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
+
+	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
+	vertexIndex += 4 * tileCord.y;
+
+	uint32_t WallState = check_NeighbourTiles(gridIndex);
+
+	switch (WallState)
+	{
+	case SingleWall:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.375f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.375f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.500f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.500f, 0.250f);
+		break;
+
+	case ReverseCorner:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.125f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.125f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.0f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.0f, 0.250f);
+		break;
+
+	case VerticalWall:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.250f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.250f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.375f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.375f, 0.250f);
+		break;
+
+	case ReverseInsideCorner:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.375f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.375f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.250f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.250f, 0.125f);
+		break;
+
+	case Corner:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.0f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.0f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.125f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.125f, 0.250f);
+		break;
+
+	case HorizontalWall:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.125f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.125f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.250f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.250f, 0.250f);
+		break;
+
+	case InsideCorner:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.250f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.250f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.375f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.375f, 0.125f);
+		break;
+
+	case MiddleWall:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.375f, 0.125f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.375f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.500f, 0.0f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.500f, 0.125f);
+		break;
+
+	default:
+		break;
+	}
+
+	WallState <<= 4;
+
+	GridLayout[gridIndex] |= WallState;
+
+	gridMesh.rebind_Buffer(GL_STATIC_DRAW);
 }
 
 glm::ivec2& GameMap::get_ChunkCord()
@@ -145,85 +258,4 @@ uint32_t GameMap::check_NeighbourTiles(uint32_t tileIndex)
 	}
 
 	return result;
-}
-
-void GameMap::change_WallState(glm::ivec2 tileCord)
-{
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
-	{
-		return;
-	}
-
-	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh(ChunkName);
-
-	int gridIndex = tileCord.x + (GridSize * tileCord.y);
-
-	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
-	vertexIndex += 4 * tileCord.y;
-
-	uint32_t WallState = check_NeighbourTiles(gridIndex);
-
-	switch (WallState)
-	{
-	case SingleWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.60f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.60f, 0.50f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.80f, 0.50f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.80f, 1.0f);
-		break;
-
-	case ReverseCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.0f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.0f, 1.0f);
-		break;
-
-	case VerticalWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.40f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.40f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.60f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.60f, 1.0f);
-		break;
-
-	case ReverseInsideCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.60f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.60f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.40f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.40f, 0.5f);
-		break;
-
-	case Corner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.0f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.0f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.20f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.20f, 1.0f);
-		break;
-
-	case HorizontalWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.20f, 1.0f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.20f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.40f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.40f, 1.0f);
-		break;
-
-	case InsideCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.40f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.40f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.60f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.60f, 0.5f);
-		break;
-
-	case MiddleWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.60f, 0.5f);
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.60f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.80f, 0.0f);
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.80f, 0.5f);
-		break;
-
-	default:
-		break;
-	}
-
-	gridMesh.rebind_Buffer(GL_STATIC_DRAW);
 }

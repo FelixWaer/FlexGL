@@ -352,30 +352,36 @@ void EngineCamera::input_RMouseFunction()
 	gridCord.y = gridCord.y >> 6;
 	gridCord.y += 1;
 
+	glm::ivec2 neighborTileCord = gridCord;
+
 	gridCord -= ChunkPosition * 32;
 
 	if (activeChunk->check_IfTileTaken(gridCord) == false)
 	{
-		glm::ivec2 neighborCord = ChunkPosition;
+		glm::ivec2 neighborChunkCord = ChunkPosition;
 		if (gridCord.x == 0)
 		{
-			neighborCord.x -= 1;
-			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+			neighborChunkCord.x -= 1;
+			neighborTileCord.x -= 1;
+			activeChunk->change_TileEdges(gridCord, neighborTileCord, get_Chunk(neighborChunkCord));
 		}
 		else if(gridCord.x == 32)
 		{
-			neighborCord.x += 1;
-			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+			neighborChunkCord.x += 1;
+			neighborTileCord.y += 1;
+			activeChunk->change_TileEdges(gridCord, neighborTileCord, get_Chunk(neighborChunkCord));
 		}
 		else if (gridCord.y == 0)
 		{
-			neighborCord.y -= 1;
-			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+			neighborChunkCord.y -= 1;
+			neighborTileCord.y -= 1;
+			activeChunk->change_TileEdges(gridCord, neighborTileCord, get_Chunk(neighborChunkCord));
 		}
 		else if (gridCord.y == 32)
 		{
-			neighborCord.y += 1;
-			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+			neighborChunkCord.y += 1;
+			neighborTileCord.y += 1;
+			activeChunk->change_TileEdges(gridCord, neighborTileCord, get_Chunk(neighborChunkCord));
 		}
 		else
 		{

@@ -24,7 +24,7 @@ void Texture::load_Texture(const std::string& filePath)
 	int width;
 	int height;
 	int nrChannels;
-	//req_comp 3
+	
 	unsigned char *data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 4);
 
 	if (data)

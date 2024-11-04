@@ -2,6 +2,9 @@
 
 #include "glad/glad.h"
 
+#include "../Rendering/ModelCreation.h"
+
+#include "Barrel.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/MovementComponent.h"
 #include "../Components/TransformComponent.h"
@@ -19,30 +22,30 @@ enum TileState
 
 enum WallState
 {
-	SingleWall = 8,
-	ReverseCorner = 9,
-	VerticalWall = 10,
-	ReverseInsideCorner = 11,
-	Corner = 12,
-	HorizontalWall = 13,
-	InsideCorner = 14,
-	MiddleWall = 15,
+	SingleWall = 0,
+	ReverseCorner = 1,
+	VerticalWall = 2,
+	ReverseInsideCorner = 3,
+	Corner = 4,
+	HorizontalWall = 5,
+	InsideCorner = 6,
+	MiddleWall = 7,
 };
 
-void GameMap::test(glm::ivec2 tileCord)
+void GameMap::change_Tile(glm::ivec2& tileCord)
 {
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return;
 	}
 
 	change_WallState(tileCord);
 
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	GridLayout[gridIndex] |= Wall;
 
-	if ((GridLayout[gridIndex - 100] & Wall) == Wall)
+	if ((GridLayout[gridIndex - GridSize] & Wall) == Wall)
 	{
 		change_WallState(glm::ivec2(tileCord.x, tileCord.y - 1));
 	}
@@ -50,7 +53,7 @@ void GameMap::test(glm::ivec2 tileCord)
 	{
 		change_WallState(glm::ivec2(tileCord.x + 1, tileCord.y));
 	}
-	if ((GridLayout[gridIndex + 100] & Wall) == Wall)
+	if ((GridLayout[gridIndex + GridSize] & Wall) == Wall)
 	{
 		change_WallState(glm::ivec2(tileCord.x, tileCord.y + 1));
 	}
@@ -60,21 +63,26 @@ void GameMap::test(glm::ivec2 tileCord)
 	}
 }
 
+void GameMap::change_TileEdges(glm::ivec2& tileCord, GameMap* neighborChunk)
+{
+
+}
+
 void GameMap::set_TileAsTaken(glm::ivec2 tileCord)
 {
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	GridLayout[gridIndex] |= Item;
 }
 
 bool GameMap::check_IfTileTaken(glm::ivec2 tileCord)
 {
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return true;
 	}
 
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	if (GridLayout[gridIndex] > 1)
 	{
@@ -86,6 +94,19 @@ bool GameMap::check_IfTileTaken(glm::ivec2 tileCord)
 	}
 }
 
+glm::ivec2& GameMap::get_ChunkCord()
+{
+	return ChunkCord;
+}
+
+void GameMap::set_ChunkCord(glm::ivec2 newChunkCord)
+{
+	ChunkCord = newChunkCord;
+	int xPos = ChunkCord.x << 11;
+	int yPos = ChunkCord.y << 11;
+	get_Component<PositionComponent>().Position = glm::vec3(xPos, yPos, 0.f);
+}
+
 void GameMap::init_Entity()
 {
 	add_Component<PositionComponent>();
@@ -93,24 +114,27 @@ void GameMap::init_Entity()
 	add_Component<TransformComponent>();
 	add_Component<SpriteComponent>();
 
+	Mesh tempMesh;
+	std::string meshName = "Chunk" + std::to_string(get_EntityID());
+	FLXModel::create_Grid(tempMesh, 32);
+	ChunkName = meshName;
+
+	EngineManager::get()->get_RenderManager().add_Mesh(tempMesh, meshName);
 	get_Component<SpriteComponent>().MaterialName = "BasicMaterial";
-	get_Component<SpriteComponent>().SpriteName = "Grid";
+	get_Component<SpriteComponent>().SpriteName = meshName;
 }
 
 uint32_t GameMap::check_NeighbourTiles(uint32_t tileIndex)
 {
 	uint32_t result = 0;
-	if (GridLayout[tileIndex - 100] & Wall)
-	{
-		result |= 1;
-	}
+
 	result <<= 1;
 	if (GridLayout[tileIndex + 1] & Wall)
 	{
 		result |= 1;
 	}
 	result <<= 1;
-	if (GridLayout[tileIndex + 100] & Wall)
+	if (GridLayout[tileIndex + GridSize] & Wall)
 	{
 		result |= 1;
 	}
@@ -125,21 +149,19 @@ uint32_t GameMap::check_NeighbourTiles(uint32_t tileIndex)
 
 void GameMap::change_WallState(glm::ivec2 tileCord)
 {
-	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= 100 || tileCord.y >= 100)
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return;
 	}
 
-	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh("Grid");
+	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh(ChunkName);
 
-	int gridIndex = tileCord.x + (100 * tileCord.y);
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
-	unsigned int vertexIndex = 100 * 4 * tileCord.x;
+	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
 	vertexIndex += 4 * tileCord.y;
 
-
 	uint32_t WallState = check_NeighbourTiles(gridIndex);
-	WallState |= 8;
 
 	switch (WallState)
 	{

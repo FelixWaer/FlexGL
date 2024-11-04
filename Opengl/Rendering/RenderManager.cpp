@@ -39,6 +39,9 @@ void RenderManager::init_RenderManager()
 
 	MaterialMap[tempPlayerMaterial].HasTexture = false;
 	MaterialMap[tempPlayerMaterial].ColorHue = glm::vec3(0.f, 0.f, 1.f);
+
+	MaterialMap[tempBulletMaterial].HasTexture = false;
+	MaterialMap[tempBulletMaterial].ColorHue = glm::vec3(1.f, 0.f, 1.f);
 }
 
 void RenderManager::cleanup_RenderManager()
@@ -155,6 +158,15 @@ Mesh& RenderManager::get_Mesh(std::string meshName)
 	return tempMesh;
 }
 
+void RenderManager::add_Mesh(Mesh& newMesh, std::string meshName)
+{
+	if (MeshMap.contains(meshName) == false)
+	{
+		MeshMap[meshName] = newMesh;
+		std::cout << "Added new mesh: " << meshName << std::endl;
+	}
+}
+
 Material& RenderManager::get_Material(std::string materialName)
 {
 	if (MaterialMap.contains(materialName) == true)
@@ -231,10 +243,6 @@ void RenderManager::load_MeshesFromFolder()
 	if (MeshMap.contains("Square") == false)
 	{
 		FLXModel::create_Square(MeshMap["Square"]);
-	}
-	if (MeshMap.contains("Grid") == false)
-	{
-		FLXModel::create_Grid(MeshMap["Grid"], 100);
 	}
 }
 

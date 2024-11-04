@@ -17,15 +17,32 @@
 
 void EngineCamera::game_Start()
 {
-	GridMap = new GameMap;
-	GridMap->create_Enity();
+	for (int x = -1; x < 2; x++)
+	{
+		for (int y = -1; y < 2; y++)
+		{
+			GameMap* tempMap = new GameMap;
+			tempMap->create_Enity();
+			tempMap->set_ChunkCord(glm::ivec2(x, y));
+			Chunks.emplace_back(tempMap);
+		}
+	}
+
+	//GridMap = new GameMap;
+	//GridMap->create_Enity();
+	//GridMap2 = new GameMap;
+	//GridMap2->create_Enity();
+	//GridMap->set_ChunkCord(glm::ivec2(0, 0));
+	//GridMap2->set_ChunkCord(glm::ivec2(0, 2));
+	//GridMap = Chunks[4];
 
 	Player = new Enemy;
 	Player->create_Enity();
-	Player->get_Component<PositionComponent>().Position += glm::vec3(0.f, 400.f, 0.f);
+	Player->get_Component<PositionComponent>().Position += glm::vec3(400.f, 400.f, 0.f);
 	Player->get_Component<MovementComponent>().Speed = 150.f;
 	Player->get_Component<SpriteComponent>().MaterialName = "PlayerMaterial";
-	Player->get_Component<CollisionComponent>().Radius = 100.f;
+	Player->get_Component<CollisionComponent>().Radius = 256.f;
+	Player->get_Component<HealthComponent>().Health = 100.f;
 	Player->get_Component<TagComponent>().Tag = "Player";
 	Player->get_Component<DamageComponent>().Damage = 100.f;
 
@@ -62,6 +79,26 @@ void EngineCamera::game_Start()
 	Input::bind_EventToKey(LM_InputEvent, Key::LMouse, KeyPress::OnPress);
 	Input::bind_EventToKey(RM_InputEvent, Key::RMouse, KeyPress::OnPress);
 	Input::bind_EventToKey(ESC_InputEvent, Key::ESCAPE, KeyPress::OnPress);
+
+	glm::vec3 tempPos = glm::vec3(EngineManager::get()->get_ActiveWindow().get_MousePositionX(),
+		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
+	tempPos -= ActiveCamera.get_2DCameraPosition();
+
+	glm::ivec2 newChunkPos(tempPos.x, tempPos.y);
+	newChunkPos.x >>= 11;
+	newChunkPos.y >>= 11;
+
+	ChunkPosition = newChunkPos;
+	std::cout << "xpos: " << ChunkPosition.x << "ypos: " << ChunkPosition.y << std::endl;
+
+	for (GameMap* chunk : Chunks)
+	{
+		if (chunk->get_ChunkCord() == ChunkPosition)
+		{
+			activeChunk = chunk;
+			break;
+		}
+	}
 }
 
 void EngineCamera::tick(float deltaTime)
@@ -93,9 +130,28 @@ void EngineCamera::tick(float deltaTime)
 		EngineManager::get()->get_ActiveWindow().get_MousePositionY(), 0.f);
 	tempPos -= ActiveCamera.get_2DCameraPosition();
 
+	glm::ivec2 newChunkPos(tempPos.x, tempPos.y);
+	newChunkPos.y += 64;
+	newChunkPos.x >>= 11;
+	newChunkPos.y >>= 11;
+
+	if (newChunkPos != ChunkPosition)
+	{
+		ChunkPosition = newChunkPos;
+		//std::cout << "xpos: " << ChunkPosition.x << "ypos: " << ChunkPosition.y << std::endl;
+
+		for (GameMap* chunk : Chunks)
+		{
+			if (chunk->get_ChunkCord() == ChunkPosition)
+			{
+				activeChunk = chunk;
+				break;
+			}
+		}
+	}
+
 	if (IsPlacing == true && Placeable != nullptr)
 	{
-
 		glm::ivec2 gridCord;
 
 		int x = tempPos.x;
@@ -111,9 +167,11 @@ void EngineCamera::tick(float deltaTime)
 
 		gridCord.y += 1;
 
+		gridCord -= ChunkPosition * 32;
+
 		Placeable->get_Component<PositionComponent>().Position = glm::vec3(x, y, 0.0f);
 
-		if (GridMap->check_IfTileTaken(gridCord) == true)
+		if (activeChunk->check_IfTileTaken(gridCord) == true)
 		{
 			EngineManager::get()->get_RenderManager().get_Material("PlacementMaterial").ColorHue = glm::vec3(1.f, 0.f, 0.f);
 		}
@@ -126,7 +184,7 @@ void EngineCamera::tick(float deltaTime)
 
 void EngineCamera::set_GridMesh(GameMap* grid)
 {
-	GridMap = grid;
+	//GridMap = grid;
 }
 
 void EngineCamera::input_WFunction()
@@ -258,11 +316,10 @@ void EngineCamera::input_LMouseFunction()
 
 	gridCord.y += 1;
 
+	gridCord -= ChunkPosition * 32;
 
-	if (GridMap->check_IfTileTaken(gridCord) == false && Placeable != nullptr)
+	if (activeChunk->check_IfTileTaken(gridCord) == false && Placeable != nullptr)
 	{
-		//Barrel* barrel = new Barrel;
-		//barrel->create_Enity();
 		Placeable->get_Component<PositionComponent>().Position = glm::vec3(x, y, 0.0f);
 		if (Placeable->get_Component<SpriteComponent>().MaterialName == "PlacementMaterial")
 		{
@@ -278,7 +335,7 @@ void EngineCamera::input_LMouseFunction()
 
 		IsPlacing = false;
 
-		GridMap->set_TileAsTaken(gridCord);
+		activeChunk->set_TileAsTaken(gridCord);
 	}
 }
 
@@ -295,9 +352,35 @@ void EngineCamera::input_RMouseFunction()
 	gridCord.y = gridCord.y >> 6;
 	gridCord.y += 1;
 
-	if (GridMap->check_IfTileTaken(gridCord) == false)
+	gridCord -= ChunkPosition * 32;
+
+	if (activeChunk->check_IfTileTaken(gridCord) == false)
 	{
-		GridMap->test(gridCord);
+		glm::ivec2 neighborCord = ChunkPosition;
+		if (gridCord.x == 0)
+		{
+			neighborCord.x -= 1;
+			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+		}
+		else if(gridCord.x == 32)
+		{
+			neighborCord.x += 1;
+			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+		}
+		else if (gridCord.y == 0)
+		{
+			neighborCord.y -= 1;
+			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+		}
+		else if (gridCord.y == 32)
+		{
+			neighborCord.y += 1;
+			activeChunk->change_TileEdges(gridCord, get_Chunk(neighborCord));
+		}
+		else
+		{
+			activeChunk->change_Tile(gridCord);
+		}
 	}
 }
 
@@ -329,11 +412,17 @@ void EngineCamera::move_Player()
 
 	Player->get_Component<MovementComponent>().Direction = tempPlayerVec;
 	PlaceToMove = tempPos;
+}
 
-	//for (Enemy* enemy : Enemies)
-	//{
-	//	glm::vec3 tempVec = glm::normalize(tempPos - enemy->get_Component<PositionComponent>().Position);
+GameMap* EngineCamera::get_Chunk(glm::ivec2& chunkCord)
+{
+	for (GameMap* chunk : Chunks)
+	{
+		if (chunk->get_ChunkCord() == chunkCord)
+		{
+			return chunk;
+		}
+	}
 
-	//	enemy->get_Component<MovementComponent>().Direction = tempVec;
-	//}
+	return nullptr;
 }

@@ -22,10 +22,10 @@ void Enemy::init_Entity()
 
 	get_Component<MovementComponent>().Speed = 50.f;
 	get_Component<TagComponent>().Tag = "Enemy";
-	get_Component<HealthComponent>().Health = 100.f;
+	get_Component<HealthComponent>().Health = 20.f;
 	get_Component<DamageComponent>().Damage = 20.f;
-	get_Component<DamageComponent>().CooldownTimer = 2.f;
-	get_Component<CollisionComponent>().Radius = 64.f;
+	get_Component<DamageComponent>().CooldownTimer = 3.f;
+	get_Component<CollisionComponent>().Radius = 128.f;
 	get_Component<SpriteComponent>().MaterialName = "EnemyMaterial";
 	TransformComponent& transComp = get_Component<TransformComponent>();
 	transComp.Rotation = glm::vec3(0.f);

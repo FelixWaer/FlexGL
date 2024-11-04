@@ -107,9 +107,6 @@
     <ClCompile Include="Engine\EventCallback.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\BasicCube.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Rendering\RenderManager.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -139,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="Systems\System.cpp">
       <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Grid.cpp">
-      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Engine\SystemManager.cpp">
       <Filter>Engine</Filter>
@@ -250,9 +244,6 @@
     <ClInclude Include="Engine\EventCallback.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\BasicCube.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Rendering\RenderManager.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -288,9 +279,6 @@
     </ClInclude>
     <ClInclude Include="Systems\System.h">
       <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Grid.h">
-      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Components\SpriteComponent.h">
       <Filter>Components</Filter>

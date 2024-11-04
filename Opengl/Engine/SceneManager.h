@@ -9,8 +9,6 @@
 #include "../GameObject Components/BoxCollision.h"
 #include "../GameObject Components/SphereCollision.h"
 #include "../GameObjects/EngineCamera.h"
-#include "../GameObjects/BasicCube.h"
-#include "../GameObjects/Grid.h"
 #include "../Rendering/ModelHandler.h"
 #include "../Rendering/Model.h"
 #include "../Rendering/Camera.h"
@@ -46,9 +44,6 @@ private:
 	//Start of Temporary Code
 	Light TestLight;
 	EngineCamera ActiveEngineCamera;
-	BasicCube CubeObject;
-	BasicCube CubeObject2;
-	Grid MapGrid;
 	std::vector<BasicCube*> Cubes;
 
 	//End of Temporary Code

@@ -16,6 +16,7 @@ public:
 	void cleanup_RenderManager();
 	void render_Scene(SceneManager* sceneToRender);
 	Mesh& get_Mesh(std::string meshName);
+	void add_Mesh(Mesh& newMesh, std::string meshName);
 	Material& get_Material(std::string materialName);
 	bool Render2D = false;
 private:
@@ -31,6 +32,7 @@ private:
 	std::string tempPlacementMaterial = "PlacementMaterial";
 	std::string tempEnemyMaterial = "EnemyMaterial";
 	std::string tempPlayerMaterial = "PlayerMaterial";
+	std::string tempBulletMaterial = "BulletMaterial";
 
 	void load_ShadersFromFolder();
 	void load_MeshesFromFolder();

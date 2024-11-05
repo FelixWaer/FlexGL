@@ -10,6 +10,7 @@ public:
 	void set_TileAsTaken(glm::ivec2 tileCord);
 	bool check_IfTileTaken(glm::ivec2 tileCord);
 	void change_WallState(glm::ivec2 tileCord);
+	void update_TileState(uint32_t newWallState, glm::ivec2& tileCord);
 	glm::ivec2& get_ChunkCord();
 	void set_ChunkCord(glm::ivec2 newChunkCord);
 protected:
@@ -21,6 +22,7 @@ private:
 	glm::ivec2 ChunkCord = glm::ivec2(0.f);
 	std::vector<uint32_t> GridLayout = std::vector<uint32_t>(GridSize*GridSize, 1);
 
-	uint32_t check_NeighbourTiles(uint32_t tileIndex);
+	void update_WallState(uint32_t tileIndex, glm::ivec2& tileCord);
+	uint32_t check_NeighbourTiles(int tileIndex);
 };
 

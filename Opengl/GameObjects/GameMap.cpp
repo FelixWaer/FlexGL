@@ -10,28 +10,6 @@
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 
-enum TileState
-{
-	Null_State = 0,
-	Water = 1 << 0,
-	Ground = 1 << 1,
-	Floor = 1 << 2,
-	Wall = 1 << 3,
-	Item = 1 << 4,
-};
-
-enum WallState
-{
-	SingleWall = 0,
-	ReverseCorner = 1,
-	VerticalWall = 2,
-	ReverseInsideCorner = 3,
-	Corner = 4,
-	HorizontalWall = 5,
-	InsideCorner = 6,
-	MiddleWall = 7,
-};
-
 void GameMap::change_Tile(glm::ivec2& tileCord)
 {
 	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
@@ -43,83 +21,122 @@ void GameMap::change_Tile(glm::ivec2& tileCord)
 
 	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
-	GridLayout[gridIndex] |= Wall;
-
 	if (gridIndex - GridSize >= 0)
 	{
-		if ((GridLayout[gridIndex - GridSize] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x, tileCord.y - 1));
-		}
+		update_TileState(Bottom, glm::ivec2(tileCord.x, tileCord.y - 1));
 	}
 	if (gridIndex + 1 < GridLayout.size())
 	{
-		if ((GridLayout[gridIndex + 1] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x + 1, tileCord.y));
-		}
+		update_TileState(Left, glm::ivec2(tileCord.x + 1, tileCord.y));
 	}
 	if (gridIndex + GridSize < GridLayout.size())
 	{
-		if ((GridLayout[gridIndex + GridSize] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x, tileCord.y + 1));
-		}
+		update_TileState(Top, glm::ivec2(tileCord.x, tileCord.y + 1));
 	}
 	if (gridIndex - 1 >= 0)
 	{
-		if ((GridLayout[gridIndex - 1] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x - 1, tileCord.y));
-		}
+		update_TileState(Right, glm::ivec2(tileCord.x - 1, tileCord.y));
 	}
 }
 
-void GameMap::change_TileEdges(glm::ivec2& tileCord, glm::ivec2& neighborTileCord, GameMap* neighborChunk)
+void GameMap::remove_Tile(glm::ivec2& tileCord)
 {
 	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
 	{
 		return;
 	}
-	std::cout << "I am wall! " << std::endl;
+
+	remove_WallState(tileCord);
+
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
+
+	if (gridIndex - GridSize >= 0)
+	{
+		remove_TileState(Bottom, glm::ivec2(tileCord.x, tileCord.y - 1));
+	}
+	if (gridIndex + 1 < GridLayout.size())
+	{
+		remove_TileState(Left, glm::ivec2(tileCord.x + 1, tileCord.y));
+	}
+	if (gridIndex + GridSize < GridLayout.size())
+	{
+		remove_TileState(Top, glm::ivec2(tileCord.x, tileCord.y + 1));
+	}
+	if (gridIndex - 1 >= 0)
+	{
+		remove_TileState(Right, glm::ivec2(tileCord.x - 1, tileCord.y));
+	}
+}
+
+void GameMap::change_TileEdges(glm::ivec2& tileCord, uint32_t direction, glm::ivec2& neighborTileCord, GameMap* neighborChunk)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
+
 	change_WallState(tileCord);
 
 	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
 	if (gridIndex - GridSize >= 0)
 	{
-		if ((GridLayout[gridIndex - GridSize] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x, tileCord.y - 1));
-		}
+		update_TileState(Bottom, glm::ivec2(tileCord.x, tileCord.y - 1));
 	}
 	if (gridIndex + 1 < GridLayout.size())
 	{
-		if ((GridLayout[gridIndex + 1] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x + 1, tileCord.y));
-		}
+		update_TileState(Left, glm::ivec2(tileCord.x + 1, tileCord.y));
 	}
 	if (gridIndex + GridSize < GridLayout.size())
 	{
-		if ((GridLayout[gridIndex + GridSize] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x, tileCord.y + 1));
-		}
+		update_TileState(Top, glm::ivec2(tileCord.x, tileCord.y + 1));
 	}
 	if (gridIndex - 1 >= 0)
 	{
-		if ((GridLayout[gridIndex - 1] & Wall) == Wall)
-		{
-			change_WallState(glm::ivec2(tileCord.x - 1, tileCord.y));
-		}
+		update_TileState(Right, glm::ivec2(tileCord.x - 1, tileCord.y));
 	}
 
 	if (neighborChunk != nullptr)
 	{
 		neighborTileCord -= neighborChunk->get_ChunkCord() * 32;
-		uint32_t test = 2;
-		neighborChunk->update_TileState(test, neighborTileCord);
+
+		neighborChunk->update_TileState(direction, neighborTileCord);
+	}
+}
+
+void GameMap::remove_TileEdges(glm::ivec2& tileCord, uint32_t direction, glm::ivec2& neighborTileCord, GameMap* neighborChunk)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
+
+	remove_WallState(tileCord);
+
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
+
+	if (gridIndex - GridSize >= 0)
+	{
+		remove_TileState(Bottom, glm::ivec2(tileCord.x, tileCord.y - 1));
+	}
+	if (gridIndex + 1 < GridLayout.size())
+	{
+		remove_TileState(Left, glm::ivec2(tileCord.x + 1, tileCord.y));
+	}
+	if (gridIndex + GridSize < GridLayout.size())
+	{
+		remove_TileState(Top, glm::ivec2(tileCord.x, tileCord.y + 1));
+	}
+	if (gridIndex - 1 >= 0)
+	{
+		remove_TileState(Right, glm::ivec2(tileCord.x - 1, tileCord.y));
+	}
+
+	if (neighborChunk != nullptr)
+	{
+		neighborTileCord -= neighborChunk->get_ChunkCord() * 32;
+
+		neighborChunk->remove_TileState(direction, neighborTileCord);
 	}
 }
 
@@ -139,7 +156,7 @@ bool GameMap::check_IfTileTaken(glm::ivec2 tileCord)
 
 	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
-	if (GridLayout[gridIndex] & Wall)
+	if (GridLayout[gridIndex] & Wall || GridLayout[gridIndex] & Item)
 	{
 		return true;
 	}
@@ -158,19 +175,69 @@ void GameMap::change_WallState(glm::ivec2 tileCord)
 
 	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
-	uint32_t wallState = check_NeighbourTiles(gridIndex);
 
 	GridLayout[gridIndex] |= Wall;
 
-	update_TileState(wallState, tileCord);
+	update_WallState(gridIndex, tileCord);
 }
 
-void GameMap::update_TileState(uint32_t newWallState, glm::ivec2& tileCord)
+void GameMap::remove_WallState(glm::ivec2 tileCord)
 {
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
+
+	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh(ChunkName);
+
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
+
+	if (GridLayout[gridIndex] & Wall)
+	{
+		GridLayout[gridIndex] ^= Wall;
+	}
+
+	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
+	vertexIndex += 4 * tileCord.y;
+
+	gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.5f, 0.125f);
+	gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.5f, 0.0f);
+	gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.625f, 0.0f);
+	gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.625f, 0.125f);
+
+	gridMesh.rebind_Buffer(GL_STATIC_DRAW);
+}
+
+void GameMap::update_TileState(uint32_t wallDirection, glm::ivec2 tileCord)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
 	uint32_t tileIndex = tileCord.x + (GridSize * tileCord.y);
 
-	newWallState <<= 4;
-	GridLayout[tileIndex] |= newWallState;
+	wallDirection <<= 8;
+	GridLayout[tileIndex] |= wallDirection;
+
+	if (GridLayout[tileIndex] & Wall)
+	{
+		update_WallState(tileIndex, tileCord);
+	}
+}
+
+void GameMap::remove_TileState(uint32_t wallDirection, glm::ivec2 tileCord)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
+	uint32_t tileIndex = tileCord.x + (GridSize * tileCord.y);
+
+	wallDirection <<= 8;
+	if (GridLayout[tileIndex] & wallDirection)
+	{
+		GridLayout[tileIndex] ^= wallDirection;
+	}
 
 	if (GridLayout[tileIndex] & Wall)
 	{
@@ -214,7 +281,11 @@ void GameMap::update_WallState(uint32_t tileIndex, glm::ivec2& tileCord)
 
 	uint32_t wallState = GridLayout[tileIndex];
 
-	wallState >>= 4;
+	wallState >>= 8;
+	if (wallState & Top)
+	{
+		wallState ^= Top;
+	}
 
 	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
 	vertexIndex += 4 * tileCord.y;

@@ -93,27 +93,44 @@ namespace FLXModel
 
 	void create_Grid(Mesh& mesh, int size)
 	{
+		srand(time(NULL));
+		int randOption = 0;
+		float textureY = 0.f;
+		float textureY2 = 0.125f;
 		int squareSize = 64;
 		glm::vec3 color = glm::vec3(1.f);
 		for (int i = 0; i < size; i++)
 		{
 			for (int j = 0; j < size; j++)
 			{
+				randOption = rand() % 100;
+
+				if (randOption < 50)
+				{
+					textureY = 0.f;
+					textureY2 = 0.125f;
+				}
+				else
+				{
+					textureY = 0.125f;
+					textureY2 = 0.250f;
+				}
+
 				int id0 = mesh.Vertices.size();
 				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, j * squareSize, 0.f), color);
-				mesh.Vertices[id0].Texture = glm::vec2(0.5f, 0.125f);
+				mesh.Vertices[id0].Texture = glm::vec2(0.5f, textureY2);
 
 				int id1 = id0 + 1;
 				mesh.Vertices.emplace_back(glm::vec3(i * squareSize, (j * squareSize) - squareSize, 0.f), color);
-				mesh.Vertices[id1].Texture = glm::vec2(0.5f, 0.0f);
+				mesh.Vertices[id1].Texture = glm::vec2(0.5f, textureY);
 
 				int id2 = id0 + 2;
 				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, (j * squareSize) - squareSize, 0.f), color);
-				mesh.Vertices[id2].Texture = glm::vec2(0.625f, 0.0f);
+				mesh.Vertices[id2].Texture = glm::vec2(0.625f, textureY);
 
 				int id3 = id0 + 3;
 				mesh.Vertices.emplace_back(glm::vec3((i * squareSize) + squareSize, j * squareSize, 0.f), color);
-				mesh.Vertices[id3].Texture = glm::vec2(0.625f, 0.125f);
+				mesh.Vertices[id3].Texture = glm::vec2(0.625f, textureY2);
 
 				mesh.Triangles.emplace_back(id0, id1, id2);
 				mesh.Triangles.emplace_back(id2, id3, id0);

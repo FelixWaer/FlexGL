@@ -81,12 +81,10 @@ void GameMap::change_TileEdges(glm::ivec2& tileCord, glm::ivec2& neighborTileCor
 	{
 		return;
 	}
-
+	std::cout << "I am wall! " << std::endl;
 	change_WallState(tileCord);
 
 	int gridIndex = tileCord.x + (GridSize * tileCord.y);
-
-	GridLayout[gridIndex] |= Wall;
 
 	if (gridIndex - GridSize >= 0)
 	{
@@ -141,7 +139,7 @@ bool GameMap::check_IfTileTaken(glm::ivec2 tileCord)
 
 	int gridIndex = tileCord.x + (GridSize * tileCord.y);
 
-	if (GridLayout[gridIndex] > 1)
+	if (GridLayout[gridIndex] & Wall)
 	{
 		return true;
 	}
@@ -163,10 +161,6 @@ void GameMap::change_WallState(glm::ivec2 tileCord)
 	uint32_t wallState = check_NeighbourTiles(gridIndex);
 
 	GridLayout[gridIndex] |= Wall;
-
-	uint32_t oldWallState = GridLayout[gridIndex];
-	oldWallState >>= 4;
-	wallState |= oldWallState;
 
 	update_TileState(wallState, tileCord);
 }
@@ -284,6 +278,10 @@ void GameMap::update_WallState(uint32_t tileIndex, glm::ivec2& tileCord)
 		break;
 
 	default:
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(0.0f, 0.375f);
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(0.0f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(0.125f, 0.250f);
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(0.125f, 0.375f);
 		break;
 	}
 

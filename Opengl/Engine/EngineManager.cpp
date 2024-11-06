@@ -118,7 +118,7 @@ void EngineManager::tick_Engine()
 	float currentFrame = static_cast<float>(glfwGetTime());
 	DeltaTime = currentFrame - LastFrame;
 	LastFrame = currentFrame;
-	std::cout << 1 / DeltaTime << std::endl;
+	//std::cout << 1 / DeltaTime << std::endl;
 
 	glClearColor(0.f, 0.8f, 1.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

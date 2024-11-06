@@ -365,7 +365,7 @@ void EngineCamera::input_RMouseFunction()
 			neighborTileCord.x -= 1;
 			activeChunk->change_TileEdges(gridCord, neighborTileCord, get_Chunk(neighborChunkCord));
 		}
-		else if(gridCord.x == 32)
+		else if(gridCord.x == 31)
 		{
 			neighborChunkCord.x += 1;
 			neighborTileCord.x += 1;
@@ -377,7 +377,7 @@ void EngineCamera::input_RMouseFunction()
 			neighborTileCord.y -= 1;
 			activeChunk->change_TileEdges(gridCord, neighborTileCord, get_Chunk(neighborChunkCord));
 		}
-		else if (gridCord.y == 32)
+		else if (gridCord.y == 31)
 		{
 			neighborChunkCord.y += 1;
 			neighborTileCord.y += 1;

@@ -31,12 +31,20 @@ enum Direction
 	Top = 1 << 3,
 };
 
+enum TileType
+{
+	BrickWall = 1,
+	WoodWall = 2,
+	Dirt = 3,
+	Grass = 4,
+};
+
 class GameMap : public Entity
 {
 public:
-	void change_Tile(glm::ivec2& tileCord);
+	void change_Tile(glm::ivec2& tileCord, uint32_t newTileType);
 	void remove_Tile(glm::ivec2& tileCord);
-	void change_TileEdges(glm::ivec2& tileCord, uint32_t direction, glm::ivec2& neighborTileCord, GameMap* neighborChunk);
+	void change_TileEdges(glm::ivec2& tileCord, uint32_t direction, uint32_t newTileType, glm::ivec2& neighborTileCord, GameMap* neighborChunk);
 	void remove_TileEdges(glm::ivec2& tileCord, uint32_t direction, glm::ivec2& neighborTileCord, GameMap* neighborChunk);
 
 	void set_TileAsTaken(glm::ivec2 tileCord);

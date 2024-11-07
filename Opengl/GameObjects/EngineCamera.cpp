@@ -250,6 +250,10 @@ void EngineCamera::input_OneFunction()
 
 void EngineCamera::input_TwoFunction()
 {
+	TileType = BrickWall;
+
+	return;
+
 	if (IsPlacing == false && ControllerMode == false)
 	{
 		Placeable = new Enemy;
@@ -283,6 +287,10 @@ void EngineCamera::input_TwoFunction()
 
 void EngineCamera::input_ThreeFunction()
 {
+	TileType = WoodWall;
+
+	return;
+
 	if (IsPlacing == false && ControllerMode == false)
 	{
 		ControllerMode = true;
@@ -296,7 +304,7 @@ void EngineCamera::input_ThreeFunction()
 void EngineCamera::input_FourFunction()
 {
 	RemoveMode = !RemoveMode;
-	std::cout << "change" << std::endl;
+	//std::cout << "change" << std::endl;
 }
 
 void EngineCamera::input_LMouseFunction()
@@ -370,7 +378,6 @@ void EngineCamera::input_RMouseFunction()
 	{
 		if (activeChunk->check_IfTileTaken(gridCord) == true)
 		{
-			std::cout << "Hello" << std::endl;
 			glm::ivec2 neighborChunkCord = ChunkPosition;
 			if (gridCord.x == 0)
 			{
@@ -411,29 +418,29 @@ void EngineCamera::input_RMouseFunction()
 			{
 				neighborChunkCord.x -= 1;
 				neighborTileCord.x -= 1;
-				activeChunk->change_TileEdges(gridCord, Right, neighborTileCord, get_Chunk(neighborChunkCord));
+				activeChunk->change_TileEdges(gridCord, Right, TileType, neighborTileCord, get_Chunk(neighborChunkCord));
 			}
 			else if (gridCord.x == 31)
 			{
 				neighborChunkCord.x += 1;
 				neighborTileCord.x += 1;
-				activeChunk->change_TileEdges(gridCord, Left, neighborTileCord, get_Chunk(neighborChunkCord));
+				activeChunk->change_TileEdges(gridCord, Left, TileType, neighborTileCord, get_Chunk(neighborChunkCord));
 			}
 			else if (gridCord.y == 0)
 			{
 				neighborChunkCord.y -= 1;
 				neighborTileCord.y -= 1;
-				activeChunk->change_TileEdges(gridCord, Bottom, neighborTileCord, get_Chunk(neighborChunkCord));
+				activeChunk->change_TileEdges(gridCord, Bottom, TileType, neighborTileCord, get_Chunk(neighborChunkCord));
 			}
 			else if (gridCord.y == 31)
 			{
 				neighborChunkCord.y += 1;
 				neighborTileCord.y += 1;
-				activeChunk->change_TileEdges(gridCord, Top, neighborTileCord, get_Chunk(neighborChunkCord));
+				activeChunk->change_TileEdges(gridCord, Top, TileType, neighborTileCord, get_Chunk(neighborChunkCord));
 			}
 			else
 			{
-				activeChunk->change_Tile(gridCord);
+				activeChunk->change_Tile(gridCord, TileType);
 			}
 		}
 	}

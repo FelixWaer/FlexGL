@@ -66,5 +66,6 @@ private:
 	bool IsPlacing = false;
 	bool ControllerMode = false;
 	bool RemoveMode = false;
+	uint32_t TileType = 1;
 };
 

@@ -37,6 +37,7 @@ enum TileType
 	WoodWall = 2,
 	Dirt = 3,
 	Grass = 4,
+	WoodFloor = 5,
 };
 
 class GameMap : public Entity
@@ -53,6 +54,7 @@ public:
 	void remove_WallState(glm::ivec2 tileCord);
 	void update_TileState(uint32_t wallDirection, glm::ivec2 tileCord);
 	void remove_TileState(uint32_t wallDirection, glm::ivec2 tileCord);
+	void add_Floor(glm::ivec2 tileCord);
 	glm::ivec2& get_ChunkCord();
 	void set_ChunkCord(glm::ivec2 newChunkCord);
 protected:

@@ -203,7 +203,8 @@ void GameMap::remove_WallState(glm::ivec2 tileCord)
 	if (GridLayout[gridIndex] & Wall)
 	{
 		GridLayout[gridIndex] ^= Wall;
-		uint32_t resetTexture = 15;
+		uint32_t resetTexture = GridLayout[gridIndex];
+		resetTexture >>= 16;
 		resetTexture <<= 16;
 		GridLayout[gridIndex] ^= resetTexture;
 	}
@@ -256,6 +257,27 @@ void GameMap::remove_TileState(uint32_t wallDirection, glm::ivec2 tileCord)
 	}
 }
 
+void GameMap::add_Floor(glm::ivec2 tileCord)
+{
+	if (tileCord.x < 0 || tileCord.y < 0 || tileCord.x >= GridSize || tileCord.y >= GridSize)
+	{
+		return;
+	}
+
+	int gridIndex = tileCord.x + (GridSize * tileCord.y);
+
+	uint32_t newFloor = Grass;
+
+	newFloor <<= 16;
+
+	GridLayout[gridIndex] |= newFloor;
+
+
+	GridLayout[gridIndex] |= Floor;
+
+	update_WallState(gridIndex, tileCord);
+}
+
 glm::ivec2& GameMap::get_ChunkCord()
 {
 	return ChunkCord;
@@ -291,17 +313,9 @@ void GameMap::update_WallState(uint32_t tileIndex, glm::ivec2& tileCord)
 	Mesh& gridMesh = EngineManager::get()->get_RenderManager().get_Mesh(ChunkName);
 
 	uint32_t wallState = GridLayout[tileIndex];
-	uint32_t tileType = GridLayout[tileIndex];
-
-	wallState >>= 8;
-	wallState &= 15;
+	uint32_t tileType = wallState;
 
 	tileType >>= 16;
-
-	if (wallState & Top)
-	{
-		wallState ^= Top;
-	}
 
 	unsigned int vertexIndex = GridSize * 4 * tileCord.x;
 	vertexIndex += 4 * tileCord.y;
@@ -320,74 +334,104 @@ void GameMap::update_WallState(uint32_t tileIndex, glm::ivec2& tileCord)
 	case WoodWall:
 		textXPos = 0.0f;
 		textYPos = 0.250f;
+		break;
+
+	case Grass:
+		textXPos = 0.500f;
+		textYPos = 0.125f;
+		break;
+
+	case WoodFloor:
+		textXPos = 0.500f;
+		textYPos = 0.250f;
+		break;
+
 	default:
 		break;
 	}
 
-	switch (wallState)
+	if (wallState & Wall)
 	{
-	case SingleWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 2));
-		break;
+		wallState >>= 8;
+		wallState &= 15;
 
-	case ReverseCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 2));
-		break;
+		if (wallState & Top)
+		{
+			wallState ^= Top;
+		}
 
-	case VerticalWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 2));
-		break;
+		switch (wallState)
+		{
+		case SingleWall:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 2));
+			break;
 
-	case ReverseInsideCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 0));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 0));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
-		break;
+		case ReverseCorner:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 2));
+			break;
 
-	case Corner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
-		break;
+		case VerticalWall:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 2));
+			break;
 
-	case HorizontalWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 2));
-		break;
+		case ReverseInsideCorner:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 0));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 0));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
+			break;
 
-	case InsideCorner:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 0));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 0));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
-		break;
+		case Corner:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
+			break;
 
-	case MiddleWall:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 0));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 0));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 1));
-		break;
+		case HorizontalWall:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 2));
+			break;
 
-	default:
-		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 3));
-		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
-		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 3));
-		break;
+		case InsideCorner:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 2), textYPos + (textWidth * 0));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 0));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
+			break;
+
+		case MiddleWall:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 1));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 3), textYPos + (textWidth * 0));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 0));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 4), textYPos + (textWidth * 1));
+			break;
+
+		default:
+			gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 3));
+			gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 2));
+			gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 3));
+			break;
+		}
+	}
+	else
+	{
+		gridMesh.Vertices[vertexIndex].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 1));
+		gridMesh.Vertices[vertexIndex + 1].Texture = glm::vec2(textXPos + (textWidth * 0), textYPos + (textWidth * 0));
+		gridMesh.Vertices[vertexIndex + 2].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 0));
+		gridMesh.Vertices[vertexIndex + 3].Texture = glm::vec2(textXPos + (textWidth * 1), textYPos + (textWidth * 1));
 	}
 
 	gridMesh.rebind_Buffer(GL_STATIC_DRAW);

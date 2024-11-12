@@ -287,7 +287,7 @@ void EngineCamera::input_TwoFunction()
 
 void EngineCamera::input_ThreeFunction()
 {
-	TileType = WoodWall;
+	TileType = WoodFloor;
 
 	return;
 
@@ -373,6 +373,10 @@ void EngineCamera::input_RMouseFunction()
 	glm::ivec2 neighborTileCord = gridCord;
 
 	gridCord -= ChunkPosition * 32;
+
+	activeChunk->add_Floor(gridCord);
+
+	return;
 
 	if (RemoveMode == true)
 	{

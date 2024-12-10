@@ -4,7 +4,7 @@
 #include "../Components/ComponentHandler.h"
 #include "../Components/DamageComponent.h"
 #include "../Components/HealthComponent.h"
-#include "../Components/SpriteComponent.h"
+#include "..\Components\MeshComponent.h"
 #include "../Components/TagComponent.h"
 
 void CombatSystem::update(float deltaTime)
@@ -13,7 +13,7 @@ void CombatSystem::update(float deltaTime)
 	{
 		return;
 	}
-	ComponentHandler<SpriteComponent>* spriteComponents = get_ComponentHandler<SpriteComponent>();
+	ComponentHandler<MeshComponent>* spriteComponents = get_ComponentHandler<MeshComponent>();
 	ComponentHandler<TagComponent>* tagHandler = get_ComponentHandler<TagComponent>();
 
 	std::vector<HealthComponent>& healthComponent = get_ComponentHandler<HealthComponent>()->Components;

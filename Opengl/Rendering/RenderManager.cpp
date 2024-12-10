@@ -17,7 +17,7 @@
 #include "../Components/ParticleComponent.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/TransformComponent.h"
-#include "../Components/SpriteComponent.h"
+#include "..\Components\MeshComponent.h"
 #include "../Engine/EngineManager.h"
 #include "../FlexLibrary/FlexTimer/Flextimer.h"
 #include "../GameObjects/Entity.h"
@@ -94,12 +94,12 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 		Shader& shaderUsed = ShaderMap["Flex2DShader"];
 		shaderUsed.use_Shader();
 
-		if (EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<SpriteComponent>() == false ||
+		if (EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<MeshComponent>() == false ||
 			EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<TransformComponent>() == false)
 		{
 			return;
 		}
-		ComponentHandler<SpriteComponent>* spriteComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<SpriteComponent>();
+		ComponentHandler<MeshComponent>* spriteComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<MeshComponent>();
 		ComponentHandler<TransformComponent>* transComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<TransformComponent>();
 
 		for (auto& element : spriteComponents->IndexMap)
@@ -125,7 +125,7 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 			shaderUsed.send_Float("Transparency", modelMaterial.Transparency);
 			shaderUsed.send_Vec3("ColorHue", modelMaterial.ColorHue);
 
-			render_Model(MeshMap[spriteComponents->Components[element.second].SpriteName]);
+			render_Model(MeshMap[spriteComponents->Components[element.second].MeshName]);
 		}
 
 		return;
@@ -134,13 +134,13 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 	Shader& shaderUsed = ShaderMap["FlexShader"];
 	shaderUsed.use_Shader();
 
-	if (EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<SpriteComponent>() == false ||
+	if (EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<MeshComponent>() == false ||
 		EngineManager::get()->get_ActiveScene()->get_ComponentManager().check_IfHandlerExists<TransformComponent>() == false)
 	{
 		return;
 	}
 
-	ComponentHandler<SpriteComponent>* spriteComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<SpriteComponent>();
+	ComponentHandler<MeshComponent>* spriteComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<MeshComponent>();
 	ComponentHandler<TransformComponent>* transComponents = EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<TransformComponent>();
 
 	glm::mat4 cameraView = glm::lookAt(ActiveCamera->get_Component<PositionComponent>().Position, ActiveCamera->get_Component<PositionComponent>().Position 
@@ -178,7 +178,7 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 		shaderUsed.send_Float("Shininess", modelMaterial.Shininess);
 		shaderUsed.send_Float("SpecularStrength", modelMaterial.SpecularStrength);
 
-		render_Model(MeshMap[spriteComponents->Components[element.second].SpriteName]);
+		render_Model(MeshMap[spriteComponents->Components[element.second].MeshName]);
 	}
 	//auto start = std::chrono::high_resolution_clock::now();
 

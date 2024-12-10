@@ -7,9 +7,11 @@
 #include "../Systems/CollisionSystem.h"
 #include "../Systems/ParticleSystem.h"
 #include "../Systems/PhysicsSystem.h"
+#include "../Systems/LuaSystem.h"
 
 void SystemManager::init_Systems()
 {
+	System* luaSystem = new LuaSystem;
 	System* ms = new MovementSystem;
 	System* ts = new TransformSystem;
 	System* cs = new CombatSystem;
@@ -23,6 +25,7 @@ void SystemManager::init_Systems()
 	SystemsHandler.emplace_back(collisionSystem);
 	SystemsHandler.emplace_back(particleSystem);
 	SystemsHandler.emplace_back(physicsSystem);
+	SystemsHandler.emplace_back(luaSystem);
 }
 
 void SystemManager::update_Systems(float deltaTime)

@@ -165,6 +165,7 @@
     <ClCompile Include="Rendering\Texture.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
     <ClCompile Include="Systems\CombatSystem.cpp" />
+    <ClCompile Include="Systems\LuaSystem.cpp" />
     <ClCompile Include="Systems\MovementSystem.cpp" />
     <ClCompile Include="Systems\ParticleSystem.cpp" />
     <ClCompile Include="Systems\PhysicsSystem.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Components\BoxCollComponent.h" />
     <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Components\PhysicsComponent.h" />
+    <ClInclude Include="Components\ScriptComponent.h" />
     <ClInclude Include="Components\SphereCollComponent.h" />
     <ClInclude Include="Components\ComponentHandler.h" />
     <ClInclude Include="Components\DamageComponent.h" />
@@ -182,7 +184,7 @@
     <ClInclude Include="Components\MovementComponent.h" />
     <ClInclude Include="Components\ParticleComponent.h" />
     <ClInclude Include="Components\PositionComponent.h" />
-    <ClInclude Include="Components\SpriteComponent.h" />
+    <ClInclude Include="Components\MeshComponent.h" />
     <ClInclude Include="Components\TagComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Engine\ComponentManager.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="Rendering\MeshData.h" />
     <ClInclude Include="Systems\CollisionSystem.h" />
     <ClInclude Include="Systems\CombatSystem.h" />
+    <ClInclude Include="Systems\LuaSystem.h" />
     <ClInclude Include="Systems\MovementSystem.h" />
     <ClInclude Include="Systems\ParticleSystem.h" />
     <ClInclude Include="Systems\PhysicsSystem.h" />

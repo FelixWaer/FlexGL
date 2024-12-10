@@ -146,6 +146,9 @@
     <ClCompile Include="Engine\LuaManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\LuaSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectDependencies\Includes\glad\glad.h">
@@ -235,7 +238,7 @@
     <ClInclude Include="Systems\System.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Components\SpriteComponent.h">
+    <ClInclude Include="Components\MeshComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SystemManager.h">
@@ -300,6 +303,12 @@
     </ClInclude>
     <ClInclude Include="Engine\LuaManager.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ScriptComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\LuaSystem.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

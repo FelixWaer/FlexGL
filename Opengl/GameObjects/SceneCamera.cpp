@@ -7,6 +7,7 @@
 #include "../Components/PhysicsComponent.h"
 #include "../Components/SphereCollComponent.h"
 #include "../Components/TagComponent.h"
+#include "../Components/ScriptComponent.h"
 #include "../Engine/Input.h"
 
 void SceneCamera::tick(float deltaTime)
@@ -45,7 +46,8 @@ void SceneCamera::init_Entity()
 	add_Component<CameraComponent>();
 	add_Component<SphereCollComponent>();
 	add_Component<TagComponent>();
-	//add_Component<PhysicsComponent>();
+	add_Component<ScriptComponent>();
+	add_Component<PhysicsComponent>();
 
 	W_InputEvent = make_Event(this, &SceneCamera::input_WFunction);
 	A_InputEvent = make_Event(this, &SceneCamera::input_AFunction);
@@ -54,6 +56,7 @@ void SceneCamera::init_Entity()
 	Space_InputEvent = make_Event(this, &SceneCamera::input_SpaceFunction);
 	CTRL_InputEvent = make_Event(this, &SceneCamera::input_CTRLFunction);
 	ESC_InputEvent = make_Event(this, &SceneCamera::input_ESCFunction);
+	One_InputEvent = make_Event(this, &SceneCamera::input_OneFunction);
 
 	Input::bind_EventToKey(W_InputEvent, Key::W, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(A_InputEvent, Key::A, KeyPress::WhileHeldDown);
@@ -62,11 +65,13 @@ void SceneCamera::init_Entity()
 	Input::bind_EventToKey(Space_InputEvent, Key::Space, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(CTRL_InputEvent, Key::CTRL, KeyPress::WhileHeldDown);
 	Input::bind_EventToKey(ESC_InputEvent, Key::ESCAPE, KeyPress::OnPress);
+	Input::bind_EventToKey(One_InputEvent, Key::One, KeyPress::OnPress);
 
 	get_Component<MovementComponent>().Speed = 10.f;
 	get_Component<CameraComponent>().CameraDirection = glm::vec3(0.f, 0.f, 1.f);
 	get_Component<SphereCollComponent>().Radius = 2.f;
 	get_Component<TagComponent>().Tag = "Player";
+	get_Component<ScriptComponent>().ScriptPath = "Scripts/Start.Lua";
 
 	mousePos = EngineManager::get()->get_MousePosition();
 	EngineManager::get()->set_MousePosCenter();
@@ -110,4 +115,18 @@ void SceneCamera::input_CTRLFunction()
 void SceneCamera::input_ESCFunction()
 {
 	EngineManager::get()->get_ActiveWindow().close_Window();
+}
+
+void SceneCamera::input_OneFunction()
+{
+	if (FreeFlying == true)
+	{
+		remove_Component<PhysicsComponent>();
+	}
+	else
+	{
+		add_Component<PhysicsComponent>();
+	}
+
+	FreeFlying = !FreeFlying;
 }

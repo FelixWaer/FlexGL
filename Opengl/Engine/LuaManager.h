@@ -4,13 +4,13 @@
 
 #include "lua54/include/lua.hpp"
 
-// Link to lua library
+using EntityID = uint32_t;
 
 class LuaManager
 {
 public:
 	void init_LuaSystem();
-	void run_Script(std::string script);
+	void run_Script(std::string script, EntityID entityID);
 
 	void add_ComponentToList(std::string& componentName);
 

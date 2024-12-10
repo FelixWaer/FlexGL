@@ -19,11 +19,13 @@ private:
 	Event* Space_InputEvent = nullptr;
 	Event* CTRL_InputEvent = nullptr;
 	Event* ESC_InputEvent = nullptr;
+	Event* One_InputEvent = nullptr;
 
 	glm::vec2 mousePos = glm::vec2(0.f);
 	float CameraSpeed = 20.f;
 	float Pitch = 0.f;
 	float Yaw = 89.f;
+	bool FreeFlying = true;
 
 	void input_WFunction();
 	void input_AFunction();
@@ -32,5 +34,6 @@ private:
 	void input_SpaceFunction();
 	void input_CTRLFunction();
 	void input_ESCFunction();
+	void input_OneFunction();
 };
 

@@ -19,11 +19,28 @@ public:
 		ComponentHandlers[typeid(T).name()]->add_Component(id);
 	}
 
-	void add_Component(std::string& componentName, EntityID id)
+	void add_Component(const std::string& componentName, EntityID id)
 	{
 		if (ComponentHandlers.contains(componentName) == true)
 		{
 			ComponentHandlers[componentName]->add_Component(id);
+		}
+	}
+
+	template <typename T>
+	void remove_Component(EntityID id)
+	{
+		if (ComponentHandlers.contains(typeid(T).name()) == true)
+		{
+			ComponentHandlers[typeid(T).name()]->remove_Component(id);
+		}
+	}
+
+	void remove_Component(const std::string& componentName, EntityID id)
+	{
+		if (ComponentHandlers.contains(componentName) == true)
+		{
+			ComponentHandlers[componentName]->remove_Component(id);
 		}
 	}
 

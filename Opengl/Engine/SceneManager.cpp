@@ -7,6 +7,7 @@
 
 #include "../Components/CameraComponent.h"
 #include "../Components/PositionComponent.h"
+#include "../Components/ScriptComponent.h"
 #include "../FlexLibrary/FlexTimer/Flextimer.h"
 #include "../GameObjects/Cube.h"
 #include "../GameObjects/SceneCamera.h"
@@ -18,13 +19,16 @@ void SceneManager::begin_Scene()
 	camera->create_Entity();
 	EngineManager::get()->get_RenderManager().ActiveCamera = camera;
 
+	Entity* World = new Entity;
+	World->create_Entity();
+
 	Cube* cube = new Cube;
 	cube->create_Entity();
 
 	Floor* floor = new Floor;
 	floor->create_Entity();
 
-	EngineManager::get()->get_LuaManager().run_Script("Scripts/Start.Lua");
+	EngineManager::get()->get_LuaManager().run_Script("Scripts/SceneStart.Lua", World->get_EntityID());
 
 	TestLight.init_Light();
 	TestLight.set_LightPosition(glm::vec3(0.f, 10.f, 0.f));

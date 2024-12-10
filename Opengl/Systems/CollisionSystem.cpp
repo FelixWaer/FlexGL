@@ -48,6 +48,9 @@ void CollisionSystem::update(float deltaTime)
 				{
 					moveComps->get_Component(indexB.first).Velocity = glm::normalize(newDirection) * glm::length(moveComps->get_Component(indexA.first).Velocity);
 				}
+
+				collisionComponents[indexA.second].IsHit = true;
+				collisionComponents[indexB.second].IsHit = true;
 			}
 		}
 	}

@@ -20,6 +20,12 @@ public:
 	}
 
 	template <typename T>
+	void remove_Component()
+	{
+		EngineManager::get()->get_ActiveScene()->get_ComponentManager().remove_Component<T>(ID);
+	}
+
+	template <typename T>
 	T& get_Component()
 	{
 		return EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_Component<T>(ID);

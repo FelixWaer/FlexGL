@@ -1,9 +1,10 @@
 #pragma once
 #include "System.h"
 
-class MovementSystem : public System
+class ParticleSystem : public System
 {
 public:
+	void init() override;
 	void update(float deltaTime) override;
 
 private:

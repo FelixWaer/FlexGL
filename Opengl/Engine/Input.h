@@ -17,6 +17,8 @@ enum class Key
 	Three = 51,
 	Four = 52,
 	ESCAPE = 256,
+	Space = 32,
+	CTRL = 341,
 	LMouse = 0,
 	RMouse = 1,
 };

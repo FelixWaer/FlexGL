@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "WindowManager.h"
 #include "SystemManager.h"
+#include "LuaManager.h"
 
 class EngineManager
 {
@@ -20,11 +21,14 @@ public:
 	SceneManager* get_ActiveScene();
 	WindowManager& get_ActiveWindow();
 	RenderManager& get_RenderManager();
+	LuaManager& get_LuaManager();
 
 	float get_DeltaTime();
 	int get_WindowWidth();
 	int get_WindowHeight();
 	float get_AspectRatio();
+	glm::vec2 get_MousePosition();
+	void set_MousePosCenter();
 private:
 	EngineManager() = default;
 
@@ -34,9 +38,12 @@ private:
 	WindowManager ActiveWindow;
 	RenderManager RenderManager;
 	SystemManager SystemManagerTest;
+	LuaManager LuaManager;
 
 	float DeltaTime = 0.f;
 	float LastFrame = 0.f;
+	float FrameTimer = 0.f;
+	int FPSCounter = 0;
 
 	void tick_Engine();
 };

@@ -49,7 +49,6 @@ void FlexTimer::write_Time() const
 	//	return;
 	//}
 	//file << TimerName << ": " << duration.count() * 1000.f << "micro" << std::endl;
-
 	//file.close();
 }
 

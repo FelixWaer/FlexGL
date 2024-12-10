@@ -2,11 +2,14 @@
 
 #include "../Engine/EntityManager.h"
 
-void Entity::create_Enity()
+void Entity::create_Entity()
 {
 	ID = EngineManager::get()->get_ActiveScene()->get_EntityManager().add_EntityToScene(this);
-	//std::cout << "Entity Created" << std::endl;
 	init_Entity();
+}
+
+void Entity::tick(float deltaTime)
+{
 }
 
 EntityID Entity::get_EntityID()
@@ -17,4 +20,9 @@ EntityID Entity::get_EntityID()
 void Entity::init_Entity()
 {
 
+}
+
+void Entity::enable_Ticking()
+{
+	EngineManager::get()->get_ActiveScene()->get_EntityManager().enable_EntityToTick(this);
 }

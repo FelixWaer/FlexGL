@@ -67,7 +67,7 @@ namespace FLXModel
 
 	void create_Square(Mesh& mesh)
 	{
-		const glm::vec3 color(0.f);
+		const glm::vec3 color(0.5f);
 
 		int index0 = mesh.Vertices.size();
 		mesh.Vertices.emplace_back(glm::vec3(-0.5f, 0.5f, 0.f), color);
@@ -89,6 +89,10 @@ namespace FLXModel
 		mesh.Triangles.emplace_back(index2, index3, index0);
 
 		mesh.bind_Buffer(GL_STATIC_DRAW);
+
+
+		mesh.Matrices.emplace_back();
+		mesh.bind_InstancedBuffer(GL_STATIC_DRAW);
 	}
 
 	void create_Grid(Mesh& mesh, int size)

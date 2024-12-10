@@ -12,12 +12,6 @@
     <Filter Include="GameObject">
       <UniqueIdentifier>{9ca6e590-4bcd-4b0b-9c89-75d4dd7cd79d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject Components">
-      <UniqueIdentifier>{9e411612-665d-4074-8c16-25f211af5ab5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject Components\Collider Component">
-      <UniqueIdentifier>{600438fc-b009-406c-bb8a-ed58c322dfb0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering">
       <UniqueIdentifier>{daa76ade-094c-4706-aa5c-929d629d1e21}</UniqueIdentifier>
     </Filter>
@@ -53,15 +47,6 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject Components\BoxCollision.cpp">
-      <Filter>GameObject Components\Collider Component</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject Components\SphereCollision.cpp">
-      <Filter>GameObject Components\Collider Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\Camera.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="Rendering\Model.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -75,9 +60,6 @@
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Engine\EngineManager.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GameObject.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Rendering\ModelCreation.cpp">
@@ -101,9 +83,6 @@
     <ClCompile Include="Engine\WindowManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\EngineCamera.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\EventCallback.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -113,14 +92,8 @@
     <ClCompile Include="Rendering\Material.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\ObjectHandler.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="FlexLibrary\FlexTimer\FlexTimer.cpp">
       <Filter>FlexLibrary\FlexTimer</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\ModelHandler.cpp">
-      <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="FlexLibrary\FlexTimer\FlexTimerHandler.cpp">
       <Filter>FlexLibrary\FlexTimer</Filter>
@@ -143,20 +116,8 @@
     <ClCompile Include="Systems\TransformSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Entities.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\EntityManager.cpp">
       <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Barrel.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\GameMap.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Enemy.cpp">
-      <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Systems\CombatSystem.cpp">
       <Filter>Systems</Filter>
@@ -164,8 +125,26 @@
     <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Bullet.cpp">
+    <ClCompile Include="GameObjects\Entity.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\SceneCamera.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Cube.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\ParticleSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PhysicsSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Floor.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LuaManager.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,18 +159,6 @@
     </ClInclude>
     <ClInclude Include="ProjectDependencies\Includes\KHR\khrplatform.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject Components\BoxCollision.h">
-      <Filter>GameObject Components\Collider Component</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject Components\SphereCollision.h">
-      <Filter>GameObject Components\Collider Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ColliderInfo.h">
-      <Filter>GameObject Components\Collider Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Camera.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\Model.h">
       <Filter>Rendering</Filter>
@@ -209,9 +176,6 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EngineManager.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GameObject.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\ModelCreation.h">
@@ -238,9 +202,6 @@
     <ClInclude Include="Engine\WindowManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\EngineCamera.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\EventCallback.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -250,14 +211,8 @@
     <ClInclude Include="Rendering\Material.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ObjectHandler.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="FlexLibrary\FlexTimer\Flextimer.h">
       <Filter>FlexLibrary\FlexTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\ModelHandler.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="FlexLibrary\FlexTimer\FlexTimerHandler.h">
       <Filter>FlexLibrary\FlexTimer</Filter>
@@ -292,20 +247,8 @@
     <ClInclude Include="Systems\TransformSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Entity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\EntityManager.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Barrel.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\GameMap.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Enemy.h">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Components\TagComponent.h">
       <Filter>Components</Filter>
@@ -319,14 +262,44 @@
     <ClInclude Include="Components\DamageComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\CollisionComponent.h">
+    <ClInclude Include="Components\SphereCollComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Systems\CollisionSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Bullet.h">
+    <ClInclude Include="GameObjects\Entity.h">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\SceneCamera.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CameraComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Cube.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ParticleComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\ParticleSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\BoxCollComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PhysicsComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PhysicsSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Floor.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LuaManager.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

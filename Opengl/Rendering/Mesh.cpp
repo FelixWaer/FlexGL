@@ -160,7 +160,6 @@ void Mesh::load_MeshTxt(const std::string& filePath)
 			break;
 		}
 	}
-
 	bind_Buffer(GL_STATIC_DRAW);
 }
 
@@ -206,7 +205,10 @@ void Mesh::create_CubeMesh()
 			Vertices[triangle.ThirdIndex]);
 	}
 
+	Matrices.emplace_back();
+
 	bind_Buffer(GL_STATIC_DRAW);
+	bind_InstancedBuffer(GL_DYNAMIC_DRAW);
 }
 
 void Mesh::bind_Buffer(int drawType)
@@ -228,9 +230,33 @@ void Mesh::bind_Buffer(int drawType)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)12);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)24),
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)24);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)36),
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)36);
+}
+
+void Mesh::bind_InstancedBuffer(int drawType)
+{
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(Matrices.size() * sizeof(glm::mat4)), Matrices.data(), drawType);
+
+	glBindVertexArray(VAO);
+
+	size_t vec4Size = sizeof(glm::vec4);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(0 * vec4Size));
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(1 * vec4Size));
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * vec4Size));
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * vec4Size));
+
+	glVertexAttribDivisor(4, 1);
+	glVertexAttribDivisor(5, 1);
+	glVertexAttribDivisor(6, 1);
+	glVertexAttribDivisor(7, 1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -246,11 +272,18 @@ void Mesh::rebind_Buffer(int drawType)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Triangles.size() * sizeof(Triangle), Triangles.data(), drawType);
 }
 
+void Mesh::rebind_InstancedBuffer(int drawType)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ARRAY_BUFFER, Matrices.size() * sizeof(glm::mat4), Matrices.data(), drawType);
+}
+
 void Mesh::delete_Buffer()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
+	glDeleteBuffers(1, &IBO);
 }
 
 void Mesh::bind_VAOBuffer()

@@ -29,6 +29,9 @@ void WindowManager::init_Window()
     glfwSetKeyCallback(WindowPtr, Input::key_Callback);
     glfwSetMouseButtonCallback(WindowPtr, Input::mouse_Callback);
     glfwSetInputMode(WindowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    WindowManager::MousePositionX = WindowWidth/2;
+    WindowManager::MousePositionY = WindowHeight/2;
 }
 
 void WindowManager::close_Window()
@@ -98,19 +101,8 @@ void WindowManager::resize_Window(GLFWwindow* window, int newWidth, int newHeigh
 
 void WindowManager::mouse_Button_Callback(GLFWwindow* window, double xPos, double yPos)
 {
-    if (CameraFirstMove == true)
-    {
-        XPosMouse = xPos;
-        YPosMouse = yPos;
-        CameraFirstMove = false;
-    }
-
-    float xOffset = xPos - XPosMouse;
-    float yOffset = YPosMouse - yPos;
-    XPosMouse = xPos;
-    YPosMouse = yPos;
     WindowManager::MousePositionX = xPos;
     WindowManager::MousePositionY = yPos;
 
-    EngineManager::get()->get_ActiveScene()->get_SceneCamera()->update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
+    //EngineManager::get()->get_ActiveScene()->get_SceneCamera()->update_CameraRotation(xOffset * 0.1f, yOffset * 0.1f);
 }

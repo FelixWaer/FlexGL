@@ -5,6 +5,8 @@
 #include "../Systems/TransformSystem.h"
 #include "../Systems/CombatSystem.h"
 #include "../Systems/CollisionSystem.h"
+#include "../Systems/ParticleSystem.h"
+#include "../Systems/PhysicsSystem.h"
 
 void SystemManager::init_Systems()
 {
@@ -12,10 +14,15 @@ void SystemManager::init_Systems()
 	System* ts = new TransformSystem;
 	System* cs = new CombatSystem;
 	System* collisionSystem = new CollisionSystem;
+	System* particleSystem = new ParticleSystem;
+	System* physicsSystem = new PhysicsSystem;
+	particleSystem->init();
 	SystemsHandler.emplace_back(ms);
 	SystemsHandler.emplace_back(ts);
 	SystemsHandler.emplace_back(cs);
 	SystemsHandler.emplace_back(collisionSystem);
+	SystemsHandler.emplace_back(particleSystem);
+	SystemsHandler.emplace_back(physicsSystem);
 }
 
 void SystemManager::update_Systems(float deltaTime)

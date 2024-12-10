@@ -1,6 +1,6 @@
 #pragma once
 
-struct CollisionComponent
+struct SphereCollComponent
 {
 	float Radius = 0.f;
 };

@@ -7,7 +7,9 @@ using EntityID = uint32_t;
 class Entity
 {
 public:
-	void create_Enity();
+	void create_Entity();
+
+	virtual void tick(float deltaTime);
 
 	EntityID get_EntityID();
 
@@ -26,11 +28,14 @@ public:
 	template <typename T>
 	bool has_Component()
 	{
-		
+		return EngineManager::get()->get_ActiveScene()->get_ComponentManager().get_ComponentHandler<T>()->IndexMap.contains(ID);
 	}
 
+	Entity* ParentID = nullptr;
+	std::vector<Entity*> Children;
 protected:
 	virtual void init_Entity();
+	void enable_Ticking();
 
 private:
 	EntityID ID = 0;

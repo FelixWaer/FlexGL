@@ -19,6 +19,14 @@ public:
 		ComponentHandlers[typeid(T).name()]->add_Component(id);
 	}
 
+	void add_Component(std::string& componentName, EntityID id)
+	{
+		if (ComponentHandlers.contains(componentName) == true)
+		{
+			ComponentHandlers[componentName]->add_Component(id);
+		}
+	}
+
 	template <typename T>
 	T& get_Component(EntityID id)
 	{

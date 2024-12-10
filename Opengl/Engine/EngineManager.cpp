@@ -41,17 +41,18 @@ void EngineManager::init_Engine()
 		return;
 	}
 
-	//glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	RenderManager.init_RenderManager();
-	RenderManager.Render2D = true;
+	RenderManager.Render2D = false;
 	if (RenderManager.Render2D == true)
 	{
 		ActiveWindow.enable_Cursor(true);
+		glEnable(GL_BLEND);
 	}
 	SystemManagerTest.init_Systems();
+	LuaManager.init_LuaSystem();
 
 	SceneManager* basicScene = new SceneManager;
 	set_ActiveScene(basicScene);
@@ -91,6 +92,11 @@ RenderManager& EngineManager::get_RenderManager()
 	return RenderManager;
 }
 
+LuaManager& EngineManager::get_LuaManager()
+{
+	return LuaManager;
+}
+
 float EngineManager::get_DeltaTime()
 {
 	return DeltaTime;
@@ -111,6 +117,16 @@ float EngineManager::get_AspectRatio()
 	return ActiveWindow.get_AspectRatio();
 }
 
+glm::vec2 EngineManager::get_MousePosition()
+{
+	return glm::vec2(ActiveWindow.get_MousePositionX(), ActiveWindow.get_MousePositionY());
+}
+
+void EngineManager::set_MousePosCenter()
+{
+	glfwSetCursorPos(ActiveWindow.get_Window(),  get_WindowWidth()/2, get_WindowHeight()/2);
+}
+
 void EngineManager::tick_Engine()
 {
 	/*----Start of Temporary Code----*/
@@ -118,6 +134,16 @@ void EngineManager::tick_Engine()
 	float currentFrame = static_cast<float>(glfwGetTime());
 	DeltaTime = currentFrame - LastFrame;
 	LastFrame = currentFrame;
+
+	FrameTimer += DeltaTime;
+	FPSCounter += 1;
+
+	if (FrameTimer >= 1.f)
+	{
+		std::cout << "FPS: " << FPSCounter << std::endl;
+		FPSCounter = 0;
+		FrameTimer = 0.f;
+	}
 	//std::cout << 1 / DeltaTime << std::endl;
 
 	glClearColor(0.f, 0.8f, 1.f, 1.0f);

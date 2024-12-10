@@ -5,6 +5,7 @@
 class System
 {
 public:
+	virtual void init();
 	virtual void update(float deltaTime);
 
 protected:

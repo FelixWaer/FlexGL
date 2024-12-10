@@ -32,10 +32,7 @@ public:
 	void set_ModelPosition(glm::vec3 newPosition);
 
 	//Model Matrix
-	glm::mat4& get_ModelMatrix();
 	void calculate_ModelMatrix();
-
-	glm::mat4& get_2DModelMatrix();
 
 	//Model Mesh
 	std::string& get_ModelMeshName();

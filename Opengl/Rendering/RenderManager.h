@@ -8,6 +8,7 @@
 #include "Material.h"
 
 class SceneManager;
+class Entity;
 
 class RenderManager
 {
@@ -19,6 +20,8 @@ public:
 	void add_Mesh(Mesh& newMesh, std::string meshName);
 	Material& get_Material(std::string materialName);
 	bool Render2D = false;
+	
+	Entity* ActiveCamera = nullptr;
 private:
 
 	std::unordered_map<std::string, Shader> ShaderMap;
@@ -38,6 +41,9 @@ private:
 	void load_MeshesFromFolder();
 	void load_TexturesFromFolder();
 
+	void render_ParticleSystem();
+
 	void render_Model(Mesh& meshToRender);
+	void render_ModelInstanced(Mesh& meshToRender, int totalDrawCalls);
 };
 

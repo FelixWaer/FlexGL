@@ -6,14 +6,14 @@
 #include <glm/ext.hpp>
 
 #include "../Engine/EngineManager.h"
-#include "../Engine/GameObject.h"
+//#include "../Engine/GameObject.h"
 
 #include "../FlexLibrary/FlexTimer/Flextimer.h"
 
 void Model::init_Model()
 {
 	ParentScene = EngineManager::get()->get_ActiveScene();
-	ModelID = ParentScene->add_ModelToScene(this);
+	//ModelID = ParentScene->add_ModelToScene(this);
 }
 
 void Model::attach_ToGameObject(GameObject* GO)
@@ -63,18 +63,13 @@ glm::vec3& Model::get_ModelPosition()
 	{
 		return ModelPosition;
 	}
-	return ParentObject->get_GameObjectPosition();
+	//return ParentObject->get_GameObjectPosition();
 }
 
 void Model::set_ModelPosition(glm::vec3 newPosition)
 {
-	ParentScene->get_ModelHandler().set_ModelPosition(ModelID, newPosition);
+	//ParentScene->get_ModelHandler().set_ModelPosition(ModelID, newPosition);
 	ModelPosition = newPosition;
-}
-
-glm::mat4& Model::get_ModelMatrix()
-{
-	return ParentScene->get_ModelHandler().get_ModelMatrix(ModelID);
 }
 
 void Model::calculate_ModelMatrix()
@@ -91,16 +86,11 @@ void Model::calculate_ModelMatrix()
 	}
 
 	//might be the faster method for calculating
-	ModelMatrix = glm::translate(glm::mat4(1.f), ParentObject->get_GameObjectPosition());
+	//ModelMatrix = glm::translate(glm::mat4(1.f), ParentObject->get_GameObjectPosition());
 	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.x), glm::vec3(1.f, 0.f, 0.f));
 	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.y), glm::vec3(0.f, 1.f, 0.f));
 	ModelMatrix = glm::rotate(ModelMatrix, glm::radians(ModelRotation.z), glm::vec3(0.f, 0.f, 1.f));
 	ModelMatrix = glm::scale(ModelMatrix, ModelScale);
-}
-
-glm::mat4& Model::get_2DModelMatrix()
-{
-	return ParentScene->get_ModelHandler().get_ModelMatrix(ModelID);
 }
 
 std::string& Model::get_ModelMeshName()

@@ -17,7 +17,7 @@ void ParticleSystem::update(float deltaTime)
 	{
 		ParticleComponent& particleComp = particleHandler->get_Component(ps.first);
 
-		if (particleComp.ParticlePositions.size() < particleComp.MaxParticleCount && Timer >= particleComp.SpawnInterval)
+		if (particleComp.ParticleCount < particleComp.MaxParticleCount && Timer >= particleComp.SpawnInterval)
 		{
 			glm::vec3 newPosition((rand() % 200) - 100, 20.f, (rand() % 200) - 100);
 			newPosition = glm::normalize(newPosition);
@@ -29,7 +29,7 @@ void ParticleSystem::update(float deltaTime)
 			newPosition.y = 20.f;
 
 			particleComp.ParticlePositions.emplace_back(newPosition);
-			particleComp.ParticleLifeTime.emplace_back();
+			particleComp.ParticleLifeTime.emplace_back(0.f);
 			particleComp.ParticleCount++;
 
 			Timer = 0.f;

@@ -5,7 +5,7 @@ if isHit == true then
     remove_Component(EntityID, "SphereCollComponent")
     render_Mesh(EntityID, false)
 
-    for i = 0, 10 do
+    for i = 0, 2 do
     id = create_Entity()
 
     add_Component(id, "PositionComponent")

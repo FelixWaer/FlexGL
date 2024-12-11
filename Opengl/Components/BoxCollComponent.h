@@ -4,4 +4,6 @@
 struct BoxCollComponent
 {
 	glm::vec3 BoxSize = glm::vec3(0.f);
+	bool IsHit = false;
 };
+

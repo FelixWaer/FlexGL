@@ -15,12 +15,15 @@
 
 void SceneManager::begin_Scene()
 {
+	Entity* World = new Entity;
+	World->create_Entity();
+	std::cout << "viktig" << World->get_EntityID() << std::endl;
+
 	Entity* camera = new SceneCamera;
 	camera->create_Entity();
 	EngineManager::get()->get_RenderManager().ActiveCamera = camera;
 
-	Entity* World = new Entity;
-	World->create_Entity();
+	SceneEntityManager.SceneGraphPtr->RootNode = World;
 
 	Cube* cube = new Cube;
 	cube->create_Entity();

@@ -146,8 +146,6 @@ void RenderManager::render_Scene(SceneManager* sceneToRender)
 	glm::mat4 cameraView = glm::lookAt(ActiveCamera->get_Component<PositionComponent>().Position, ActiveCamera->get_Component<PositionComponent>().Position 
 		+ ActiveCamera->get_Component<CameraComponent>().CameraDirection, ActiveCamera->get_Component<CameraComponent>().CameraUp);
 
-	glm::mat4 test = ActiveCamera->get_Component<TransformComponent>().Matrix;
-
 	shaderUsed.send_Vec3("CameraPos", ActiveCamera->get_Component<PositionComponent>().Position);
 	shaderUsed.send_Vec3("LightPos", sceneToRender->get_SceneLights()[0]->get_LightPosition());
 	shaderUsed.send_Vec3("LightColor", sceneToRender->get_SceneLights()[0]->get_LightColor());
@@ -271,14 +269,7 @@ void RenderManager::render_ParticleSystem()
 	glm::vec3 cameraPos = ActiveCamera->get_Component<PositionComponent>().Position;
 
 	int start = 0;
-	int middle = particleComponents->Components[0].ParticlePositions.size() / 2;
 	int end = particleComponents->Components[0].ParticlePositions.size();
-
-	//std::thread jaja(calculate_ParticleMatrices, std::ref(MeshMap["Cube"]), std::ref(cameraPos), std::ref(particleComponents->Components[0].ParticlePositions), start, middle);
-	//std::thread neinei(calculate_ParticleMatrices, std::ref(MeshMap["Cube"]), std::ref(cameraPos), std::ref(particleComponents->Components[0].ParticlePositions), middle, end);
-
-	//jaja.join();
-	//neinei.join();
 
 	calculate_ParticleMatrices(MeshMap["Cube"], cameraPos, particleComponents->Components[0].ParticlePositions, start, end);
 
